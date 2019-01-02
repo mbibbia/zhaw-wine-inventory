@@ -1,0 +1,205 @@
+{
+	"desktops": [
+		{
+			"name": "Desktop All",
+			"viewGroup": "allGroup"
+		},
+		{
+			"name": "Desktop Wine",
+			"viewGroup": "wineGroup"
+		},
+		{
+			"name": "Desktop Country",
+			"viewGroup": "countryGroup"
+		},
+		{
+			"name": "Desktop Region",
+			"viewGroup": "regionGroup"
+		},
+		{
+			"name": "Desktop Classification",
+			"viewGroup": "classificationGroup"
+		},
+		{
+			"name": "Desktop Wine Type",
+			"viewGroup": "wineTypeGroup"
+		},
+		{
+			"name": "Desktop Producer",
+			"viewGroup": "producerGroup"
+		}
+	],
+	"viewGroups": [
+		{
+			"name": "rootGroup",
+			"orientation": "horizontal",
+			"viewGroups": [
+				{
+					"type": "view",
+					"name": "root"
+				}
+			]
+		},
+		{
+			"name": "wineGroup",
+			"orientation": "horizontal",
+			"viewGroups": [
+				{
+					"type": "view",
+					"name": "wineDetail"
+				},
+				{
+					"type": "view",
+					"name": "wineTable"
+				}
+			]
+		},
+		{
+			"name": "countryGroup",
+			"orientation": "vertical",
+			"viewGroups": [
+				{
+					"type": "view",
+					"name": "countryDetail"
+				},
+				{
+					"type": "view",
+					"name": "countryTable"
+				}
+			]
+		},
+		{
+			"name": "regionGroup",
+			"orientation": "vertical",
+			"viewGroups": [
+				{
+					"type": "view",
+					"name": "regionDetail"
+				},
+				{
+					"type": "view",
+					"name": "regionTable"
+				}
+			]
+		},
+		{
+			"name": "classificationGroup",
+			"orientation": "vertical",
+			"viewGroups": [
+				{
+					"type": "view",
+					"name": "classificationDetail"
+				},
+				{
+					"type": "view",
+					"name": "classificationTable"
+				}
+			]
+		},
+		{
+			"name": "wineTypeGroup",
+			"orientation": "vertical",
+			"viewGroups": [
+				{
+					"type": "view",
+					"name": "wineTypeDetail"
+				},
+				{
+					"type": "view",
+					"name": "wineTypeTable"
+				}
+			]
+		},
+		{
+			"name": "producerGroup",
+			"orientation": "vertical",
+			"viewGroups": [
+				{
+					"type": "view",
+					"name": "producerDetail"
+				},
+				{
+					"type": "view",
+					"name": "producerTable"
+				}
+			]
+		},
+				{
+			"name": "allGroup",
+			"orientation": "horizontal",
+			"viewGroups": [
+				{
+					"type": "viewGroup",
+					"name": "wineGroup"
+				},
+				{
+					"type": "viewGroup",
+					"name": "countryGroup"
+				},
+								{
+					"type": "viewGroup",
+					"name": "regionGroup"
+				}
+				
+			]
+		}
+	],
+	"views": [
+		{
+			"name": "wine",
+			"fxmlFile": "/fxml/Wine.fxml"
+		},
+		{
+			"name": "wineTable",
+			"fxmlFile": "/fxml/WineTable.fxml"
+		},
+		{
+			"name": "wineDetail",
+			"fxmlFile": "/fxml/WineDetail.fxml"
+		},
+		{
+			"name": "countryTable",
+			"fxmlFile": "/fxml/CountryTable.fxml"
+		},
+		{
+			"name": "countryDetail",
+			"fxmlFile": "/fxml/CountryDetail.fxml"
+		},
+		{
+			"name": "regionTable",
+			"fxmlFile": "/fxml/RegionTable.fxml"
+		},
+		{
+			"name": "regionDetail",
+			"fxmlFile": "/fxml/RegionDetail.fxml"
+		},
+		{
+			"name": "classificationTable",
+			"fxmlFile": "/fxml/ClassificationTable.fxml"
+		},
+		{
+			"name": "classificationDetail",
+			"fxmlFile": "/fxml/ClassificationDetail.fxml"
+		},
+		{
+			"name": "wineTypeTable",
+			"fxmlFile": "/fxml/WineTypeTable.fxml"
+		},
+		{
+			"name": "wineTypeDetail",
+			"fxmlFile": "/fxml/WineTypeDetail.fxml"
+		},
+		{
+			"name": "producerTable",
+			"fxmlFile": "/fxml/ProducerTable.fxml"
+		},
+		{
+			"name": "producerDetail",
+			"fxmlFile": "/fxml/ProducerDetail.fxml"
+		},
+		{
+			"name": "root",
+			"fxmlFile": "/fxml/Root.fxml"
+		}
+	]
+}
