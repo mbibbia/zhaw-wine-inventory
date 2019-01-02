@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 @Configuration
 public class AppJavaConfig {
 
+	@Lazy
 	@Autowired
 	SpringFXMLLoader springFXMLLoader;
 
