@@ -16,7 +16,7 @@ import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.config.StageManager;
 import ch.zhaw.wineInventory.event.RegionDetailsEvent;
-import ch.zhaw.wineInventory.event.SaveRegionEvent;
+import ch.zhaw.wineInventory.event.RegionSaveEvent;
 import ch.zhaw.wineInventory.service.RegionService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -76,10 +76,10 @@ public class RegionTableController implements Initializable {
 	private final ObservableList<Region> regionList = FXCollections.observableArrayList();
 
 	@Component
-	class SaveRegionEventHandler implements ApplicationListener<SaveRegionEvent> {
+	class SaveRegionEventHandler implements ApplicationListener<RegionSaveEvent> {
 
 		@Override
-		public void onApplicationEvent(SaveRegionEvent event) {
+		public void onApplicationEvent(RegionSaveEvent event) {
 			loadRegions();
 		}
 

@@ -13,7 +13,7 @@ import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.config.StageManager;
 import ch.zhaw.wineInventory.event.RegionDetailsEvent;
-import ch.zhaw.wineInventory.event.SaveRegionEvent;
+import ch.zhaw.wineInventory.event.RegionSaveEvent;
 import ch.zhaw.wineInventory.service.CountryService;
 import ch.zhaw.wineInventory.service.RegionService;
 import javafx.collections.FXCollections;
@@ -145,7 +145,7 @@ public class RegionDetailController implements Initializable {
 	}
 
 	private void raiseEventSaveRegion(final Region region) {
-		SaveRegionEvent regionEvent = new SaveRegionEvent(this, region);
+		RegionSaveEvent regionEvent = new RegionSaveEvent(this, region);
 		applicationEventPublisher.publishEvent(regionEvent);
 	}
 

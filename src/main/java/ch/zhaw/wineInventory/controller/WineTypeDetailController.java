@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import ch.zhaw.wineInventory.bean.WineType;
 import ch.zhaw.wineInventory.config.StageManager;
-import ch.zhaw.wineInventory.event.SaveWineTypeEvent;
+import ch.zhaw.wineInventory.event.WineTypeSaveEvent;
 import ch.zhaw.wineInventory.event.WineTypeDetailsEvent;
 import ch.zhaw.wineInventory.service.WineTypeService;
 import javafx.event.ActionEvent;
@@ -122,7 +122,7 @@ public class WineTypeDetailController implements Initializable {
 	}
 
 	private void raiseEventSaveWineType(final WineType wineType) {
-		SaveWineTypeEvent wineTypeEvent = new SaveWineTypeEvent(this, wineType);
+		WineTypeSaveEvent wineTypeEvent = new WineTypeSaveEvent(this, wineType);
 		applicationEventPublisher.publishEvent(wineTypeEvent);
 	}
 

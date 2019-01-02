@@ -14,7 +14,7 @@ import ch.zhaw.wineInventory.bean.Producer;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.config.StageManager;
 import ch.zhaw.wineInventory.event.ProducerDetailsEvent;
-import ch.zhaw.wineInventory.event.SaveProducerEvent;
+import ch.zhaw.wineInventory.event.ProducerSaveEvent;
 import ch.zhaw.wineInventory.service.CountryService;
 import ch.zhaw.wineInventory.service.ProducerService;
 import javafx.collections.FXCollections;
@@ -269,7 +269,7 @@ public class ProducerDetailController implements Initializable {
 	}
 
 	private void raiseEventSaveProducer(final Producer producer) {
-		SaveProducerEvent producerEvent = new SaveProducerEvent(this, producer);
+		ProducerSaveEvent producerEvent = new ProducerSaveEvent(this, producer);
 		applicationEventPublisher.publishEvent(producerEvent);
 	}
 

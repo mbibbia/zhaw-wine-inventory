@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.config.StageManager;
 import ch.zhaw.wineInventory.event.CountryDetailsEvent;
-import ch.zhaw.wineInventory.event.SaveCountryEvent;
+import ch.zhaw.wineInventory.event.CountrySaveEvent;
 import ch.zhaw.wineInventory.service.CountryService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -133,7 +133,7 @@ public class CountryDetailController implements Initializable {
 	}
 
 	private void raiseEventSaveCountry(final Country country) {
-		SaveCountryEvent countryEvent = new SaveCountryEvent(this, country);
+		CountrySaveEvent countryEvent = new CountrySaveEvent(this, country);
 		applicationEventPublisher.publishEvent(countryEvent);
 	}
 

@@ -17,7 +17,7 @@ import ch.zhaw.wineInventory.bean.Producer;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.config.StageManager;
 import ch.zhaw.wineInventory.event.ProducerDetailsEvent;
-import ch.zhaw.wineInventory.event.SaveProducerEvent;
+import ch.zhaw.wineInventory.event.ProducerSaveEvent;
 import ch.zhaw.wineInventory.service.ProducerService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -106,10 +106,10 @@ public class ProducerTableController implements Initializable {
 	private final ObservableList<Producer> producerList = FXCollections.observableArrayList();
 
 	@Component
-	class SaveProducerEventHandler implements ApplicationListener<SaveProducerEvent> {
+	class SaveProducerEventHandler implements ApplicationListener<ProducerSaveEvent> {
 
 		@Override
-		public void onApplicationEvent(SaveProducerEvent event) {
+		public void onApplicationEvent(ProducerSaveEvent event) {
 			loadProducers();
 		}
 

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import ch.zhaw.wineInventory.bean.Classification;
 import ch.zhaw.wineInventory.config.StageManager;
 import ch.zhaw.wineInventory.event.ClassificationDetailsEvent;
-import ch.zhaw.wineInventory.event.SaveClassificationEvent;
+import ch.zhaw.wineInventory.event.ClassificationSaveEvent;
 import ch.zhaw.wineInventory.service.ClassificationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -122,7 +122,7 @@ public class ClassificationDetailController implements Initializable {
 	}
 
 	private void raiseEventSaveClassification(final Classification classification) {
-		SaveClassificationEvent classificationEvent = new SaveClassificationEvent(this, classification);
+		ClassificationSaveEvent classificationEvent = new ClassificationSaveEvent(this, classification);
 		applicationEventPublisher.publishEvent(classificationEvent);
 	}
 

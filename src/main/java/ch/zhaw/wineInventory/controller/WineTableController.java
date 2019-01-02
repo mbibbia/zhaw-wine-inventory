@@ -19,7 +19,7 @@ import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.bean.Wine;
 import ch.zhaw.wineInventory.bean.WineType;
 import ch.zhaw.wineInventory.config.StageManager;
-import ch.zhaw.wineInventory.event.SaveWineEvent;
+import ch.zhaw.wineInventory.event.WineSaveEvent;
 import ch.zhaw.wineInventory.event.WineDetailsEvent;
 import ch.zhaw.wineInventory.service.WineService;
 import javafx.collections.FXCollections;
@@ -90,10 +90,10 @@ public class WineTableController implements Initializable {
 	private final ObservableList<Wine> wineList = FXCollections.observableArrayList();
 
 	@Component
-	class SaveWineEventHandler implements ApplicationListener<SaveWineEvent> {
+	class SaveWineEventHandler implements ApplicationListener<WineSaveEvent> {
 
 		@Override
-		public void onApplicationEvent(SaveWineEvent event) {
+		public void onApplicationEvent(WineSaveEvent event) {
 			loadWines();
 		}
 

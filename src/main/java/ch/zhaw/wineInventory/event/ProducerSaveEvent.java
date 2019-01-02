@@ -11,13 +11,13 @@ import ch.zhaw.wineInventory.bean.Producer;
  *         Application Event when a producer is saved.
  *
  */
-public class SaveProducerEvent extends ApplicationEvent {
+public class ProducerSaveEvent extends ApplicationEvent {
 
 	private Producer producer;
 
 	private static final long serialVersionUID = 1L;
 
-	public SaveProducerEvent(Object source, Producer producer) {
+	public ProducerSaveEvent(Object source, Producer producer) {
 		super(source);
 		this.producer = producer;
 

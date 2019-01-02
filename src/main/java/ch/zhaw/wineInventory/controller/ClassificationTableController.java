@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
 import ch.zhaw.wineInventory.bean.Classification;
 import ch.zhaw.wineInventory.config.StageManager;
 import ch.zhaw.wineInventory.event.ClassificationDetailsEvent;
-import ch.zhaw.wineInventory.event.SaveClassificationEvent;
+import ch.zhaw.wineInventory.event.ClassificationSaveEvent;
 import ch.zhaw.wineInventory.service.ClassificationService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -72,10 +72,10 @@ public class ClassificationTableController implements Initializable {
 	private final ObservableList<Classification> classificationList = FXCollections.observableArrayList();
 
 	@Component
-	class SaveClassificationEventHandler implements ApplicationListener<SaveClassificationEvent> {
+	class SaveClassificationEventHandler implements ApplicationListener<ClassificationSaveEvent> {
 
 		@Override
-		public void onApplicationEvent(SaveClassificationEvent event) {
+		public void onApplicationEvent(ClassificationSaveEvent event) {
 			loadClassifications();
 		}
 

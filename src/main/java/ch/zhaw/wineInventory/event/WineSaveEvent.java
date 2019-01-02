@@ -11,13 +11,13 @@ import ch.zhaw.wineInventory.bean.Wine;
  *         Application Event when a wine is saved.
  *
  */
-public class SaveWineEvent extends ApplicationEvent {
+public class WineSaveEvent extends ApplicationEvent {
 
 	private Wine wine;
 
 	private static final long serialVersionUID = 1L;
 
-	public SaveWineEvent(Object source, Wine wine) {
+	public WineSaveEvent(Object source, Wine wine) {
 		super(source);
 		this.wine = wine;
 

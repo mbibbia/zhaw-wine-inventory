@@ -16,7 +16,7 @@ import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.bean.Wine;
 import ch.zhaw.wineInventory.bean.WineType;
 import ch.zhaw.wineInventory.config.StageManager;
-import ch.zhaw.wineInventory.event.SaveWineEvent;
+import ch.zhaw.wineInventory.event.WineSaveEvent;
 import ch.zhaw.wineInventory.event.WineDetailsEvent;
 import ch.zhaw.wineInventory.service.ClassificationService;
 import ch.zhaw.wineInventory.service.CountryService;
@@ -232,7 +232,7 @@ public class WineDetailController implements Initializable {
 	}
 
 	private void raiseEventSaveWine(final Wine wine) {
-		SaveWineEvent wineEvent = new SaveWineEvent(this, wine);
+		WineSaveEvent wineEvent = new WineSaveEvent(this, wine);
 		applicationEventPublisher.publishEvent(wineEvent);
 	}
 

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
 import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.config.StageManager;
 import ch.zhaw.wineInventory.event.CountryDetailsEvent;
-import ch.zhaw.wineInventory.event.SaveCountryEvent;
+import ch.zhaw.wineInventory.event.CountrySaveEvent;
 import ch.zhaw.wineInventory.service.CountryService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -75,10 +75,10 @@ public class CountryTableController implements Initializable {
 	private final ObservableList<Country> countryList = FXCollections.observableArrayList();
 
 	@Component
-	class SaveCountryEventHandler implements ApplicationListener<SaveCountryEvent> {
+	class SaveCountryEventHandler implements ApplicationListener<CountrySaveEvent> {
 
 		@Override
-		public void onApplicationEvent(SaveCountryEvent event) {
+		public void onApplicationEvent(CountrySaveEvent event) {
 			loadCountries();
 		}
 
