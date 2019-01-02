@@ -12,8 +12,8 @@ import ch.zhaw.wineInventory.bean.Region;
  * 
  * @author Christian Jeitziner / Marco Bibbia
  * 
- *         Repository interface for region beans extends JpaRepository and adds
- *         bean specific methods
+ *         Repository interface for region entities extends JpaRepository and adds
+ *         entity specific methods
  *
  */
 @Repository

@@ -9,8 +9,8 @@ import ch.zhaw.wineInventory.bean.WineType;
  * 
  * @author Christian Jeitziner / Marco Bibbia
  * 
- *         Repository interface for wine type beans extends JpaRepository and
- *         adds bean specific methods
+ *         Repository interface for wine type entities extends JpaRepository and
+ *         adds entity specific methods
  *
  */
 @Repository

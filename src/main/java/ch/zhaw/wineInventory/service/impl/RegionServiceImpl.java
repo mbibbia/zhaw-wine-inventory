@@ -13,8 +13,8 @@ import ch.zhaw.wineInventory.service.RegionService;
  * 
  * @author Christian Jeitziner / Marco Bibbia
  * 
- *         Persistence Service for country beans implements interface
- *         RegionService, uses RegionRepository and implements bean specific
+ *         Persistence Service for country entities implements interface
+ *         RegionService, uses RegionRepository and implements entity specific
  *         methods.
  *
  */

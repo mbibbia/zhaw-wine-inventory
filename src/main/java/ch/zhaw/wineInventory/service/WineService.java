@@ -16,21 +16,51 @@ import ch.zhaw.wineInventory.generic.GenericService;
  * 
  * @author Christian Jeitziner / Marco Bibbia
  * 
- *         Service interface for wine beans extends interface GenericService and
- *         adds bean specific methods
+ *         Service interface for wine entities extends interface GenericService and
+ *         adds entity specific methods
  *
  */
 @Service
 public interface WineService extends GenericService<Wine> {
 
+	/**
+	 * Returns a list of wine objects found with supplied country.
+	 * 
+	 * @param place
+	 * @return List of Wine
+	 */
 	List<Wine> findByCountry(Country country);
 
+	/**
+	 * Returns a list of wine objects found with supplied region.
+	 * 
+	 * @param region
+	 * @return List of Wine
+	 */
 	List<Wine> findByRegion(Region region);
 
+	/**
+	 * Returns a list of wine objects found with supplied classification.
+	 * 
+	 * @param classification
+	 * @return List of Wine
+	 */
 	List<Wine> findByClassification(Classification classification);
 
+	/**
+	 * Returns a list of wine objects found with supplied wine type.
+	 * 
+	 * @param wineType
+	 * @return List of Wine
+	 */
 	List<Wine> findByType(WineType wineType);
 
+	/**
+	 * Returns a list of wine objects found with supplied producer.
+	 * 
+	 * @param producer
+	 * @return List of Wine
+	 */
 	List<Wine> findByProducer(Producer producer);
 
 }

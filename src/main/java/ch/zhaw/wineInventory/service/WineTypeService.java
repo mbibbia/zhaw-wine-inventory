@@ -9,13 +9,19 @@ import ch.zhaw.wineInventory.generic.GenericService;
  * 
  * @author Christian Jeitziner / Marco Bibbia
  * 
- *         Service interface for wine type beans extends interface
- *         GenericService and adds bean specific methods
+ *         Service interface for wine type entities extends interface
+ *         GenericService and adds entity specific methods
  *
  */
 @Service
 public interface WineTypeService extends GenericService<WineType> {
 
+	/**
+	 * Returns a wine type object found with supplied name.
+	 * 
+	 * @param name
+	 * @return WineType
+	 */
 	WineType findByName(String name);
 
 }

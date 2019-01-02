@@ -14,8 +14,8 @@ import ch.zhaw.wineInventory.service.ProducerService;
  * 
  * @author Christian Jeitziner / Marco Bibbia
  * 
- *         Persistence Service for country beans implements interface
- *         ProducerService, uses ProducerRepository and implements bean specific
+ *         Persistence Service for country entities implements interface
+ *         ProducerService, uses ProducerRepository and implements entity specific
  *         methods.
  *
  */

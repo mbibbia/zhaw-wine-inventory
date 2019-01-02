@@ -9,13 +9,19 @@ import ch.zhaw.wineInventory.generic.GenericService;
  * 
  * @author Christian Jeitziner / Marco Bibbia
  * 
- *         Service interface for classification beans extends interface
- *         GenericService and adds bean specific methods
+ *         Service interface for classification entities extends interface
+ *         GenericService and adds entity specific methods
  *
  */
 @Service
 public interface ClassificationService extends GenericService<Classification> {
 
+	/**
+	 * Returns a classification object found with supplied name.
+	 * 
+	 * @param name
+	 * @return Classification
+	 */
 	Classification findByName(String name);
 
 }

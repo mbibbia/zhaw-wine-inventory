@@ -9,8 +9,8 @@ import ch.zhaw.wineInventory.bean.Classification;
  * 
  * @author Christian Jeitziner / Marco Bibbia
  * 
- *         Repository interface for classification beans extends JpaRepository
- *         and adds bean specific methods
+ *         Repository interface for classification entities extends JpaRepository
+ *         and adds entity specific methods
  *
  */
 @Repository

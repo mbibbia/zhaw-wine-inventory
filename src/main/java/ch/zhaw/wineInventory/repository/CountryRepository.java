@@ -9,8 +9,8 @@ import ch.zhaw.wineInventory.bean.Country;
  * 
  * @author Christian Jeitziner / Marco Bibbia
  * 
- *         Repository interface for country beans extends JpaRepository and adds
- *         bean specific methods
+ *         Repository interface for country entities extends JpaRepository and adds
+ *         entity specific methods
  *
  */
 @Repository

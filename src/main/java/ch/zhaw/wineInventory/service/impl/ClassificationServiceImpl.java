@@ -12,9 +12,9 @@ import ch.zhaw.wineInventory.service.ClassificationService;
  * 
  * @author Christian Jeitziner / Marco Bibbia
  * 
- *         Persistence Service for classification beans implements interface
+ *         Persistence Service for classification entities implements interface
  *         ClassificationService, uses ClassificationRepository and implements
- *         bean specific methods.
+ *         entity specific methods.
  *
  */
 
