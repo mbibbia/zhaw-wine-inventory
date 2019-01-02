@@ -6,16 +6,16 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox prefHeight="383.0" prefWidth="746.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.zhaw.wineInventory.controller.ProducerTableController">
+<HBox prefHeight="428.0" prefWidth="1180.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.zhaw.wineInventory.controller.ProducerTableController">
    <children>
-      <TableView fx:id="producerTable" prefHeight="383.0" prefWidth="748.0" tableMenuButtonVisible="true">
+      <TableView fx:id="producerTable" prefHeight="488.0" prefWidth="1207.0" tableMenuButtonVisible="true">
          <columns>
             <TableColumn fx:id="colProducerId" maxWidth="700.0" prefWidth="20.0" text="ID" />
             <TableColumn fx:id="colName" maxWidth="4000.0" prefWidth="75.0" text="Name" />
             <TableColumn fx:id="colCompany" maxWidth="4000.0" prefWidth="75.0" text="Company" />
-            <TableColumn fx:id="colAddressLine1" maxWidth="4000.0" prefWidth="75.0" text="Address Line 1" />
-            <TableColumn fx:id="colAddressLine2" maxWidth="4000.0" prefWidth="60.0" text="Address Line 2" />
-            <TableColumn fx:id="colZipCode" maxWidth="4000.0" prefWidth="60.0" text="Zip Code" />
+            <TableColumn fx:id="colAddressLine1" maxWidth="4000.0" prefWidth="119.0" text="Address Line 1" />
+            <TableColumn fx:id="colAddressLine2" maxWidth="4000.0" prefWidth="122.0" text="Address Line 2" />
+            <TableColumn fx:id="colZipCode" maxWidth="4000.0" prefWidth="57.0" text="Zip Code" />
             <TableColumn fx:id="colPlace" maxWidth="4000.0" prefWidth="60.0" text="Place" />
             <TableColumn fx:id="colPhone" maxWidth="4000.0" prefWidth="60.0" text="Phone" />
             <TableColumn fx:id="colFax" maxWidth="4000.0" prefWidth="60.0" text="Fax" />

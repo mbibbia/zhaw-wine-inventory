@@ -112,7 +112,7 @@
 		},
 		{
 			"name": "producerGroup",
-			"orientation": "vertical",
+			"orientation": "horizontal",
 			"viewGroups": [
 				{
 					"type": "view",
