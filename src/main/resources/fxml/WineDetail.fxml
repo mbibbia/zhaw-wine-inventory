@@ -44,7 +44,7 @@
                   <Insets left="25.0" right="25.0" />
                </VBox.margin>
             </TextField>
-            <ComboBox fx:id="type" prefWidth="246.0" promptText="Type">
+            <ComboBox fx:id="wineType" prefWidth="246.0" promptText="Type">
                <VBox.margin>
                   <Insets left="25.0" />
                </VBox.margin>

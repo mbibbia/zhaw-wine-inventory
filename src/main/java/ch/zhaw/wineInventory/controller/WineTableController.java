@@ -20,6 +20,10 @@ import ch.zhaw.wineInventory.bean.Wine;
 import ch.zhaw.wineInventory.bean.WineType;
 import ch.zhaw.wineInventory.config.StageManager;
 import ch.zhaw.wineInventory.event.WineSaveEvent;
+import ch.zhaw.wineInventory.event.WineTypeSaveEvent;
+import ch.zhaw.wineInventory.event.ClassificationSaveEvent;
+import ch.zhaw.wineInventory.event.CountrySaveEvent;
+import ch.zhaw.wineInventory.event.ProducerSaveEvent;
 import ch.zhaw.wineInventory.event.WineDetailsEvent;
 import ch.zhaw.wineInventory.service.WineService;
 import javafx.collections.FXCollections;
@@ -94,6 +98,46 @@ public class WineTableController implements Initializable {
 
 		@Override
 		public void onApplicationEvent(WineSaveEvent event) {
+			loadWines();
+		}
+
+	}
+
+	@Component
+	class SaveCountryEventHandler implements ApplicationListener<CountrySaveEvent> {
+
+		@Override
+		public void onApplicationEvent(CountrySaveEvent event) {
+			loadWines();
+		}
+
+	}
+
+	@Component
+	class SaveClassificationEventHandler implements ApplicationListener<ClassificationSaveEvent> {
+
+		@Override
+		public void onApplicationEvent(ClassificationSaveEvent event) {
+			loadWines();
+		}
+
+	}
+
+	@Component
+	class SaveWineTypeEventHandler implements ApplicationListener<WineTypeSaveEvent> {
+
+		@Override
+		public void onApplicationEvent(WineTypeSaveEvent event) {
+			loadWines();
+		}
+
+	}
+
+	@Component
+	class SaveProducerEventHandler implements ApplicationListener<ProducerSaveEvent> {
+
+		@Override
+		public void onApplicationEvent(ProducerSaveEvent event) {
 			loadWines();
 		}
 

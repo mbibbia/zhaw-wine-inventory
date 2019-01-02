@@ -17,6 +17,10 @@ import ch.zhaw.wineInventory.bean.Wine;
 import ch.zhaw.wineInventory.bean.WineType;
 import ch.zhaw.wineInventory.config.StageManager;
 import ch.zhaw.wineInventory.event.WineSaveEvent;
+import ch.zhaw.wineInventory.event.WineTypeSaveEvent;
+import ch.zhaw.wineInventory.event.ClassificationSaveEvent;
+import ch.zhaw.wineInventory.event.CountrySaveEvent;
+import ch.zhaw.wineInventory.event.ProducerSaveEvent;
 import ch.zhaw.wineInventory.event.WineDetailsEvent;
 import ch.zhaw.wineInventory.service.ClassificationService;
 import ch.zhaw.wineInventory.service.CountryService;
@@ -56,7 +60,7 @@ public class WineDetailController implements Initializable {
 	private TextField name;
 
 	@FXML
-	private ComboBox<WineType> type;
+	private ComboBox<WineType> wineType;
 
 	@FXML
 	private ComboBox<Classification> classification;
@@ -105,7 +109,7 @@ public class WineDetailController implements Initializable {
 		public void onApplicationEvent(WineDetailsEvent event) {
 			wineId.setText(Long.toString(event.getWine().getId()));
 			name.setText(event.getWine().getName());
-			type.setValue(event.getWine().getType());
+			wineType.setValue(event.getWine().getType());
 			classification.setValue(event.getWine().getClassification());
 			country.setValue(event.getWine().getCountry());
 			region.setValue(event.getWine().getRegion());
@@ -114,9 +118,53 @@ public class WineDetailController implements Initializable {
 
 	}
 
+	@Component
+	class SaveCountryEventHandler implements ApplicationListener<CountrySaveEvent> {
+
+		@Override
+		public void onApplicationEvent(CountrySaveEvent event) {
+			country.setItems(loadCountries());
+			country.setValue(event.getCountry());
+		}
+
+	}
+
+	@Component
+	class SaveClassificationEventHandler implements ApplicationListener<ClassificationSaveEvent> {
+
+		@Override
+		public void onApplicationEvent(ClassificationSaveEvent event) {
+			classification.setItems(loadClassifications());
+			classification.setValue(event.getClassification());
+		}
+
+	}
+
+	@Component
+	class SaveWineTypeEventHandler implements ApplicationListener<WineTypeSaveEvent> {
+
+		@Override
+		public void onApplicationEvent(WineTypeSaveEvent event) {
+			wineType.setItems(loadTypes());
+			wineType.setValue(event.getWineType());
+		}
+
+	}
+
+	@Component
+	class SaveProducerEventHandler implements ApplicationListener<ProducerSaveEvent> {
+
+		@Override
+		public void onApplicationEvent(ProducerSaveEvent event) {
+			producer.setItems(loadProducers());
+			producer.setValue(event.getProducer());
+		}
+
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		type.setItems(loadTypes());
+		wineType.setItems(loadTypes());
 		classification.setItems(loadClassifications());
 		country.setItems(loadCountries());
 		producer.setItems(loadProducers());
@@ -143,7 +191,7 @@ public class WineDetailController implements Initializable {
 	}
 
 	private WineType getType() {
-		return type.getValue();
+		return wineType.getValue();
 	}
 
 	private Classification getClassification() {
@@ -171,7 +219,7 @@ public class WineDetailController implements Initializable {
 
 		wineId.setText(null);
 		name.clear();
-		type.getSelectionModel().clearSelection();
+		wineType.getSelectionModel().clearSelection();
 		classification.getSelectionModel().clearSelection();
 		country.getSelectionModel().clearSelection();
 		region.getSelectionModel().clearSelection();

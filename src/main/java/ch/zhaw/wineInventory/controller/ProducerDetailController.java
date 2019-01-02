@@ -13,6 +13,7 @@ import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Producer;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.config.StageManager;
+import ch.zhaw.wineInventory.event.CountrySaveEvent;
 import ch.zhaw.wineInventory.event.ProducerDetailsEvent;
 import ch.zhaw.wineInventory.event.ProducerSaveEvent;
 import ch.zhaw.wineInventory.service.CountryService;
@@ -117,6 +118,17 @@ public class ProducerDetailController implements Initializable {
 			country.setValue(event.getProducer().getCountry());
 			region.setValue(event.getProducer().getRegion());
 
+		}
+
+	}
+
+	@Component
+	class SaveCountryEventHandler implements ApplicationListener<CountrySaveEvent> {
+
+		@Override
+		public void onApplicationEvent(CountrySaveEvent event) {
+			country.setItems(loadCountries());
+			country.setValue(event.getCountry());
 		}
 
 	}

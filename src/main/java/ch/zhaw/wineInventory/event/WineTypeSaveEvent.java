@@ -28,7 +28,7 @@ public class WineTypeSaveEvent extends ApplicationEvent {
 	 * 
 	 * @return WineType
 	 */
-	public WineType getClassification() {
+	public WineType getWineType() {
 		return this.wineType;
 	}
 

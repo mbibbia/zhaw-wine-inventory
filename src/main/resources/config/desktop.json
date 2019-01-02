@@ -124,23 +124,34 @@
 				}
 			]
 		},
-				{
+		{
 			"name": "allGroup",
 			"orientation": "horizontal",
 			"viewGroups": [
+				{
+					"type": "viewGroup",
+					"name": "countryGroup"
+				},
+				{
+					"type": "viewGroup",
+					"name": "regionGroup"
+				},
 				{
 					"type": "viewGroup",
 					"name": "wineGroup"
 				},
 				{
 					"type": "viewGroup",
-					"name": "countryGroup"
+					"name": "producerGroup"
 				},
-								{
+				{
 					"type": "viewGroup",
-					"name": "regionGroup"
+					"name": "classificationGroup"
+				},
+				{
+					"type": "viewGroup",
+					"name": "wineTypeGroup"
 				}
-				
 			]
 		}
 	],

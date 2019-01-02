@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.config.StageManager;
+import ch.zhaw.wineInventory.event.CountrySaveEvent;
 import ch.zhaw.wineInventory.event.RegionDetailsEvent;
 import ch.zhaw.wineInventory.event.RegionSaveEvent;
 import ch.zhaw.wineInventory.service.RegionService;
@@ -91,6 +92,16 @@ public class RegionTableController implements Initializable {
 		regionTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		setColumnProperties();
 		loadRegions();
+
+	}
+
+	@Component
+	class SaveCountryEventHandler implements ApplicationListener<CountrySaveEvent> {
+
+		@Override
+		public void onApplicationEvent(CountrySaveEvent event) {
+			loadRegions();
+		}
 
 	}
 
