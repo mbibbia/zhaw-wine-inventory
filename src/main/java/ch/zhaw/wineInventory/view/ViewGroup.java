@@ -307,7 +307,7 @@ public class ViewGroup extends Component {
 				AnchorPane.setRightAnchor(subPane, 5.0);
 				AnchorPane.setBottomAnchor(subPane, 5.0);
 			}
-			
+
 			// Set divider positions
 			int numComponents = this.components.size();
 			int numDividers = numComponents - 1;
@@ -317,7 +317,7 @@ public class ViewGroup extends Component {
 				dividers[di] = (di + 1) * distance;
 			}
 			splitPane.setDividerPositions(dividers);
-			
+
 			return anchorPane;
 
 		} else if (this.components.size() == 1) {
