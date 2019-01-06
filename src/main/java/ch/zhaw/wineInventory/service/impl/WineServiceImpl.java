@@ -64,6 +64,11 @@ public class WineServiceImpl implements WineService {
 	}
 
 	@Override
+	public Wine findByName(String name) {
+		return repository.findByName(name);
+	}
+
+	@Override
 	public List<Wine> findByCountry(Country country) {
 		return repository.findByCountry(country);
 	}

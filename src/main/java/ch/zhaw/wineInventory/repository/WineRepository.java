@@ -22,6 +22,8 @@ import ch.zhaw.wineInventory.bean.WineType;
  */
 @Repository
 public interface WineRepository extends JpaRepository<Wine, Long> {
+	
+	Wine findByName(String name);
 
 	List<Wine> findByCountry(Country country);
 

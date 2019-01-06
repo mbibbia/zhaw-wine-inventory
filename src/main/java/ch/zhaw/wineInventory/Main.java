@@ -6,8 +6,6 @@ import javafx.stage.Stage;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.io.Resource;
-
 import ch.zhaw.wineInventory.config.AppProperties;
 import ch.zhaw.wineInventory.config.StageManager;
 
