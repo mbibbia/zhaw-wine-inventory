@@ -126,6 +126,20 @@
 		},
 		{
 			"name": "allGroup",
+			"orientation": "vertical",
+			"viewGroups": [
+				{
+					"type": "viewGroup",
+					"name": "allGroup1"
+				},
+				{
+					"type": "viewGroup",
+					"name": "allGroup2"
+				}
+			]
+		},
+		{
+			"name": "allGroup1",
 			"orientation": "horizontal",
 			"viewGroups": [
 				{
@@ -138,19 +152,25 @@
 				},
 				{
 					"type": "viewGroup",
-					"name": "wineGroup"
-				},
-				{
-					"type": "viewGroup",
-					"name": "producerGroup"
-				},
-				{
-					"type": "viewGroup",
 					"name": "classificationGroup"
 				},
 				{
 					"type": "viewGroup",
 					"name": "wineTypeGroup"
+				}
+			]
+		},
+		{
+			"name": "allGroup2",
+			"orientation": "vertical",
+			"viewGroups": [
+				{
+					"type": "viewGroup",
+					"name": "wineGroup"
+				},
+				{
+					"type": "viewGroup",
+					"name": "producerGroup"
 				}
 			]
 		}
