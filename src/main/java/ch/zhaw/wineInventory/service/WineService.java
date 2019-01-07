@@ -16,12 +16,20 @@ import ch.zhaw.wineInventory.generic.GenericService;
  * 
  * @author Christian Jeitziner / Marco Bibbia
  * 
- *         Service interface for wine entities extends interface GenericService and
- *         adds entity specific methods
+ *         Service interface for wine entities extends interface GenericService
+ *         and adds entity specific methods
  *
  */
 @Service
 public interface WineService extends GenericService<Wine> {
+
+	/**
+	 * Returns a wine object found with supplied name.
+	 * 
+	 * @param name
+	 * @return Wine
+	 */
+	Wine findByName(String name);
 
 	/**
 	 * Returns a list of wine objects found with supplied country.
