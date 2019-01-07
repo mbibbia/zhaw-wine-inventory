@@ -21,6 +21,9 @@ public class ViewGroup extends Component {
 	// --------------------------------------------------------------------------
 	// INSTANCE AND CLASS VARIABLES.
 	// --------------------------------------------------------------------------
+	/**
+	 * Used for logging. 
+	 */
 	private static final Logger LOG = getLogger(ViewGroup.class);
 
 	/**
@@ -52,6 +55,12 @@ public class ViewGroup extends Component {
 	// --------------------------------------------------------------------------
 	// STATIC METHODS
 	// --------------------------------------------------------------------------
+	/**
+	 * Helper method to convert a String (horizonal, vertical) to a Orientation
+	 * enum value.
+	 * @param {String} orientation
+	 * @return {Orientation}
+	 */
 	public static Orientation getOrientation(String orientation) {
 		if (orientation.toLowerCase().equals("horizontal")) {
 			return Orientation.HORIZONTAL;
@@ -62,7 +71,15 @@ public class ViewGroup extends Component {
 	// --------------------------------------------------------------------------
 	// METHODS
 	// --------------------------------------------------------------------------
-	public void addComponentLeft(String name, Component component, boolean splitCurrentComponent) {
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.view.Component#addComponentLeft(
+	 *   java.lang.String,
+	 *   ch.zhaw.wineInventory.view.Component,
+	 *   boolean)
+	 */
+	public void addComponentLeft(String name,
+			                     Component component,
+			                     boolean splitCurrentComponent) {
 		// If the orientation is horizontal , we can just insert a component at
 		// the first position of this.components ArrayList.
 		if (getOrientation() == Orientation.HORIZONTAL) {
@@ -113,6 +130,12 @@ public class ViewGroup extends Component {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.view.Component#addComponentRight(
+	 *   java.lang.String,
+	 *   ch.zhaw.wineInventory.view.Component,
+	 *   boolean)
+	 */
 	public void addComponentRight(String name, Component component, boolean splitCurrentComponent) {
 		// If the orientation is horizontal , we can just insert a component at
 		// the first position of this.components ArrayList.
@@ -164,6 +187,12 @@ public class ViewGroup extends Component {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.view.Component#addComponentTop(
+	 *   java.lang.String,
+	 *   ch.zhaw.wineInventory.view.Component,
+	 *   boolean)
+	 */
 	public void addComponentTop(String name, Component component, boolean splitCurrentComponent) {
 		// If the orientation is vertical, we can just insert a component at
 		// the first position of this.components ArrayList.
@@ -215,6 +244,12 @@ public class ViewGroup extends Component {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.view.Component#addComponentBottom(
+	 *   java.lang.String,
+	 *   ch.zhaw.wineInventory.view.Component,
+	 *   boolean)
+	 */
 	public void addComponentBottom(String name, Component component, boolean splitCurrentComponent) {
 		// If the orientation is vertical, we can just insert a component at
 		// the last position of this.components ArrayList.
@@ -266,6 +301,12 @@ public class ViewGroup extends Component {
 		}
 	}
 
+	/**
+	 * Appends a component to the components list and connects it to this object.
+	 * If front is true, the component is added to the front of the list.
+	 * @param {Component} component
+	 * @param {boolean} front
+	 */
 	public void addComponent(Component component, boolean front) {
 		// Set connection from parent to child.
 		component.setParentViewGroup(this);
@@ -277,10 +318,20 @@ public class ViewGroup extends Component {
 		}
 	}
 
+	/**
+	 * Appends a component to the components list and connects it to this object.
+	 * If front is true, the component is added to the front of the list.
+	 * @param {Component} component
+	 * @param {boolean} front
+	 */
 	public void addComponent(Component component) {
 		addComponent(component, false);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.view.Component#createPane(
+	 *   ch.zhaw.wineInventory.view.FxmlLoader)
+	 */
 	public Pane createPane(FxmlLoader loader) {
 		if (this.components.size() > 1) {
 			final AnchorPane anchorPane = new AnchorPane();

@@ -34,26 +34,69 @@ public class View extends Component {
 	//--------------------------------------------------------------------------
 	// METHODS
 	//--------------------------------------------------------------------------
-	public void addComponentLeft(String name, Component component, boolean splitCurrentComponent) {
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.view.Component#addComponentLeft(
+	 *   java.lang.String,
+	 *   ch.zhaw.wineInventory.view.Component,
+	 *   boolean)
+	 */
+	public void addComponentLeft(String name,
+			                     Component component,
+			                     boolean splitCurrentComponent) {
 		// Delegate to parent view group
-		getParentViewGroup().addComponentLeft(name, component, splitCurrentComponent);
+		getParentViewGroup().addComponentLeft(name,
+				                              component,
+				                              splitCurrentComponent);
 	}
 
-	public void addComponentRight(String name, Component component, boolean splitCurrentComponent) {
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.view.Component#addComponentRight(
+	 *   java.lang.String,
+	 *   ch.zhaw.wineInventory.view.Component,
+	 *   boolean)
+	 */
+	public void addComponentRight(String name,
+			                      Component component,
+			                      boolean splitCurrentComponent) {
 		// Delegate to parent view group
-		getParentViewGroup().addComponentRight(name, component, splitCurrentComponent);
+		getParentViewGroup().addComponentRight(name,
+				                               component,
+				                               splitCurrentComponent);
 	}
 	
-	public void addComponentTop(String name, Component component, boolean splitCurrentComponent) {
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.view.Component#addComponentTop(
+	 *   java.lang.String,
+	 *   ch.zhaw.wineInventory.view.Component
+	 *   boolean)
+	 */
+	public void addComponentTop(String name,
+			                    Component component,
+			                    boolean splitCurrentComponent) {
 		// Delegate to parent view group
-		getParentViewGroup().addComponentTop(name, component, splitCurrentComponent);
+		getParentViewGroup().addComponentTop(name,
+				                             component,
+				                             splitCurrentComponent);
 	}
 	
-	public void addComponentBottom(String name, Component component, boolean splitCurrentComponent) {
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.view.Component#addComponentBottom(
+	 *   java.lang.String,
+	 *   ch.zhaw.wineInventory.view.Component,
+	 *   boolean)
+	 */
+	public void addComponentBottom(String name,
+			                       Component component,
+			                       boolean splitCurrentComponent) {
 		// Delegate to parent view group
-		getParentViewGroup().addComponentBottom(name, component, splitCurrentComponent);
+		getParentViewGroup().addComponentBottom(name,
+				                                component,
+				                                splitCurrentComponent);
 	}
 	
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.view.Component#createPane(ch.zhaw.wineInventory.view.FxmlLoader)
+	 */
 	public Pane createPane(FxmlLoader loader) {
 		Pane pane = (Pane)loader.load(this.fxmlFile);
 		return pane;

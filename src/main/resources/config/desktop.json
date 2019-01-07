@@ -1,10 +1,6 @@
 {
 	"desktops": [
 		{
-			"name": "Desktop All",
-			"viewGroup": "allGroup"
-		},
-		{
 			"name": "Desktop Wine",
 			"viewGroup": "wineGroup"
 		},
@@ -30,16 +26,6 @@
 		}
 	],
 	"viewGroups": [
-		{
-			"name": "rootGroup",
-			"orientation": "horizontal",
-			"viewGroups": [
-				{
-					"type": "view",
-					"name": "root"
-				}
-			]
-		},
 		{
 			"name": "wineGroup",
 			"orientation": "horizontal",
@@ -123,56 +109,6 @@
 					"name": "producerTable"
 				}
 			]
-		},
-		{
-			"name": "allGroup",
-			"orientation": "vertical",
-			"viewGroups": [
-				{
-					"type": "viewGroup",
-					"name": "allGroup1"
-				},
-				{
-					"type": "viewGroup",
-					"name": "allGroup2"
-				}
-			]
-		},
-		{
-			"name": "allGroup1",
-			"orientation": "horizontal",
-			"viewGroups": [
-				{
-					"type": "viewGroup",
-					"name": "countryGroup"
-				},
-				{
-					"type": "viewGroup",
-					"name": "regionGroup"
-				},
-				{
-					"type": "viewGroup",
-					"name": "classificationGroup"
-				},
-				{
-					"type": "viewGroup",
-					"name": "wineTypeGroup"
-				}
-			]
-		},
-		{
-			"name": "allGroup2",
-			"orientation": "vertical",
-			"viewGroups": [
-				{
-					"type": "viewGroup",
-					"name": "wineGroup"
-				},
-				{
-					"type": "viewGroup",
-					"name": "producerGroup"
-				}
-			]
 		}
 	],
 	"views": [
@@ -227,10 +163,6 @@
 		{
 			"name": "producerDetail",
 			"fxmlFile": "/fxml/ProducerDetail.fxml"
-		},
-		{
-			"name": "root",
-			"fxmlFile": "/fxml/Root.fxml"
 		}
 	]
 }

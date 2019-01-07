@@ -29,6 +29,9 @@ import org.slf4j.Logger;
  */
 public class JsonObjectReader {
 	
+	/**
+	 * Used for logging. 
+	 */
 	private static final Logger LOG = getLogger(JsonObjectReader.class);
 
 	/**
@@ -37,7 +40,7 @@ public class JsonObjectReader {
 	private JsonObjectReader() {}
 
 	/**
-	 * Method to create a JSON object from a json file.
+	 * Static method to create a JSON object from a JSON file.
 	 * 
 	 * @param {String} filePath - path of a JSON file.
 	 * @return {JsonObject} - initialized from filePath. 
@@ -57,11 +60,11 @@ public class JsonObjectReader {
 			LOG.error(String.format("Cannot read file '%s'", filePath));
 		}
 
-		return jsonObject;		
+		return jsonObject;
 	}
 
 	/**
-	 * Method to create a JSON object from a input string.
+	 * Static method to create a JSON object from an input string.
 	 * 
 	 * @param {String} inputString
 	 * @return {JsonObject} - initialized from inputString.
@@ -72,9 +75,9 @@ public class JsonObjectReader {
 	}
 
 	/**
-	 * Private helper method to create a JSON object from a input stream.
+	 * Helper method to create a JSON object from a input stream.
 	 * 
-	 * @param {InputStream} is - 
+	 * @param {InputStream} is
 	 * @return {JsonObject}
 	 */
 	public static JsonObject getJsonObjectFromInputStream(InputStream is) {
@@ -89,5 +92,5 @@ public class JsonObjectReader {
 		}
 		return jsonObject;
 	}
-		
+
 }

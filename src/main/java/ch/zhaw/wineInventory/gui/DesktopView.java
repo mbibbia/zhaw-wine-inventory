@@ -12,6 +12,8 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
 
 /**
+ * Used to create the main view for the application, i.e a menu bar and a number 
+ * of sub views.
  * @author Christian Jeitziner / Marco Bibbia
  *
  */
@@ -19,13 +21,23 @@ public class DesktopView {
 	//--------------------------------------------------------------------------
 	// INSTANCE AND CLASS VARIABLES.
 	//--------------------------------------------------------------------------
+	/**
+	 * Back reference to the controller object. 
+	 */
 	private DesktopController controller;
 	
+	/**
+	 * A map of desktopMenuItems, used to set or clear the selection state in the
+	 * desktop menu item.
+	 */
 	private Map<String,RadioMenuItem> desktopMenuMap;
 
 	//--------------------------------------------------------------------------
 	// CONSTRUCTORS
 	//--------------------------------------------------------------------------
+	/**
+	 * DesktopView Constructor, creates a empty desktopMenuMap. 
+	 */
 	public DesktopView() {
 		this.desktopMenuMap = new HashMap<String,RadioMenuItem>();
 	}
@@ -109,6 +121,9 @@ public class DesktopView {
 	//--------------------------------------------------------------------------
 	// GETTER AND SETTER METHODS
 	//--------------------------------------------------------------------------		
+	/** Method to connect the view to the controller.
+	 * @param controller: DesktopController instance
+	 */
 	public void setController(DesktopController controller) {
 		this.controller = controller;
 	}

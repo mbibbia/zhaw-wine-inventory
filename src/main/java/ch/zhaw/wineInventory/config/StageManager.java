@@ -23,9 +23,19 @@ import javafx.stage.Stage;
  */
 public class StageManager {
 
+	/**
+	 * Used for logging. 
+	 */	
 	private static final Logger LOG = getLogger(StageManager.class);
+	
+	/**
+	 * All scenes (instances of Scene) are shown on this stage.
+	 */
 	private final Stage primaryStage;
 
+	/**
+	 * Used to load a view from a FXML file.
+	 */
 	@Autowired
 	private final SpringFXMLLoader springFXMLLoader;
 
@@ -36,6 +46,11 @@ public class StageManager {
 	 */
 	private DesktopController desktopController;
 
+	/**
+	 * Constructor which needs a FXML loader and a stage as parameters.
+	 * @param springFXMLLoader
+	 * @param stage
+	 */
 	public StageManager(SpringFXMLLoader springFXMLLoader, Stage stage) {
 		this.springFXMLLoader = springFXMLLoader;
 		this.primaryStage = stage;
@@ -51,14 +66,30 @@ public class StageManager {
 				new FxmlLoaderImpl(springFXMLLoader));
 	}
 
+	/**
+	 * Used in Main.java to display the first scene.
+	 * Implemented in the DesktopController class.
+	 */
 	public void displayInitialScene() {
 		this.desktopController.displayInitialScene();
 	}
 
+	/**
+	 * Used by the desktop controller to switch to another scene,
+	 * receives a Pane object and the title for the scene.
+	 * @param pane
+	 * @param sceneTitle
+	 */
 	public void switchScene(Pane pane, String sceneTitle) {
 		show(pane, sceneTitle);
 	}
 
+	/**
+	 * Private method to assign a scene to the primary stage 
+	 * and to show the stage.
+	 * @param rootnode
+	 * @param title
+	 */
 	private void show(final Parent rootnode, String title) {
 		Scene scene = prepareScene(rootnode);
 		// scene.getStylesheets().add("/styles/Styles.css");
@@ -76,6 +107,12 @@ public class StageManager {
 		}
 	}
 
+	/**
+	 * Private method which receives a Parent object and connects
+	 * the Parent to a scene.
+	 * @param rootnode: instance of Parent
+	 * @return a scene object
+	 */
 	private Scene prepareScene(Parent rootnode) {
 		Scene scene = primaryStage.getScene();
 
@@ -86,6 +123,12 @@ public class StageManager {
 		return scene;
 	}
 
+	/**
+	 * Called when the primary stage cannot be shown and the application
+	 * then exists.
+	 * @param errorMsg
+	 * @param exception
+	 */
 	private void logAndExit(String errorMsg, Exception exception) {
 		LOG.error(errorMsg, exception, exception.getCause());
 		Platform.exit();

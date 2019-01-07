@@ -14,6 +14,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
 /**
+ * This class is responsible for the main model and the main view
+ * of the application.
  * @author Christian Jeitziner / Marco Bibbia
  *
  */
@@ -21,16 +23,42 @@ public class DesktopController {
 	//--------------------------------------------------------------------------
 	// INSTANCE AND CLASS VARIABLES.
 	//--------------------------------------------------------------------------
+	/**
+	 * Used for logging. 
+	 */	
 	private static final Logger LOG = getLogger(DesktopController.class);
 	
+	/**
+	 * Main model.
+	 */
 	private DesktopModel model;
+	
+	/**
+	 * Main view.
+	 */
 	private DesktopView view;
+	
+	/**
+	 * StageManager is responsible for showing a Scene on a Stage.
+	 */
 	private StageManager stageManager;
+	
+	/**
+	 * Used for loading FXML files.
+	 */
 	private FxmlLoader fxmlLoader;
 
 	//--------------------------------------------------------------------------
 	// CONSTRUCTORS
 	//--------------------------------------------------------------------------
+	/**
+	 * Constructor which receives a model, a view, a stage manager and a FXML
+	 * loader.
+	 * @param model
+	 * @param view
+	 * @param stageManager
+	 * @param fxmlLoader
+	 */
 	public DesktopController(DesktopModel model,
 			                 DesktopView view,
 			                 StageManager stageManager,

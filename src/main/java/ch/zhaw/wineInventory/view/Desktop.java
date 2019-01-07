@@ -33,6 +33,9 @@ public class Desktop extends ViewGroup {
 	// --------------------------------------------------------------------------
 	// INSTANCE AND CLASS VARIABLES.
 	// --------------------------------------------------------------------------
+	/**
+	 * Used for logging. 
+	 */
 	private static final Logger LOG = getLogger(Desktop.class);
 
 	/**
@@ -45,6 +48,10 @@ public class Desktop extends ViewGroup {
 	// --------------------------------------------------------------------------
 	// CONSTRUCTORS
 	// --------------------------------------------------------------------------
+	/**
+	 * Private constructor, Desktop objects can only be created by static methods.
+	 * @param {String} name of Desktop
+	 */
 	private Desktop(String name) {
 		// We can assign an arbitrary orientation to the first group.
 		super(name, Orientation.HORIZONTAL);
@@ -53,6 +60,12 @@ public class Desktop extends ViewGroup {
 	// --------------------------------------------------------------------------
 	// STATIC METHODS
 	// --------------------------------------------------------------------------
+	/**
+	 * Used to create a String of length num populated with charactters char.
+	 * @param ch
+	 * @param num
+	 * @return
+	 */
 	public static String createSpacer(char ch, int num) {
 		return new String(new char[num]).replace('\0', ch);
 	}
@@ -141,8 +154,6 @@ public class Desktop extends ViewGroup {
 		for (String name : desktopObjMap.keySet()) {
 			JsonObject currentDesktopObj = desktopObjMap.get(name);
 			String viewGroupName = currentDesktopObj.getString("viewGroup");
-
-			Map<String, ViewGroup> viewGroupMap = new HashMap<>();
 
 			// Get viewGroupObj from map
 			JsonObject viewGroupObj = viewGroupObjMap.get(viewGroupName);
