@@ -78,8 +78,6 @@ public class WineTableController implements Initializable {
 
 	@FXML
 	private TableColumn<Wine, Producer> colProducer;
-	@FXML
-	private TableColumn<Wine, Boolean> colEdit;
 
 	@Lazy
 	@Autowired
@@ -145,10 +143,17 @@ public class WineTableController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
-		wineTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		wineTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		setColumnProperties();
 		loadWines();
+
+		wineTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+    		if (newSelection != null) {
+    			int index = wineTable.getSelectionModel().getSelectedIndex();
+    			Wine wine = wineTable.getSelectionModel().getTableView().getItems().get(index);
+				raiseEventShowWine(wine);
+    		}
+		});
 
 	}
 
@@ -160,7 +165,6 @@ public class WineTableController implements Initializable {
 		colCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
 		colRegion.setCellValueFactory(new PropertyValueFactory<>("region"));
 		colProducer.setCellValueFactory(new PropertyValueFactory<>("producer"));
-		colEdit.setCellFactory(cellFactory);
 	}
 
 	private void loadWines() {

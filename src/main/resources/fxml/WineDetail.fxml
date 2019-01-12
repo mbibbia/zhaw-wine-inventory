@@ -5,7 +5,9 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -23,7 +25,7 @@
                   <Insets bottom="10.0" left="20.0" top="30.0" />
                </VBox.margin>
             </Label>
-            <HBox prefHeight="30.0" prefWidth="265.0">
+            <HBox prefWidth="246.0">
                <children>
                   <Label text="Wine ID - " textFill="#f8f7f7">
                      <font>
@@ -37,7 +39,7 @@
                   </Label>
                </children>
                <VBox.margin>
-                  <Insets left="25.0" />
+                  <Insets left="25.0" right="25.0" />
                </VBox.margin>
             </HBox>
             <TextField fx:id="name" maxWidth="246.0" prefHeight="30.0" prefWidth="246.0" promptText="Name">
@@ -70,27 +72,68 @@
                   <Insets left="25.0" />
                </VBox.margin>
             </ComboBox>
-            <HBox prefHeight="30.0" prefWidth="250.0" spacing="10.0">
+            <HBox maxWidth="246.0">
                <children>
-                  <Button fx:id="reset" mnemonicParsing="false" onAction="#reset" prefHeight="30.0" prefWidth="75.0" style="-fx-background-color: white;" text="Reset">
-                     <effect>
-                        <DropShadow blurType="ONE_PASS_BOX" color="#1965d0" />
-                     </effect>
-                  </Button>
-                  <Button fx:id="saveWine" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveWine" prefHeight="30.0" prefWidth="75.0" styleClass="btnGreen" text="Save" textFill="WHITE">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                     <effect>
-                        <DropShadow blurType="ONE_PASS_BOX" color="#6468b2" />
-                     </effect>
-                  </Button>
+                  <HBox prefHeight="20.0" spacing="10.0">
+                     <children>
+                        <Button fx:id="editWine" mnemonicParsing="false" onAction="#editWine">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/edit.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Edit" />
+                           </tooltip>
+                        </Button>
+                        <Button fx:id="saveWine" mnemonicParsing="false" onAction="#saveWine">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/save.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Save" />
+                           </tooltip>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox HBox.hgrow="ALWAYS" />
+                  <HBox alignment="TOP_RIGHT" prefHeight="20.0" spacing="10.0">
+                     <children>
+                        <Button fx:id="reset" mnemonicParsing="false" onAction="#reset">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/reset.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Reset" />
+                           </tooltip>
+                        </Button>
+                        <Button fx:id="deleteWine" mnemonicParsing="false" onAction="#deleteWine">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/delete.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Delete" />
+                           </tooltip>
+                        </Button>
+                     </children>
+                  </HBox>
                </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
                <VBox.margin>
-                  <Insets left="110.0" />
+                  <Insets left="25.0" right="25.0" />
                </VBox.margin>
             </HBox>
          </children>

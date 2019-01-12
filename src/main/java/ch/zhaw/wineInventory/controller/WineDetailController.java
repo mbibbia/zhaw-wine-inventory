@@ -1,6 +1,8 @@
 package ch.zhaw.wineInventory.controller;
 
 import java.net.URL;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -34,6 +36,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -78,6 +81,12 @@ public class WineDetailController implements Initializable {
 	private Button reset;
 
 	@FXML
+	private Button editWine;
+
+	@FXML
+	private Button deleteWine;
+
+	@FXML
 	private Button saveWine;
 
 	@Lazy
@@ -114,6 +123,9 @@ public class WineDetailController implements Initializable {
 			country.setValue(event.getWine().getCountry());
 			region.setValue(event.getWine().getRegion());
 			producer.setValue(event.getWine().getProducer());
+			disableAllFields();
+			editWine.setDisable(false);
+			deleteWine.setDisable(false);
 		}
 
 	}
@@ -168,8 +180,28 @@ public class WineDetailController implements Initializable {
 		classification.setItems(loadClassifications());
 		country.setItems(loadCountries());
 		producer.setItems(loadProducers());
+		
+		initializeDefaultButtonState();
+		initializeButtonHandler();
 	}
 
+	private void initializeDefaultButtonState() {
+		editWine.setDisable(true);
+		saveWine.setDisable(true);
+		reset.setDisable(false);
+		deleteWine.setDisable(true);
+	}
+	
+	private void initializeButtonHandler() {
+		name.textProperty().addListener((observable, oldValue, newValue) -> {
+		    if (!newValue.trim().isEmpty()) {
+		    	saveWine.setDisable(false);
+		    } else {
+		    	saveWine.setDisable(true);
+		    }
+		});
+	}
+	
 	private ObservableList<WineType> loadTypes() {
 		return FXCollections.observableArrayList(wineTypeService.findAll());
 	}
@@ -224,7 +256,27 @@ public class WineDetailController implements Initializable {
 		country.getSelectionModel().clearSelection();
 		region.getSelectionModel().clearSelection();
 		producer.getSelectionModel().clearSelection();
+		
+		enableAllFields();
+		initializeDefaultButtonState();
+	}
+	
+	private void enableAllFields() {
+		name.setDisable(false);
+		wineType.setDisable(false);
+		classification.setDisable(false);
+		country.setDisable(false);
+		region.setDisable(false);
+		producer.setDisable(false);
+	}
 
+	private void disableAllFields() {
+		name.setDisable(true);
+		wineType.setDisable(true);
+		classification.setDisable(true);
+		country.setDisable(true);
+		region.setDisable(true);
+		producer.setDisable(true);
 	}
 
 	@FXML
@@ -236,6 +288,26 @@ public class WineDetailController implements Initializable {
 		}
 	}
 
+	@FXML
+	private void editWine(ActionEvent event) {
+		enableAllFields();
+	}
+	
+	@FXML
+	private void deleteWine(ActionEvent event) {
+		Wine wine = wineService.find(Long.parseLong(wineId.getText()));
+
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirmation Dialog");
+		alert.setHeaderText(null);
+		alert.setContentText("Are you sure you want to delete selected?");
+		Optional<ButtonType> action = alert.showAndWait();
+
+		if (action.get() == ButtonType.OK) {
+			wineService.delete(wine);
+		}
+	}
+	
 	@FXML
 	private void saveWine(ActionEvent event) {
 
