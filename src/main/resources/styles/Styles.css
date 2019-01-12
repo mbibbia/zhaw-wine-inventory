@@ -4,7 +4,130 @@
 	-fx-background-color:  #3cbc53;
 }
 
-.background{
-	-fx-background-color: DODGERBLUE;
+/*-----------------------------------------------------------*/
+
+.classification_title {
+	-fx-font-size: 18pt;
+	-fx-text-fill: black;
+	-fx-font-weight: 900;
 }
 
+.classification_subtitle {
+	-fx-font-size: 12pt;
+	-fx-text-fill: black;
+	-fx-font-weight: 900;
+}
+
+.classification_background {
+	-fx-background-color: #FFE4C4; /*Bisque*/ 
+}
+
+/*-----------------------------------------------------------*/
+
+.country_title {
+	-fx-font-size: 18pt;
+	-fx-text-fill: #000000;
+	-fx-font-weight: 900;
+}
+
+.country_subtitle {
+	-fx-font-size: 12pt;
+	-fx-text-fill: #000000;
+	-fx-font-weight: 900;
+}
+
+.country_background{
+	-fx-background-color: #90EE90; /*LightGreen*/ 
+}
+
+/*-----------------------------------------------------------*/
+
+.producer_title {
+	-fx-font-size: 18pt;
+	-fx-text-fill: #000000;
+	-fx-font-weight: 900;
+}
+
+.producer_subtitle {
+	-fx-font-size: 12pt;
+	-fx-text-fill: #000000;
+	-fx-font-weight: 900;
+}
+
+.producer_background{
+	-fx-background-color: #DDA0DD; /*Plum*/
+}
+
+/*-----------------------------------------------------------*/
+
+.winedetail_title {
+	-fx-font-size: 18pt;
+	-fx-text-fill: black;
+	-fx-font-weight: 900;
+}
+
+.winedetail_subtitle {
+	-fx-font-size: 12pt;
+	-fx-text-fill: black;
+	-fx-font-weight: 900;
+}
+
+.winedetail_background{
+	-fx-background-color: #ADD8E6; /*LightBlue*/
+}
+
+/*-----------------------------------------------------------*/
+
+.region_title {
+	-fx-font-size: 18pt;
+	-fx-text-fill: black;
+	-fx-font-weight: 900;
+}
+
+.region_subtitle {
+	-fx-font-size: 12pt;
+	-fx-text-fill: black;
+	-fx-font-weight: 900;
+}
+
+.region_background{
+	-fx-background-color: #FFFFE0; /*LightYellow*/ 
+}
+
+/*-----------------------------------------------------------*/
+
+.winedetail_title {
+	-fx-font-size: 18pt;
+	-fx-text-fill: black;
+	-fx-font-weight: 900;
+}
+
+.winedetail_subtitle {
+	-fx-font-size: 12pt;
+	-fx-text-fill: black;
+	-fx-font-weight: 900;
+}
+
+.winedetail_background{
+	-fx-background-color: #B0C4DE; /*LightSteelBlue*/
+}
+
+/*-----------------------------------------------------------*/
+
+.winetype_title {
+	-fx-font-size: 18pt;
+	-fx-text-fill: black;
+	-fx-font-weight: 900;
+}
+
+.winetype_subtitle {
+	-fx-font-size: 12pt;
+	-fx-text-fill: black;
+	-fx-font-weight: 900;
+}
+
+.winetype_background{
+	-fx-background-color: #A9A9A9; /*Darkgrey*/
+}
+
+/*-----------------------------------------------------------*/

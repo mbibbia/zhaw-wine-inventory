@@ -10,12 +10,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.zhaw.wineInventory.controller.ClassificationDetailController">
    <children>
-      <VBox prefHeight="571.0" prefWidth="306.0" spacing="10.0" styleClass="background" stylesheets="@../styles/Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox prefHeight="571.0" prefWidth="306.0" spacing="10.0" styleClass="classification_background" stylesheets="@../styles/Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label text="Classification Detail" textFill="WHITE">
+            <Label styleClass="classification_title" stylesheets="@../styles/Styles.css" text="Classification Detail" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font>
@@ -25,7 +24,7 @@
             </Label>
             <HBox prefHeight="30.0" prefWidth="265.0">
                <children>
-                  <Label text="Classification ID - " textFill="#f8f7f7">
+                  <Label styleClass="classification_subtitle" stylesheets="@../styles/Styles.css" text="Classification ID - " textFill="#f8f7f7">
                      <font>
                         <Font size="15.0" />
                      </font>

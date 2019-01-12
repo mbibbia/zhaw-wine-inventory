@@ -10,26 +10,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.zhaw.wineInventory.controller.CountryDetailController">
    <children>
-      <VBox prefHeight="571.0" prefWidth="306.0" spacing="10.0" styleClass="background" stylesheets="@../styles/Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox prefHeight="571.0" prefWidth="306.0" spacing="10.0" styleClass="country_background" stylesheets="@../styles/Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label text="Country Detail" textFill="WHITE">
-               <font>
-                  <Font size="20.0" />
-               </font>
+            <Label styleClass="country_title" stylesheets="@../styles/Styles.css" text="Country Detail">
                <VBox.margin>
                   <Insets bottom="10.0" left="20.0" top="30.0" />
                </VBox.margin>
             </Label>
             <HBox prefHeight="30.0" prefWidth="265.0">
                <children>
-                  <Label text="Country ID - " textFill="#f8f7f7">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Label>
+                  <Label styleClass="country_subtitle" stylesheets="@../styles/Styles.css" text="Country ID - " />
                   <Label fx:id="countryId">
                      <HBox.margin>
                         <Insets left="25.0" />
