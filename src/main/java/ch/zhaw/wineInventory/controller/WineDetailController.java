@@ -23,6 +23,7 @@ import ch.zhaw.wineInventory.event.WineTypeSaveEvent;
 import ch.zhaw.wineInventory.event.ClassificationSaveEvent;
 import ch.zhaw.wineInventory.event.CountrySaveEvent;
 import ch.zhaw.wineInventory.event.ProducerSaveEvent;
+import ch.zhaw.wineInventory.event.WineDeleteEvent;
 import ch.zhaw.wineInventory.event.WineDetailsEvent;
 import ch.zhaw.wineInventory.service.ClassificationService;
 import ch.zhaw.wineInventory.service.CountryService;
@@ -305,6 +306,7 @@ public class WineDetailController implements Initializable {
 
 		if (action.get() == ButtonType.OK) {
 			wineService.delete(wine);
+			raiseEventDeleteWine(wine);
 		}
 	}
 	
@@ -349,6 +351,11 @@ public class WineDetailController implements Initializable {
 
 		clearFields();
 
+	}
+
+	private void raiseEventDeleteWine(final Wine wine) {
+		WineDeleteEvent wineEvent = new WineDeleteEvent(this, wine);
+		applicationEventPublisher.publishEvent(wineEvent);
 	}
 
 	private void raiseEventSaveWine(final Wine wine) {

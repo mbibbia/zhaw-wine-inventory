@@ -24,6 +24,7 @@ import ch.zhaw.wineInventory.event.WineTypeSaveEvent;
 import ch.zhaw.wineInventory.event.ClassificationSaveEvent;
 import ch.zhaw.wineInventory.event.CountrySaveEvent;
 import ch.zhaw.wineInventory.event.ProducerSaveEvent;
+import ch.zhaw.wineInventory.event.WineDeleteEvent;
 import ch.zhaw.wineInventory.event.WineDetailsEvent;
 import ch.zhaw.wineInventory.service.WineService;
 import javafx.collections.FXCollections;
@@ -101,6 +102,16 @@ public class WineTableController implements Initializable {
 
 	}
 
+	@Component
+	class DeleteWineEventHandler implements ApplicationListener<WineDeleteEvent> {
+
+		@Override
+		public void onApplicationEvent(WineDeleteEvent event) {
+			loadWines();
+		}
+
+	}	
+	
 	@Component
 	class SaveCountryEventHandler implements ApplicationListener<CountrySaveEvent> {
 
