@@ -92,12 +92,9 @@ public class StageManager {
 	 */
 	private void show(final Parent rootnode, String title) {
 		Scene scene = prepareScene(rootnode);
-		// scene.getStylesheets().add("/styles/Styles.css");
 
-		// primaryStage.initStyle(StageStyle.TRANSPARENT);
 		primaryStage.setTitle(title);
 		primaryStage.setScene(scene);
-		primaryStage.sizeToScene();
 		primaryStage.centerOnScreen();
 
 		try {
