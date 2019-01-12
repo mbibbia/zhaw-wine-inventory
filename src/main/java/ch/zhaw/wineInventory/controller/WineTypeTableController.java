@@ -93,7 +93,7 @@ public class WineTypeTableController implements Initializable {
 	private void setColumnProperties() {
 		colWineTypeId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colName.setCellValueFactory(new PropertyValueFactory<>("name"));
-		colEdit.setCellFactory(cellFactory);
+
 	}
 
 	private void loadWineTypes() {

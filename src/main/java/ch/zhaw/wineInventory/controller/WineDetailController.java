@@ -219,11 +219,11 @@ public class WineDetailController implements Initializable {
 
 		wineId.setText(null);
 		name.clear();
-		wineType.getSelectionModel().clearSelection();
-		classification.getSelectionModel().clearSelection();
-		country.getSelectionModel().clearSelection();
-		region.getSelectionModel().clearSelection();
-		producer.getSelectionModel().clearSelection();
+		wineType.setValue(null);
+		classification.setValue(null);
+		country.setValue(null);
+		region.setValue(null);
+		producer.setValue(null);
 
 	}
 

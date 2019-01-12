@@ -210,8 +210,8 @@ public class ProducerDetailController implements Initializable {
 		fax.clear();
 		email.clear();
 		url.clear();
-		country.getSelectionModel().clearSelection();
-		region.getSelectionModel().clearSelection();
+		country.setValue(null);
+		region.setValue(null);
 
 	}
 
