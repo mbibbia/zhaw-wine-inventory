@@ -11,10 +11,7 @@ import ch.zhaw.wineInventory.bean.Classification;
 import ch.zhaw.wineInventory.event.ClassificationDetailsEvent;
 import ch.zhaw.wineInventory.event.ClassificationSaveEvent;
 import ch.zhaw.wineInventory.service.ClassificationService;
-import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 
 /**
@@ -33,17 +30,11 @@ public class ClassificationDetailController extends MainDetailController {
 
 		@Override
 		public void onApplicationEvent(ClassificationDetailsEvent event) {
-			classificationId.setText(Long.toString(event.getClassification().getId()));
+			id.setText(Long.toString(event.getClassification().getId()));
 			name.setText(event.getClassification().getName());
 		}
 
 	}
-
-	@FXML
-	private Label classificationId;
-	
-	@FXML
-	private TextField name;
 
 	@Autowired
 	private ClassificationService classificationService;
@@ -54,31 +45,20 @@ public class ClassificationDetailController extends MainDetailController {
 
 	}
 
-	private String getName() {
-		return name.getText();
-	}
-
 	@Override
-	void clearFields() {
-
-		classificationId.setText(null);
-		name.clear();
+	void deletePersistent(Object object) {
+		classificationService.delete((Classification) object);
 
 	}
 
 	@Override
-	boolean isNew() {
-		return (classificationId.getText() == null || classificationId.getText() == "");
-	}
-
-	@Override
-	boolean isValid() {
-		return validation.emptyValidation("Name", getName().isEmpty());
+	Object getPersistent() {
+		return classificationService.find(Long.parseLong(id.getText()));
 	}
 
 	@Override
 	Object persistExisting() {
-		Classification classification = classificationService.find(Long.parseLong(classificationId.getText()));
+		Classification classification = (Classification) getPersistent();
 		classification.setName(getName());
 		return classificationService.update(classification);
 	}
@@ -104,13 +84,6 @@ public class ClassificationDetailController extends MainDetailController {
 	}
 
 	@Override
-	void raiseEventSave(Object object) {
-		ClassificationSaveEvent classificationEvent = new ClassificationSaveEvent(this, (Classification) object);
-		applicationEventPublisher.publishEvent(classificationEvent);
-
-	}
-
-	@Override
 	void raiseAlertUpdate(Object object) {
 		Classification classification = (Classification) object;
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -119,11 +92,6 @@ public class ClassificationDetailController extends MainDetailController {
 		alert.setContentText("The classification " + classification.getName() + " has been updated.");
 		alert.showAndWait();
 
-	}
-
-	@Override
-	void reset() {
-		clearFields();
 	}
 
 	@Override
@@ -137,25 +105,9 @@ public class ClassificationDetailController extends MainDetailController {
 	}
 
 	@Override
-	void deletePersistent(Object object) {
-		classificationService.delete((Classification) object);
-
-	}
-
-	@Override
-	Object getPersistent() {
-		return classificationService.find(Long.parseLong(classificationId.getText()));
-	}
-
-	@Override
-	void disableAllFields() {
-		name.setDisable(true);
-
-	}
-
-	@Override
-	void enableAllFields() {
-		name.setDisable(false);
+	void raiseEventSave(Object object) {
+		ClassificationSaveEvent classificationEvent = new ClassificationSaveEvent(this, (Classification) object);
+		applicationEventPublisher.publishEvent(classificationEvent);
 
 	}
 

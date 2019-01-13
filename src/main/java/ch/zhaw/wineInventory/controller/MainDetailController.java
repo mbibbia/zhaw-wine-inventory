@@ -16,6 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 
@@ -31,6 +32,9 @@ abstract class MainDetailController implements Initializable {
 
 	@Autowired
 	ControllerValidation validation;
+
+	@FXML
+	Label id;
 
 	@FXML
 	TextField name;
@@ -55,8 +59,8 @@ abstract class MainDetailController implements Initializable {
 
 	private void create() {
 		Object object = persistNew();
-		raiseAlertNew(object);
 		raiseEventSave(object);
+		raiseAlertNew(object);
 
 	}
 
@@ -87,12 +91,15 @@ abstract class MainDetailController implements Initializable {
 
 	private void update() {
 		Object object = persistExisting();
-		raiseAlertUpdate(object);
 		raiseEventSave(object);
+		raiseAlertUpdate(object);
 
 	};
 
-	abstract void clearFields();
+	void clearFields() {
+		id.setText(null);
+		name.clear();
+	};
 
 	@FXML
 	void delete() {
@@ -113,15 +120,34 @@ abstract class MainDetailController implements Initializable {
 
 	abstract void deletePersistent(Object object);
 
-	abstract void disableAllFields();
+	void disableAllFields() {
+		name.setDisable(true);
 
-	abstract void enableAllFields();
+	}
+
+	@FXML
+	void edit() {
+		enableAllFields();
+	}
+
+	void enableAllFields() {
+		name.setDisable(false);
+
+	}
+
+	String getName() {
+		return name.getText();
+	}
 
 	abstract Object getPersistent();
 
-	abstract boolean isNew();
+	boolean isNew() {
+		return (id.getText() == null || id.getText() == "");
+	};
 
-	abstract boolean isValid();
+	boolean isValid() {
+		return validation.emptyValidation("Name", getName().isEmpty());
+	};
 
 	abstract Object persistExisting();
 
@@ -134,11 +160,6 @@ abstract class MainDetailController implements Initializable {
 	abstract void raiseEventDelete(Object object);
 
 	abstract void raiseEventSave(Object object);
-
-	@FXML
-	void edit() {
-		enableAllFields();
-	}
 
 	@FXML
 	void reset() {

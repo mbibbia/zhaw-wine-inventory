@@ -28,7 +28,7 @@
                         <String fx:value="winetype_subtitle" />
                      </styleClass>
                   </Label>
-                  <Label fx:id="wineTypeId">
+                  <Label fx:id="id">
                      <HBox.margin>
                         <Insets left="25.0" />
                      </HBox.margin>
@@ -50,7 +50,7 @@
                         <DropShadow blurType="ONE_PASS_BOX" color="#1965d0" />
                      </effect>
                   </Button>
-                  <Button fx:id="saveWineType" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveWineType" prefHeight="30.0" prefWidth="75.0" styleClass="btnGreen" text="Save" textFill="WHITE">
+                  <Button fx:id="save" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#save" prefHeight="30.0" prefWidth="75.0" styleClass="btnGreen" text="Save" textFill="WHITE">
                      <font>
                         <Font size="15.0" />
                      </font>
