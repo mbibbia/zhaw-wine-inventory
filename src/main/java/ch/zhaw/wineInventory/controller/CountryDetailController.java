@@ -48,17 +48,12 @@ public class CountryDetailController extends MainDetailController {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		super.initialize(location, resources);
+		code.setStyle("-fx-opacity: 1;");
 
 	}
 
 	private String getCode() {
 		return code.getText();
-	}
-
-	@Override
-	void clearFields() {
-		super.clearFields();
-		code.clear();
 	}
 
 	@Override
@@ -126,6 +121,18 @@ public class CountryDetailController extends MainDetailController {
 		CountrySaveEvent countryEvent = new CountrySaveEvent(this, (Country) object);
 		applicationEventPublisher.publishEvent(countryEvent);
 
+	}
+
+	@Override
+	void setEditStateActivation() {
+		super.setEditStateActivation();
+		code.setDisable(false);
+	}
+
+	@Override
+	void setResetStateProperties() {
+		super.setResetStateProperties();
+		code.clear();
 	}
 
 }

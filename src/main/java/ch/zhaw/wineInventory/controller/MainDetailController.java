@@ -10,7 +10,9 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import ch.zhaw.wineInventory.config.StageManager;
+import ch.zhaw.wineInventory.controller.helper.ControllerState;
 import ch.zhaw.wineInventory.controller.helper.ControllerValidation;
+import ch.zhaw.wineInventory.service.ProducerService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -33,6 +35,11 @@ abstract class MainDetailController implements Initializable {
 	@Autowired
 	ControllerValidation validation;
 
+	@Autowired
+	ProducerService producerService;
+
+	ControllerState controllerState;
+
 	@FXML
 	Label id;
 
@@ -53,8 +60,10 @@ abstract class MainDetailController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		initializeDefaultButtonState();
-		initializeButtonHandler();
+		// Text field and combo boxes should be readable
+		// also in VIEW state.
+		name.setStyle("-fx-opacity: 1;");
+		changeState(ControllerState.RESET);
 	}
 
 	private void create() {
@@ -64,31 +73,6 @@ abstract class MainDetailController implements Initializable {
 
 	}
 
-	private void initializeButtonHandler() {
-		name.textProperty().addListener((observable, oldValue, newValue) -> {
-			if (!newValue.trim().isEmpty()) {
-				save.setDisable(false);
-			} else {
-				save.setDisable(true);
-			}
-		});
-	}
-
-	private void initializeDefaultButtonState() {
-		if (edit != null) {
-			edit.setDisable(true);
-		}
-		if (save != null) {
-			save.setDisable(true);
-		}
-		if (reset != null) {
-			reset.setDisable(false);
-		}
-		if (delete != null) {
-			delete.setDisable(true);
-		}
-	};
-
 	private void update() {
 		Object object = persistExisting();
 		raiseEventSave(object);
@@ -96,10 +80,85 @@ abstract class MainDetailController implements Initializable {
 
 	};
 
-	void clearFields() {
-		id.setText(null);
-		name.clear();
+	void changeState(ControllerState newState) {
+		if (controllerState == newState) {
+			return;
+		}
+		System.out.println(String.format("%s => %s", controllerState, newState));
+
+		if (controllerState != null) {
+			switch (controllerState) {
+			case EDIT:
+			case CREATE:
+				name.textProperty().addListener((observable, oldValue, newValue) -> {
+				});
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		controllerState = newState;
+
+		switch (controllerState) {
+		case RESET:
+			// Buttons
+			setResetStateButtons();
+
+			// Text field and combo boxes view
+			setResetStateProperties();
+
+			// Text field and combo boxes activation state
+			setResetStateActivation();
+
+			break;
+
+		case VIEW:
+			// Buttons
+			setViewStateButtons();
+
+			setViewStateActivation();
+			break;
+
+		case EDIT:
+			setEditStateButtons();
+
+			// Text field and combo boxes activation state
+			setEditStateActivation();
+
+			setEventListener();
+			break;
+
+		case CREATE:
+			// Buttons
+			setCreateStateButtons();
+
+			// Text field and combo boxes activation state
+			setCreateStateActivation();
+
+			// Event listener
+			setEventListener();
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	void setEventListener() {
+		name.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue.trim().isEmpty()) {
+				save.setDisable(false);
+			} else {
+				save.setDisable(true);
+			}
+		});
 	};
+
+	void clearFields() {
+		setResetStateProperties();
+	}
 
 	@FXML
 	void delete() {
@@ -114,6 +173,7 @@ abstract class MainDetailController implements Initializable {
 		if (action.get() == ButtonType.OK) {
 			deletePersistent(object);
 			raiseEventDelete(object);
+			changeState(ControllerState.RESET);
 		}
 
 	}
@@ -121,17 +181,21 @@ abstract class MainDetailController implements Initializable {
 	abstract void deletePersistent(Object object);
 
 	void disableAllFields() {
-		name.setDisable(true);
+		setResetStateActivation();
 
 	}
 
 	@FXML
 	void edit() {
-		enableAllFields();
+		if (controllerState == ControllerState.RESET) {
+			changeState(ControllerState.CREATE);
+		} else if (controllerState == ControllerState.VIEW) {
+			changeState(ControllerState.EDIT);
+		}
 	}
 
 	void enableAllFields() {
-		name.setDisable(false);
+		setEditStateActivation();
 
 	}
 
@@ -143,11 +207,11 @@ abstract class MainDetailController implements Initializable {
 
 	boolean isNew() {
 		return (id.getText() == null || id.getText() == "");
-	};
+	}
 
 	boolean isValid() {
 		return validation.emptyValidation("Name", getName().isEmpty());
-	};
+	}
 
 	abstract Object persistExisting();
 
@@ -163,7 +227,7 @@ abstract class MainDetailController implements Initializable {
 
 	@FXML
 	void reset() {
-		clearFields();
+		changeState(ControllerState.RESET);
 	}
 
 	@FXML
@@ -175,7 +239,88 @@ abstract class MainDetailController implements Initializable {
 				update();
 			}
 		}
-		clearFields();
+		changeState(ControllerState.VIEW);
+	};
+
+	void setCreateStateActivation() {
+		setEditStateActivation();
+	};
+
+	void setCreateStateButtons() {
+		if (edit != null) {
+			edit.setDisable(true);
+		}
+		if (save != null) {
+			save.setDisable(true);
+		}
+		if (reset != null) {
+			reset.setDisable(false);
+		}
+		if (delete != null) {
+			delete.setDisable(true);
+		}
+	}
+
+	void setEditStateActivation() {
+		name.setDisable(false);
+	}
+
+	void setEditStateButtons() {
+		if (edit != null) {
+			edit.setDisable(true);
+		}
+		if (save != null) {
+			save.setDisable(false);
+		}
+		if (reset != null) {
+			reset.setDisable(false);
+		}
+		if (delete != null) {
+			delete.setDisable(false);
+		}
+	}
+
+	void setResetStateActivation() {
+		name.setDisable(true);
+	}
+
+	void setResetStateButtons() {
+		if (edit != null) {
+			edit.setDisable(false);
+		}
+		if (save != null) {
+			save.setDisable(true);
+		}
+		if (reset != null) {
+			reset.setDisable(true);
+		}
+		if (delete != null) {
+			delete.setDisable(true);
+		}
+	}
+
+	void setResetStateProperties() {
+		id.setText(null);
+		name.clear();
+	}
+
+	void setViewStateActivation() {
+		setResetStateActivation();
+	}
+
+	void setViewStateButtons() {
+		if (edit != null) {
+			edit.setDisable(false);
+		}
+		if (save != null) {
+			save.setDisable(true);
+		}
+		if (reset != null) {
+			reset.setDisable(false);
+		}
+		if (delete != null) {
+			delete.setDisable(true);
+		}
 	}
 
 }

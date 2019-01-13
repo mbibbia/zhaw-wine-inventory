@@ -1,12 +1,9 @@
 package ch.zhaw.wineInventory.controller;
 
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
@@ -16,7 +13,6 @@ import ch.zhaw.wineInventory.bean.Producer;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.bean.Wine;
 import ch.zhaw.wineInventory.bean.WineType;
-import ch.zhaw.wineInventory.config.StageManager;
 import ch.zhaw.wineInventory.controller.helper.ControllerState;
 import ch.zhaw.wineInventory.event.WineSaveEvent;
 import ch.zhaw.wineInventory.event.WineTypeSaveEvent;
@@ -34,13 +30,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 
 /**
@@ -51,82 +42,15 @@ import javafx.scene.control.Alert.AlertType;
  *
  */
 @Controller
-public class WineDetailController implements Initializable {
-
-	@FXML
-	private Label wineId;
-
-	@FXML
-	private Label userId;
-
-	@FXML
-	private TextField name;
-
-	@FXML
-	private ComboBox<WineType> wineType;
-
-	@FXML
-	private ComboBox<Classification> classification;
-
-	@FXML
-	private ComboBox<Country> country;
-
-	@FXML
-	private ComboBox<Region> region;
-
-	@FXML
-	private ComboBox<Producer> producer;
-
-	@FXML
-	private Button reset;
-
-	@FXML
-	private Button editWine;
-
-	@FXML
-	private Button deleteWine;
-
-	@FXML
-	private Button saveWine;
-
-	@Lazy
-	@Autowired
-	private StageManager stageManager;
-
-	@Autowired
-	private ApplicationEventPublisher applicationEventPublisher;
-
-	@Autowired
-	private WineService wineService;
-
-	@Autowired
-	private WineTypeService wineTypeService;
-
-	@Autowired
-	private ClassificationService classificationService;
-
-	@Autowired
-	private CountryService countryService;
-
-	@Autowired
-	private ProducerService producerService;
-	
-	private ControllerState controllerState;
+public class WineDetailController extends MainDetailController {
 
 	@Component
-	class ShowWineDetailEventHandler implements ApplicationListener<WineDetailsEvent> {
+	class SaveClassificationEventHandler implements ApplicationListener<ClassificationSaveEvent> {
 
 		@Override
-		public void onApplicationEvent(WineDetailsEvent event) {
-			wineId.setText(Long.toString(event.getWine().getId()));
-			name.setText(event.getWine().getName());
-			wineType.setValue(event.getWine().getType());
-			classification.setValue(event.getWine().getClassification());
-			country.setValue(event.getWine().getCountry());
-			region.setValue(event.getWine().getRegion());
-			producer.setValue(event.getWine().getProducer());
-			
-			changeState(ControllerState.VIEW);
+		public void onApplicationEvent(ClassificationSaveEvent event) {
+			classification.setItems(loadClassifications());
+			classification.setValue(event.getClassification());
 		}
 
 	}
@@ -143,12 +67,12 @@ public class WineDetailController implements Initializable {
 	}
 
 	@Component
-	class SaveClassificationEventHandler implements ApplicationListener<ClassificationSaveEvent> {
+	class SaveProducerEventHandler implements ApplicationListener<ProducerSaveEvent> {
 
 		@Override
-		public void onApplicationEvent(ClassificationSaveEvent event) {
-			classification.setItems(loadClassifications());
-			classification.setValue(event.getClassification());
+		public void onApplicationEvent(ProducerSaveEvent event) {
+			producer.setItems(loadProducers());
+			producer.setValue(event.getProducer());
 		}
 
 	}
@@ -165,18 +89,56 @@ public class WineDetailController implements Initializable {
 	}
 
 	@Component
-	class SaveProducerEventHandler implements ApplicationListener<ProducerSaveEvent> {
+	class ShowWineDetailEventHandler implements ApplicationListener<WineDetailsEvent> {
 
 		@Override
-		public void onApplicationEvent(ProducerSaveEvent event) {
-			producer.setItems(loadProducers());
-			producer.setValue(event.getProducer());
+		public void onApplicationEvent(WineDetailsEvent event) {
+			id.setText(Long.toString(event.getWine().getId()));
+			name.setText(event.getWine().getName());
+			wineType.setValue(event.getWine().getType());
+			classification.setValue(event.getWine().getClassification());
+			country.setValue(event.getWine().getCountry());
+			region.setValue(event.getWine().getRegion());
+			producer.setValue(event.getWine().getProducer());
+
+			changeState(ControllerState.VIEW);
 		}
 
 	}
 
+	@FXML
+	private ComboBox<WineType> wineType;
+
+	@FXML
+	private ComboBox<Classification> classification;
+
+	@FXML
+	private ComboBox<Country> country;
+
+	@FXML
+	private ComboBox<Region> region;
+
+	@FXML
+	private ComboBox<Producer> producer;
+
+	@Autowired
+	private WineService wineService;
+
+	@Autowired
+	private WineTypeService wineTypeService;
+
+	@Autowired
+	private ClassificationService classificationService;
+
+	@Autowired
+	private CountryService countryService;
+
+	@Autowired
+	private ProducerService producerService;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		super.initialize(location, resources);
 		wineType.setItems(loadTypes());
 		classification.setItems(loadClassifications());
 		country.setItems(loadCountries());
@@ -184,18 +146,49 @@ public class WineDetailController implements Initializable {
 
 		// Text field and combo boxes should be readable
 		// also in VIEW state.
-		name.setStyle("-fx-opacity: 1;");
 		wineType.setStyle("-fx-opacity: 1;");
 		classification.setStyle("-fx-opacity: 1;");
 		country.setStyle("-fx-opacity: 1;");
 		region.setStyle("-fx-opacity: 1;");
 		producer.setStyle("-fx-opacity: 1;");
-
-		changeState(ControllerState.RESET);
 	}
-	
-	private ObservableList<WineType> loadTypes() {
-		return FXCollections.observableArrayList(wineTypeService.findAll());
+
+	@FXML
+	private void editWine(ActionEvent event) {
+		if (controllerState == ControllerState.RESET) {
+			changeState(ControllerState.CREATE);
+		} else if (controllerState == ControllerState.VIEW) {
+			changeState(ControllerState.EDIT);
+		}
+	}
+
+	private Classification getClassification() {
+		return classification.getValue();
+	}
+
+	private Country getCountry() {
+		return country.getValue();
+	}
+
+	private Producer getProducer() {
+		return producer.getValue();
+	}
+
+	private Region getRegion() {
+		return region.getValue();
+	}
+
+	private WineType getType() {
+		return wineType.getValue();
+	}
+
+	@FXML
+	private void handleRegionClicked() {
+
+		if (country.getValue() != null) {
+			ObservableList<Region> regions = FXCollections.observableArrayList(country.getValue().getRegions());
+			region.setItems(regions);
+		}
 	}
 
 	private ObservableList<Classification> loadClassifications() {
@@ -210,123 +203,47 @@ public class WineDetailController implements Initializable {
 		return FXCollections.observableArrayList(producerService.findAll());
 	}
 
-	private String getName() {
-		return name.getText();
+	private ObservableList<WineType> loadTypes() {
+		return FXCollections.observableArrayList(wineTypeService.findAll());
 	}
 
-	private WineType getType() {
-		return wineType.getValue();
+	@Override
+	void deletePersistent(Object object) {
+		wineService.delete((Wine) object);
 	}
 
-	private Classification getClassification() {
-		return classification.getValue();
+	@Override
+	Object getPersistent() {
+		return wineService.find(Long.parseLong(id.getText()));
 	}
 
-	private Country getCountry() {
-		return country.getValue();
+	@Override
+	Object persistExisting() {
+		Wine wine = (Wine) getPersistent();
+		wine.setName(getName());
+		wine.setType(getType());
+		wine.setClassification(getClassification());
+		wine.setCountry(getCountry());
+		wine.setRegion(getRegion());
+		wine.setProducer(getProducer());
+		return wineService.update(wine);
 	}
 
-	private Region getRegion() {
-		return region.getValue();
+	@Override
+	Object persistNew() {
+		Wine wine = new Wine();
+		wine.setName(getName());
+		wine.setType(getType());
+		wine.setClassification(getClassification());
+		wine.setCountry(getCountry());
+		wine.setRegion(getRegion());
+		wine.setProducer(getProducer());
+		return wineService.save(wine);
 	}
 
-	private Producer getProducer() {
-		return producer.getValue();
-	}
-
-	@FXML
-	void reset(ActionEvent event) {
-		changeState(ControllerState.RESET);
-	}
-
-	@FXML
-	private void handleRegionClicked() {
-
-		if (country.getValue() != null) {
-			ObservableList<Region> regions = FXCollections.observableArrayList(country.getValue().getRegions());
-			region.setItems(regions);
-		}
-	}
-
-	@FXML
-	private void editWine(ActionEvent event) {
-		if (controllerState == ControllerState.RESET) {
-			changeState(ControllerState.CREATE);
-		} else if (controllerState == ControllerState.VIEW) {
-			changeState(ControllerState.EDIT);
-		}
-	}
-	
-	@FXML
-	private void deleteWine(ActionEvent event) {
-		Wine wine = wineService.find(Long.parseLong(wineId.getText()));
-
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Confirmation Dialog");
-		alert.setHeaderText(null);
-		alert.setContentText("Are you sure you want to delete selected?");
-		Optional<ButtonType> action = alert.showAndWait();
-
-		if (action.get() == ButtonType.OK) {
-			wineService.delete(wine);
-			raiseEventDeleteWine(wine);
-			changeState(ControllerState.RESET);
-		}
-	}
-	
-	@FXML
-	private void saveWine(ActionEvent event) {
-
-		/*
-		 * if (validate("Name", getName(), "[a-zA-Z]+") && validate("Type", getType(),
-		 * "[a-zA-Z]+") && emptyValidation("Classification", getClassification() &&
-		 * emptyValidation("Country", getCountry() {
-		 */
-
-		if (wineId.getText() == null || wineId.getText() == "") {
-
-			Wine wine = new Wine();
-			wine.setName(getName());
-			wine.setType(getType());
-			wine.setClassification(getClassification());
-			wine.setCountry(getCountry());
-			wine.setRegion(getRegion());
-			wine.setProducer(getProducer());
-
-			Wine newWine = wineService.save(wine);
-
-			saveAlert(newWine);
-
-			raiseEventSaveWine(newWine);
-			wineId.setText(Long.toString(newWine.getId()));
-		} else {
-			Wine wine = wineService.find(Long.parseLong(wineId.getText()));
-			wine.setName(getName());
-			wine.setType(getType());
-			wine.setClassification(getClassification());
-			wine.setCountry(getCountry());
-			wine.setRegion(getRegion());
-			wine.setProducer(getProducer());
-			Wine updatedWine = wineService.update(wine);
-			updateAlert(updatedWine);
-
-			raiseEventSaveWine(updatedWine);
-		}
-
-		changeState(ControllerState.VIEW);
-	}
-
-	private void raiseEventDeleteWine(final Wine wine) {
-		WineDeleteEvent wineEvent = new WineDeleteEvent(this, wine);
-		applicationEventPublisher.publishEvent(wineEvent);
-	}
-
-	private void raiseEventSaveWine(final Wine wine) {
-		WineSaveEvent wineEvent = new WineSaveEvent(this, wine);
-		applicationEventPublisher.publishEvent(wineEvent);
-	}
-
-	private void saveAlert(Wine wine) {
+	@Override
+	void raiseAlertNew(Object object) {
+		Wine wine = (Wine) object;
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Wine saved successfully.");
 		alert.setHeaderText(null);
@@ -334,129 +251,29 @@ public class WineDetailController implements Initializable {
 		alert.showAndWait();
 	}
 
-	private void updateAlert(Wine wine) {
+	@Override
+	void raiseAlertUpdate(Object object) {
+		Wine wine = (Wine) object;
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("User updated successfully.");
+		alert.setTitle("Wine updated successfully.");
 		alert.setHeaderText(null);
 		alert.setContentText("The wine " + wine.getName() + " has been updated.");
 		alert.showAndWait();
+
 	}
-	
-	private void changeState(ControllerState newState) {
-		if (controllerState == newState) {
-			return;
-		}
-		System.out.println(String.format("%s => %s", controllerState, newState));
 
-		if (controllerState != null) {
-			switch (controllerState) {
-				case EDIT:
-				case CREATE:
-					name.textProperty().addListener((observable, oldValue, newValue) -> {
-					});		
-					break;
-				
-				default:
-					break;
-			}
-		}
-		
-		controllerState = newState;
+	@Override
+	void raiseEventDelete(Object object) {
+		WineDeleteEvent wineEvent = new WineDeleteEvent(this, (Wine) object);
+		applicationEventPublisher.publishEvent(wineEvent);
 
-		switch (controllerState) {
-			case RESET:
-				// Buttons
-				editWine.setDisable(false);
-				saveWine.setDisable(true);
-				reset.setDisable(true);
-				deleteWine.setDisable(true);
+	}
 
-				// Text field and combo boxes view
-				wineId.setText(null);
-				name.clear();
-				wineType.setValue(null);
-				classification.setValue(null);
-				country.setValue(null);
-				region.setValue(null);
-				producer.setValue(null);;
+	@Override
+	void raiseEventSave(Object object) {
+		WineSaveEvent wineEvent = new WineSaveEvent(this, (Wine) object);
+		applicationEventPublisher.publishEvent(wineEvent);
 
-				// Text field and combo boxes activation state
-				name.setDisable(true);
-				wineType.setDisable(true);
-				classification.setDisable(true);
-				country.setDisable(true);
-				region.setDisable(true);
-				producer.setDisable(true);
-			break;
-			
-			case VIEW:
-				// Buttons
-				editWine.setDisable(false);
-				saveWine.setDisable(true);
-				reset.setDisable(false);
-				deleteWine.setDisable(true);
-				
-				// Text field and combo boxes activation state
-				name.setDisable(true);
-				wineType.setDisable(true);
-				classification.setDisable(true);
-				country.setDisable(true);
-				region.setDisable(true);
-				producer.setDisable(true);
-			break;
-			
-			case EDIT:
-				editWine.setDisable(true);
-				saveWine.setDisable(false);
-				reset.setDisable(false);
-				deleteWine.setDisable(false);
-				
-				// Text field and combo boxes activation state
-				name.setDisable(false);
-				wineType.setDisable(false);
-				classification.setDisable(false);
-				country.setDisable(false);
-				region.setDisable(false);
-				producer.setDisable(false);
+	}
 
-				// Event listener
-				name.textProperty().addListener((observable, oldValue, newValue) -> {
-				    if (!newValue.trim().isEmpty()) {
-				    	saveWine.setDisable(false);
-				    } else {
-				    	saveWine.setDisable(true);
-				    }
-				});
-				break;
-			
-			case CREATE:
-				// Buttons
-				editWine.setDisable(true);
-				saveWine.setDisable(true);
-				reset.setDisable(false);
-				deleteWine.setDisable(true);
-				
-				// Text field and combo boxes activation state
-				name.setDisable(false);
-				wineType.setDisable(false);
-				classification.setDisable(false);
-				country.setDisable(false);
-				region.setDisable(false);
-				producer.setDisable(false);
-
-				// Event listener
-				name.textProperty().addListener((observable, oldValue, newValue) -> {
-				    if (!newValue.trim().isEmpty()) {
-				    	saveWine.setDisable(false);
-				    } else {
-				    	saveWine.setDisable(true);
-				    }
-				});
-				break;
-				
-			default:
-				break;
-		}
-	} 
-	
 }

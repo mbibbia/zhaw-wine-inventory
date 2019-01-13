@@ -68,12 +68,9 @@ public class RegionDetailController extends MainDetailController {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		super.initialize(location, resources);
+		country.setStyle("-fx-opacity: 1;");
 		country.setItems(loadCountries());
-	}
-
-	void clearFields() {
-		super.clearFields();
-		country.setValue(null);
 	}
 
 	private Country getCountry() {
@@ -85,12 +82,6 @@ public class RegionDetailController extends MainDetailController {
 	}
 
 	@Override
-	boolean isValid() {
-		return (validation.emptyValidation("Name", getName().isEmpty())
-				&& validation.emptyValidation("Country", getCountry() == null));
-	}
-
-	@Override
 	void deletePersistent(Object object) {
 		regionService.delete((Region) object);
 	}
@@ -98,6 +89,12 @@ public class RegionDetailController extends MainDetailController {
 	@Override
 	Object getPersistent() {
 		return regionService.find(Long.parseLong(id.getText()));
+	}
+
+	@Override
+	boolean isValid() {
+		return (validation.emptyValidation("Name", getName().isEmpty())
+				&& validation.emptyValidation("Country", getCountry() == null));
 	}
 
 	@Override
@@ -155,6 +152,24 @@ public class RegionDetailController extends MainDetailController {
 		RegionSaveEvent regionEvent = new RegionSaveEvent(this, (Region) object);
 		applicationEventPublisher.publishEvent(regionEvent);
 
+	}
+
+	@Override
+	void setEditStateActivation() {
+		super.setEditStateActivation();
+		country.setDisable(false);
+	}
+
+	@Override
+	void setResetStateActivation() {
+		super.setResetStateActivation();
+		country.setDisable(true);
+	}
+
+	@Override
+	void setResetStateProperties() {
+		super.setResetStateProperties();
+		country.setValue(null);
 	}
 
 }

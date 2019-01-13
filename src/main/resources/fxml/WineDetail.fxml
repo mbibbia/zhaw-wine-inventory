@@ -32,7 +32,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label fx:id="wineId">
+                  <Label fx:id="id">
                      <HBox.margin>
                         <Insets left="25.0" />
                      </HBox.margin>
@@ -76,7 +76,7 @@
                <children>
                   <HBox prefHeight="20.0" spacing="10.0">
                      <children>
-                        <Button fx:id="editWine" mnemonicParsing="false" onAction="#editWine">
+                        <Button fx:id="edit" mnemonicParsing="false" onAction="#edit">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -88,7 +88,7 @@
                               <Tooltip text="Edit" />
                            </tooltip>
                         </Button>
-                        <Button fx:id="saveWine" mnemonicParsing="false" onAction="#saveWine">
+                        <Button fx:id="save" mnemonicParsing="false" onAction="#save">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -117,7 +117,7 @@
                               <Tooltip text="Reset" />
                            </tooltip>
                         </Button>
-                        <Button fx:id="deleteWine" mnemonicParsing="false" onAction="#deleteWine">
+                        <Button fx:id="delete" mnemonicParsing="false" onAction="#delete">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
