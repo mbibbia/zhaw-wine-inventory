@@ -11,7 +11,6 @@ import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.event.CountryDetailsEvent;
 import ch.zhaw.wineInventory.event.CountrySaveEvent;
 import ch.zhaw.wineInventory.service.CountryService;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
@@ -127,11 +126,6 @@ public class CountryDetailController extends MainDetailController {
 		CountrySaveEvent countryEvent = new CountrySaveEvent(this, (Country) object);
 		applicationEventPublisher.publishEvent(countryEvent);
 
-	}
-
-	@FXML
-	void reset(ActionEvent event) {
-		clearFields();
 	}
 
 }
