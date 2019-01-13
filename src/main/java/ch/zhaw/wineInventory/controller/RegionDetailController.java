@@ -25,7 +25,7 @@ import javafx.scene.control.Alert.AlertType;
  * 
  * @author Christian Jeitziner / Marco Bibbia
  * 
- *         Controller for FXML View RegionDetail.fxml.
+ *         Controller for FXML View RegionDetail.fxml. 
  *
  */
 
