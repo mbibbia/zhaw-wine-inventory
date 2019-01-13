@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import ch.zhaw.wineInventory.config.StageManager;
-import ch.zhaw.wineInventory.controller.validation.ControllerValidation;
+import ch.zhaw.wineInventory.controller.helper.ControllerValidation;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;

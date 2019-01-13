@@ -17,6 +17,7 @@ import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.bean.Wine;
 import ch.zhaw.wineInventory.bean.WineType;
 import ch.zhaw.wineInventory.config.StageManager;
+import ch.zhaw.wineInventory.controller.helper.ControllerState;
 import ch.zhaw.wineInventory.event.WineSaveEvent;
 import ch.zhaw.wineInventory.event.WineTypeSaveEvent;
 import ch.zhaw.wineInventory.event.ClassificationSaveEvent;

@@ -1,4 +1,4 @@
-package ch.zhaw.wineInventory.controller.validation;
+package ch.zhaw.wineInventory.controller.helper;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
