@@ -24,6 +24,7 @@ import ch.zhaw.wineInventory.event.WineTypeSaveEvent;
 import ch.zhaw.wineInventory.event.ClassificationSaveEvent;
 import ch.zhaw.wineInventory.event.CountrySaveEvent;
 import ch.zhaw.wineInventory.event.ProducerSaveEvent;
+import ch.zhaw.wineInventory.event.WineDeleteEvent;
 import ch.zhaw.wineInventory.event.WineDetailsEvent;
 import ch.zhaw.wineInventory.service.WineService;
 import javafx.collections.FXCollections;
@@ -78,8 +79,6 @@ public class WineTableController implements Initializable {
 
 	@FXML
 	private TableColumn<Wine, Producer> colProducer;
-	@FXML
-	private TableColumn<Wine, Boolean> colEdit;
 
 	@Lazy
 	@Autowired
@@ -103,6 +102,16 @@ public class WineTableController implements Initializable {
 
 	}
 
+	@Component
+	class DeleteWineEventHandler implements ApplicationListener<WineDeleteEvent> {
+
+		@Override
+		public void onApplicationEvent(WineDeleteEvent event) {
+			loadWines();
+		}
+
+	}	
+	
 	@Component
 	class SaveCountryEventHandler implements ApplicationListener<CountrySaveEvent> {
 
@@ -145,10 +154,17 @@ public class WineTableController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
-		wineTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		wineTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		setColumnProperties();
 		loadWines();
+
+		wineTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+    		if (newSelection != null) {
+    			int index = wineTable.getSelectionModel().getSelectedIndex();
+    			Wine wine = wineTable.getSelectionModel().getTableView().getItems().get(index);
+				raiseEventShowWine(wine);
+    		}
+		});
 
 	}
 
