@@ -15,7 +15,9 @@ import ch.zhaw.wineInventory.controller.validation.ControllerValidation;
 import ch.zhaw.wineInventory.event.ClassificationDetailsEvent;
 import ch.zhaw.wineInventory.event.ClassificationSaveEvent;
 import ch.zhaw.wineInventory.service.ClassificationService;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -31,7 +33,7 @@ import javafx.scene.control.Alert.AlertType;
  */
 
 @Controller
-public class ClassificationDetailController extends MainDetailController {
+public class ClassificationDetailController2 implements Initializable {
 
 	@Component
 	class ShowClassificationDetailEventHandler implements ApplicationListener<ClassificationDetailsEvent> {
@@ -74,78 +76,75 @@ public class ClassificationDetailController extends MainDetailController {
 
 	}
 
-	@Override
-	void clearFields() {
+	private void clearFields() {
 
 		classificationId.setText(null);
 		name.clear();
 
 	}
 
-	@Override
-	String getName() {
+	private String getName() {
 		return name.getText();
 	}
 
-	@FXML
-	void reset() {
-		clearFields();
+	private void raiseEventSaveClassification(final Classification classification) {
+		ClassificationSaveEvent classificationEvent = new ClassificationSaveEvent(this, classification);
+		applicationEventPublisher.publishEvent(classificationEvent);
 	}
 
-	@Override
-	boolean isNew() {
-		return (classificationId.getText() == null || classificationId.getText() == "");
-	}
+	private void saveAlert(Classification classification) {
 
-	@Override
-	boolean isValid() {
-		return validation.emptyValidation("Name", getName().isEmpty());
-	}
-
-	@Override
-	Object persistNew() {
-		Classification classification = new Classification();
-		classification.setName(getName());
-		return classificationService.save(classification);
-
-	}
-
-	@Override
-	Object persistExisting() {
-		Classification classification = classificationService.find(Long.parseLong(classificationId.getText()));
-		classification.setName(getName());
-		return classificationService.update(classification);
-	}
-
-	@Override
-	void raiseCreateAlert(Object object) {
-		Classification classification = (Classification) object;
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Classification saved successfully.");
 		alert.setHeaderText(null);
 		alert.setContentText("The classification " + classification.getName() + " has been created and \n id is "
 				+ classification.getId() + ".");
 		alert.showAndWait();
+	}
+
+	@FXML
+	private void saveClassification() {
+
+		if (validation.emptyValidation("Name", getName().isEmpty())) {
+
+			if (classificationId.getText() == null || classificationId.getText() == "") {
+
+				Classification classification = new Classification();
+				classification.setName(getName());
+
+				Classification newClassification = classificationService.save(classification);
+
+				saveAlert(newClassification);
+
+				raiseEventSaveClassification(newClassification);
+
+			} else {
+				Classification classification = classificationService.find(Long.parseLong(classificationId.getText()));
+				classification.setName(getName());
+				Classification updatedClassification = classificationService.update(classification);
+				updateAlert(updatedClassification);
+
+				raiseEventSaveClassification(updatedClassification);
+			}
+
+			clearFields();
+
+		}
 
 	}
 
-	@Override
-	void raiseUpdateAlert(Object object) {
-		Classification classification = (Classification) object;
+	private void updateAlert(Classification classification) {
+
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Classification updated successfully.");
 		alert.setHeaderText(null);
 		alert.setContentText("The classification " + classification.getName() + " has been updated.");
 		alert.showAndWait();
-
 	}
 
-	@Override
-	void raiseSaveEvent(Object object) {
-		Classification classification = (Classification) object;
-		ClassificationSaveEvent classificationEvent = new ClassificationSaveEvent(this, classification);
-		applicationEventPublisher.publishEvent(classificationEvent);
-
+	@FXML
+	void reset() {
+		clearFields();
 	}
 
 }
