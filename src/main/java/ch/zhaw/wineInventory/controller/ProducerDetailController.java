@@ -3,17 +3,13 @@ package ch.zhaw.wineInventory.controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Producer;
 import ch.zhaw.wineInventory.bean.Region;
-import ch.zhaw.wineInventory.config.StageManager;
-import ch.zhaw.wineInventory.controller.validation.ControllerValidation;
 import ch.zhaw.wineInventory.event.CountrySaveEvent;
 import ch.zhaw.wineInventory.event.ProducerDetailsEvent;
 import ch.zhaw.wineInventory.event.ProducerSaveEvent;
@@ -21,13 +17,9 @@ import ch.zhaw.wineInventory.service.CountryService;
 import ch.zhaw.wineInventory.service.ProducerService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 
@@ -40,7 +32,7 @@ import javafx.scene.control.Alert.AlertType;
  */
 
 @Controller
-public class ProducerDetailController implements Initializable {
+public class ProducerDetailController extends MainDetailController {
 
 	@Component
 	class SaveCountryEventHandler implements ApplicationListener<CountrySaveEvent> {
@@ -60,7 +52,7 @@ public class ProducerDetailController implements Initializable {
 
 		@Override
 		public void onApplicationEvent(ProducerDetailsEvent event) {
-			producerId.setText(Long.toString(event.getProducer().getId()));
+			id.setText(Long.toString(event.getProducer().getId()));
 			name.setText(event.getProducer().getName());
 			company.setText(event.getProducer().getCompany());
 			addressLine1.setText(event.getProducer().getAddressLine1());
@@ -80,12 +72,6 @@ public class ProducerDetailController implements Initializable {
 		}
 
 	}
-
-	@FXML
-	private Label producerId;
-
-	@FXML
-	private TextField name;
 
 	@FXML
 	private TextField company;
@@ -120,27 +106,11 @@ public class ProducerDetailController implements Initializable {
 	@FXML
 	private ComboBox<Region> region;
 
-	@FXML
-	private Button reset;
-
-	@FXML
-	private Button saveProducer;
-
-	@Lazy
-	@Autowired
-	private StageManager stageManager;
-
-	@Autowired
-	private ApplicationEventPublisher applicationEventPublisher;
-
 	@Autowired
 	private ProducerService producerService;
 
 	@Autowired
 	private CountryService countryService;
-
-	@Autowired
-	private ControllerValidation validation;
 
 	public String getAddressLine1() {
 		return addressLine1.getText();
@@ -180,35 +150,12 @@ public class ProducerDetailController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
+		super.initialize(location, resources);
 		country.setItems(loadCountries());
-
-	}
-
-	private void clearFields() {
-
-		producerId.setText(null);
-		name.clear();
-		company.clear();
-		addressLine1.clear();
-		addressLine2.clear();
-		zipCode.clear();
-		place.clear();
-		phone.clear();
-		fax.clear();
-		email.clear();
-		url.clear();
-		country.setValue(null);
-		region.setValue(null);
-
 	}
 
 	private Country getCountry() {
 		return country.getValue();
-	}
-
-	private String getName() {
-		return name.getText();
 	}
 
 	private Region getRegion() {
@@ -230,87 +177,106 @@ public class ProducerDetailController implements Initializable {
 		return list;
 	}
 
-	private void raiseEventSaveProducer(final Producer producer) {
-		ProducerSaveEvent producerEvent = new ProducerSaveEvent(this, producer);
-		applicationEventPublisher.publishEvent(producerEvent);
+	void clearFields() {
+
+		super.clearFields();
+		company.clear();
+		addressLine1.clear();
+		addressLine2.clear();
+		zipCode.clear();
+		place.clear();
+		phone.clear();
+		fax.clear();
+		email.clear();
+		url.clear();
+		country.setValue(null);
+		region.setValue(null);
+
 	}
 
-	private void saveAlert(Producer producer) {
+	@Override
+	void deletePersistent(Object object) {
+		producerService.delete((Producer) object);
+	}
 
+	@Override
+	Object getPersistent() {
+		return producerService.find(Long.parseLong(id.getText()));
+	}
+
+	@Override
+	Object persistExisting() {
+		Producer producer = (Producer) getPersistent();
+		producer.setName(getName());
+		producer.setCompany(getCompany());
+		producer.setAddressLine1(getAddressLine1());
+		producer.setAddressLine2(getAddressLine2());
+		producer.setZipCode(getZipCode());
+		producer.setPlace(getPlace());
+		producer.setPhone(getPhone());
+		producer.setFax(getFax());
+		producer.setEmail(getEmail());
+		producer.setUrl(getUrl());
+		producer.setCountry(getCountry());
+		producer.setRegion(getRegion());
+		return producerService.update(producer);
+	}
+
+	@Override
+	Object persistNew() {
+		Producer producer = new Producer();
+		producer.setName(getName());
+		producer.setCompany(getCompany());
+		producer.setAddressLine1(getAddressLine1());
+		producer.setAddressLine2(getAddressLine2());
+		producer.setZipCode(getZipCode());
+		producer.setPlace(getPlace());
+		producer.setPhone(getPhone());
+		producer.setFax(getFax());
+		producer.setEmail(getEmail());
+		producer.setUrl(getUrl());
+		producer.setCountry(getCountry());
+		producer.setRegion(getRegion());
+		return producerService.save(producer);
+	}
+
+	@Override
+	void raiseAlertNew(Object object) {
+		Producer producer = (Producer) object;
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Producer saved successfully.");
 		alert.setHeaderText(null);
 		alert.setContentText(
 				"The producer " + producer.getName() + " has been created and \n id is " + producer.getId() + ".");
 		alert.showAndWait();
-	}
-
-	@FXML
-	private void saveProducer(ActionEvent event) {
-
-		if (validation.emptyValidation("Name", getName().isEmpty())) {
-
-			if (producerId.getText() == null || producerId.getText() == "") {
-
-				Producer producer = new Producer();
-				producer.setName(getName());
-				producer.setCompany(getCompany());
-				producer.setAddressLine1(getAddressLine1());
-				producer.setAddressLine2(getAddressLine2());
-				producer.setZipCode(getZipCode());
-				producer.setPlace(getPlace());
-				producer.setPhone(getPhone());
-				producer.setFax(getFax());
-				producer.setEmail(getEmail());
-				producer.setUrl(getUrl());
-				producer.setCountry(getCountry());
-				producer.setRegion(getRegion());
-
-				Producer newProducer = producerService.save(producer);
-
-				saveAlert(newProducer);
-
-				raiseEventSaveProducer(newProducer);
-
-			} else {
-				Producer producer = producerService.find(Long.parseLong(producerId.getText()));
-				producer.setName(getName());
-				producer.setCompany(getCompany());
-				producer.setAddressLine1(getAddressLine1());
-				producer.setAddressLine2(getAddressLine2());
-				producer.setZipCode(getZipCode());
-				producer.setPlace(getPlace());
-				producer.setPhone(getPhone());
-				producer.setFax(getFax());
-				producer.setEmail(getEmail());
-				producer.setUrl(getUrl());
-				producer.setCountry(getCountry());
-				producer.setRegion(getRegion());
-
-				Producer updatedProducer = producerService.update(producer);
-				updateAlert(updatedProducer);
-
-				raiseEventSaveProducer(updatedProducer);
-			}
-
-			clearFields();
-
-		}
 
 	}
 
-	private void updateAlert(Producer producer) {
-
+	@Override
+	void raiseAlertUpdate(Object object) {
+		Producer producer = (Producer) object;
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Producer updated successfully.");
 		alert.setHeaderText(null);
 		alert.setContentText("The producer " + producer.getName() + " has been updated.");
 		alert.showAndWait();
+
 	}
 
-	@FXML
-	void reset(ActionEvent event) {
-		clearFields();
+	@Override
+	void raiseEventDelete(Object object) {
+		// TODO Auto-generated method stub
+
+		// ProducerDeleteEvent producerEvent = new
+		// ProducerDeleteEvent(this, (Producer) object);
+		// applicationEventPublisher.publishEvent(producerEvent);
+	}
+
+	@Override
+	void raiseEventSave(Object object) {
+		ProducerSaveEvent producerEvent = new ProducerSaveEvent(this, (Producer) object);
+		applicationEventPublisher.publishEvent(producerEvent);
+
 	}
 
 }

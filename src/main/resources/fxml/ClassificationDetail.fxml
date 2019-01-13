@@ -29,7 +29,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label fx:id="classificationId">
+                  <Label fx:id="id">
                      <HBox.margin>
                         <Insets left="25.0" />
                      </HBox.margin>
