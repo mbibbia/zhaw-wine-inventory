@@ -13,7 +13,6 @@ import ch.zhaw.wineInventory.event.ClassificationSaveEvent;
 import ch.zhaw.wineInventory.service.ClassificationService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
@@ -42,21 +41,16 @@ public class ClassificationDetailController extends MainDetailController {
 
 	@FXML
 	private Label classificationId;
-
+	
 	@FXML
 	private TextField name;
-
-	@FXML
-	private Button reset;
-
-	@FXML
-	private Button saveClassification;
 
 	@Autowired
 	private ClassificationService classificationService;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		super.initialize(location, resources);
 
 	}
 
@@ -98,7 +92,7 @@ public class ClassificationDetailController extends MainDetailController {
 	}
 
 	@Override
-	void raiseCreateAlert(Object object) {
+	void raiseAlertNew(Object object) {
 		Classification classification = (Classification) object;
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Classification saved successfully.");
@@ -110,15 +104,14 @@ public class ClassificationDetailController extends MainDetailController {
 	}
 
 	@Override
-	void raiseSaveEvent(Object object) {
-		Classification classification = (Classification) object;
-		ClassificationSaveEvent classificationEvent = new ClassificationSaveEvent(this, classification);
+	void raiseEventSave(Object object) {
+		ClassificationSaveEvent classificationEvent = new ClassificationSaveEvent(this, (Classification) object);
 		applicationEventPublisher.publishEvent(classificationEvent);
 
 	}
 
 	@Override
-	void raiseUpdateAlert(Object object) {
+	void raiseAlertUpdate(Object object) {
 		Classification classification = (Classification) object;
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Classification updated successfully.");
@@ -131,6 +124,39 @@ public class ClassificationDetailController extends MainDetailController {
 	@Override
 	void reset() {
 		clearFields();
+	}
+
+	@Override
+	void raiseEventDelete(Object object) {
+		// TODO Auto-generated method stub
+
+		// ClassificationDeleteEvent classificationEvent = new
+		// ClassificationDeleteEvent(this, (Classification) object);
+		// applicationEventPublisher.publishEvent(classificationEvent);
+
+	}
+
+	@Override
+	void deletePersistent(Object object) {
+		classificationService.delete((Classification) object);
+
+	}
+
+	@Override
+	Object getPersistent() {
+		return classificationService.find(Long.parseLong(classificationId.getText()));
+	}
+
+	@Override
+	void disableAllFields() {
+		name.setDisable(true);
+
+	}
+
+	@Override
+	void enableAllFields() {
+		name.setDisable(false);
+
 	}
 
 }
