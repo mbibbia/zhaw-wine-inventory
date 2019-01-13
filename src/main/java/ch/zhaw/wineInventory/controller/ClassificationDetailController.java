@@ -87,7 +87,7 @@ public class ClassificationDetailController extends MainDetailController {
 		return name.getText();
 	}
 
-	@FXML
+	@Override
 	void reset() {
 		clearFields();
 	}
