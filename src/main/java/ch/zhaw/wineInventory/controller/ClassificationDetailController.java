@@ -3,15 +3,11 @@ package ch.zhaw.wineInventory.controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import ch.zhaw.wineInventory.bean.Classification;
-import ch.zhaw.wineInventory.config.StageManager;
-import ch.zhaw.wineInventory.controller.validation.ControllerValidation;
 import ch.zhaw.wineInventory.event.ClassificationDetailsEvent;
 import ch.zhaw.wineInventory.event.ClassificationSaveEvent;
 import ch.zhaw.wineInventory.service.ClassificationService;
@@ -56,22 +52,16 @@ public class ClassificationDetailController extends MainDetailController {
 	@FXML
 	private Button saveClassification;
 
-	@Lazy
-	@Autowired
-	private StageManager stageManager;
-
-	@Autowired
-	private ApplicationEventPublisher applicationEventPublisher;
-
 	@Autowired
 	private ClassificationService classificationService;
-
-	@Autowired
-	private ControllerValidation validation;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
+	}
+
+	private String getName() {
+		return name.getText();
 	}
 
 	@Override
@@ -80,16 +70,6 @@ public class ClassificationDetailController extends MainDetailController {
 		classificationId.setText(null);
 		name.clear();
 
-	}
-
-	@Override
-	String getName() {
-		return name.getText();
-	}
-
-	@Override
-	void reset() {
-		clearFields();
 	}
 
 	@Override
@@ -103,18 +83,18 @@ public class ClassificationDetailController extends MainDetailController {
 	}
 
 	@Override
+	Object persistExisting() {
+		Classification classification = classificationService.find(Long.parseLong(classificationId.getText()));
+		classification.setName(getName());
+		return classificationService.update(classification);
+	}
+
+	@Override
 	Object persistNew() {
 		Classification classification = new Classification();
 		classification.setName(getName());
 		return classificationService.save(classification);
 
-	}
-
-	@Override
-	Object persistExisting() {
-		Classification classification = classificationService.find(Long.parseLong(classificationId.getText()));
-		classification.setName(getName());
-		return classificationService.update(classification);
 	}
 
 	@Override
@@ -130,6 +110,14 @@ public class ClassificationDetailController extends MainDetailController {
 	}
 
 	@Override
+	void raiseSaveEvent(Object object) {
+		Classification classification = (Classification) object;
+		ClassificationSaveEvent classificationEvent = new ClassificationSaveEvent(this, classification);
+		applicationEventPublisher.publishEvent(classificationEvent);
+
+	}
+
+	@Override
 	void raiseUpdateAlert(Object object) {
 		Classification classification = (Classification) object;
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -141,11 +129,8 @@ public class ClassificationDetailController extends MainDetailController {
 	}
 
 	@Override
-	void raiseSaveEvent(Object object) {
-		Classification classification = (Classification) object;
-		ClassificationSaveEvent classificationEvent = new ClassificationSaveEvent(this, classification);
-		applicationEventPublisher.publishEvent(classificationEvent);
-
+	void reset() {
+		clearFields();
 	}
 
 }

@@ -18,15 +18,15 @@ abstract class MainDetailController implements Initializable {
 
 	@Lazy
 	@Autowired
-	private StageManager stageManager;
+	StageManager stageManager;
 
 	@SuppressWarnings("unused")
 	@Autowired
-	private ApplicationEventPublisher applicationEventPublisher;
+	ApplicationEventPublisher applicationEventPublisher;
 
 	@SuppressWarnings("unused")
 	@Autowired
-	private ControllerValidation validation;
+	ControllerValidation validation;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -48,8 +48,6 @@ abstract class MainDetailController implements Initializable {
 	};
 
 	abstract void clearFields();
-
-	abstract String getName();
 
 	abstract boolean isNew();
 
