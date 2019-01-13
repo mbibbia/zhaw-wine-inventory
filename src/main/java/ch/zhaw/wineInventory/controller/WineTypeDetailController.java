@@ -35,6 +35,17 @@ import javafx.scene.control.Alert.AlertType;
 @Controller
 public class WineTypeDetailController implements Initializable {
 
+	@Component
+	class ShowWineTypeDetailEventHandler implements ApplicationListener<WineTypeDetailsEvent> {
+
+		@Override
+		public void onApplicationEvent(WineTypeDetailsEvent event) {
+			wineTypeId.setText(Long.toString(event.getWineType().getId()));
+			name.setText(event.getWineType().getName());
+		}
+
+	}
+
 	@FXML
 	private Label wineTypeId;
 
@@ -60,29 +71,9 @@ public class WineTypeDetailController implements Initializable {
 	@Autowired
 	private ControllerValidation validation;
 
-	@Component
-	class ShowWineTypeDetailEventHandler implements ApplicationListener<WineTypeDetailsEvent> {
-
-		@Override
-		public void onApplicationEvent(WineTypeDetailsEvent event) {
-			wineTypeId.setText(Long.toString(event.getWineType().getId()));
-			name.setText(event.getWineType().getName());
-		}
-
-	}
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-	}
-
-	private String getName() {
-		return name.getText();
-	}
-
-	@FXML
-	void reset(ActionEvent event) {
-		clearFields();
 	}
 
 	private void clearFields() {
@@ -90,6 +81,25 @@ public class WineTypeDetailController implements Initializable {
 		wineTypeId.setText(null);
 		name.clear();
 
+	}
+
+	private String getName() {
+		return name.getText();
+	}
+
+	private void raiseEventSaveWineType(final WineType wineType) {
+		WineTypeSaveEvent wineTypeEvent = new WineTypeSaveEvent(this, wineType);
+		applicationEventPublisher.publishEvent(wineTypeEvent);
+	}
+
+	private void saveAlert(WineType wineType) {
+
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Wine saved successfully.");
+		alert.setHeaderText(null);
+		alert.setContentText(
+				"The wine type " + wineType.getName() + " has been created and \n id is " + wineType.getId() + ".");
+		alert.showAndWait();
 	}
 
 	@FXML
@@ -123,21 +133,6 @@ public class WineTypeDetailController implements Initializable {
 
 	}
 
-	private void raiseEventSaveWineType(final WineType wineType) {
-		WineTypeSaveEvent wineTypeEvent = new WineTypeSaveEvent(this, wineType);
-		applicationEventPublisher.publishEvent(wineTypeEvent);
-	}
-
-	private void saveAlert(WineType wineType) {
-
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Wine saved successfully.");
-		alert.setHeaderText(null);
-		alert.setContentText(
-				"The wine type " + wineType.getName() + " has been created and \n id is " + wineType.getId() + ".");
-		alert.showAndWait();
-	}
-
 	private void updateAlert(WineType wineType) {
 
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -145,6 +140,11 @@ public class WineTypeDetailController implements Initializable {
 		alert.setHeaderText(null);
 		alert.setContentText("The wine type " + wineType.getName() + " has been updated.");
 		alert.showAndWait();
+	}
+
+	@FXML
+	void reset(ActionEvent event) {
+		clearFields();
 	}
 
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.config.StageManager;
+import ch.zhaw.wineInventory.controller.validation.ControllerValidation;
 import ch.zhaw.wineInventory.event.CountrySaveEvent;
 import ch.zhaw.wineInventory.event.RegionDetailsEvent;
 import ch.zhaw.wineInventory.event.RegionSaveEvent;
@@ -39,6 +40,31 @@ import javafx.scene.control.Alert.AlertType;
 
 @Controller
 public class RegionDetailController implements Initializable {
+
+	@Component
+	class SaveCountryEventHandler implements ApplicationListener<CountrySaveEvent> {
+
+		@Override
+		public void onApplicationEvent(CountrySaveEvent event) {
+			if (country != null) {
+				country.setItems(loadCountries());
+				country.setValue(event.getCountry());
+			}
+		}
+
+	}
+
+	@Component
+	class ShowRegionDetailEventHandler implements ApplicationListener<RegionDetailsEvent> {
+
+		@Override
+		public void onApplicationEvent(RegionDetailsEvent event) {
+			regionId.setText(Long.toString(event.getRegion().getId()));
+			country.setValue(event.getRegion().getCountry());
+			name.setText(event.getRegion().getName());
+		}
+
+	}
 
 	@FXML
 	private Label regionId;
@@ -68,40 +94,19 @@ public class RegionDetailController implements Initializable {
 	@Autowired
 	private CountryService countryService;
 
-	@Component
-	class ShowRegionDetailEventHandler implements ApplicationListener<RegionDetailsEvent> {
-
-		@Override
-		public void onApplicationEvent(RegionDetailsEvent event) {
-			regionId.setText(Long.toString(event.getRegion().getId()));
-			country.setValue(event.getRegion().getCountry());
-			name.setText(event.getRegion().getName());
-		}
-
-	}
-
-	@Component
-	class SaveCountryEventHandler implements ApplicationListener<CountrySaveEvent> {
-
-		@Override
-		public void onApplicationEvent(CountrySaveEvent event) {
-			if (country != null) {
-				country.setItems(loadCountries());
-				country.setValue(event.getCountry());
-			}
-		}
-
-	}
+	@Autowired
+	private ControllerValidation validation;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		country.setItems(loadCountries());
 	}
 
-	private ObservableList<Country> loadCountries() {
-		ObservableList<Country> list = FXCollections.observableArrayList(countryService.findAll());
-		list.add(0, new Country());
-		return list;
+	private void clearFields() {
+
+		regionId.setText(null);
+		country.setValue(null);
+		name.clear();
 
 	}
 
@@ -113,52 +118,8 @@ public class RegionDetailController implements Initializable {
 		return name.getText();
 	}
 
-	@FXML
-	void reset(ActionEvent event) {
-		clearFields();
-	}
-
-	private void clearFields() {
-
-		regionId.setText(null);
-		country.setValue(null);
-		name.clear();
-
-	}
-
-	@FXML
-	private void saveRegion(ActionEvent event) {
-
-		/*
-		 * if (validate("Name", getName(), "[a-zA-Z]+") && validate("Type", getType(),
-		 * "[a-zA-Z]+") && emptyValidation("Classification", getClassification() &&
-		 * emptyValidation("Country", getCountry() {
-		 */
-
-		if (regionId.getText() == null || regionId.getText() == "") {
-
-			Region region = new Region();
-			region.setCountry(getCountry());
-			region.setName(getName());
-
-			Region newRegion = regionService.save(region);
-
-			saveAlert(newRegion);
-
-			raiseEventSaveRegion(newRegion);
-
-		} else {
-			Region region = regionService.find(Long.parseLong(regionId.getText()));
-			region.setCountry(getCountry());
-			region.setName(getName());
-			Region updatedRegion = regionService.update(region);
-			updateAlert(updatedRegion);
-
-			raiseEventSaveRegion(updatedRegion);
-		}
-
-		clearFields();
-
+	private ObservableList<Country> loadCountries() {
+		return FXCollections.observableArrayList(countryService.findAll());
 	}
 
 	private void raiseEventSaveRegion(final Region region) {
@@ -176,6 +137,40 @@ public class RegionDetailController implements Initializable {
 		alert.showAndWait();
 	}
 
+	@FXML
+	private void saveRegion(ActionEvent event) {
+
+		if (validation.emptyValidation("Name", getName().isEmpty())
+				&& validation.emptyValidation("Country", getCountry() == null)) {
+
+			if (regionId.getText() == null || regionId.getText() == "") {
+
+				Region region = new Region();
+				region.setCountry(getCountry());
+				region.setName(getName());
+
+				Region newRegion = regionService.save(region);
+
+				saveAlert(newRegion);
+
+				raiseEventSaveRegion(newRegion);
+
+			} else {
+				Region region = regionService.find(Long.parseLong(regionId.getText()));
+				region.setCountry(getCountry());
+				region.setName(getName());
+				Region updatedRegion = regionService.update(region);
+				updateAlert(updatedRegion);
+
+				raiseEventSaveRegion(updatedRegion);
+			}
+
+			clearFields();
+
+		}
+
+	}
+
 	private void updateAlert(Region region) {
 
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -183,6 +178,11 @@ public class RegionDetailController implements Initializable {
 		alert.setHeaderText(null);
 		alert.setContentText("The region " + region.getName() + " has been updated.");
 		alert.showAndWait();
+	}
+
+	@FXML
+	void reset(ActionEvent event) {
+		clearFields();
 	}
 
 }

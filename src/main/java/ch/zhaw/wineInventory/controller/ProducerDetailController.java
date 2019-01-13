@@ -13,6 +13,7 @@ import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Producer;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.config.StageManager;
+import ch.zhaw.wineInventory.controller.validation.ControllerValidation;
 import ch.zhaw.wineInventory.event.CountrySaveEvent;
 import ch.zhaw.wineInventory.event.ProducerDetailsEvent;
 import ch.zhaw.wineInventory.event.ProducerSaveEvent;
@@ -40,6 +41,45 @@ import javafx.scene.control.Alert.AlertType;
 
 @Controller
 public class ProducerDetailController implements Initializable {
+
+	@Component
+	class SaveCountryEventHandler implements ApplicationListener<CountrySaveEvent> {
+
+		@Override
+		public void onApplicationEvent(CountrySaveEvent event) {
+			if (country != null) {
+				country.setItems(loadCountries());
+				country.setValue(event.getCountry());
+			}
+		}
+
+	}
+
+	@Component
+	class ShowProducerDetailEventHandler implements ApplicationListener<ProducerDetailsEvent> {
+
+		@Override
+		public void onApplicationEvent(ProducerDetailsEvent event) {
+			producerId.setText(Long.toString(event.getProducer().getId()));
+			name.setText(event.getProducer().getName());
+			company.setText(event.getProducer().getCompany());
+			addressLine1.setText(event.getProducer().getAddressLine1());
+			addressLine2.setText(event.getProducer().getAddressLine2());
+			zipCode.setText(event.getProducer().getZipCode());
+			place.setText(event.getProducer().getPlace());
+			phone.setText(event.getProducer().getPhone());
+			fax.setText(event.getProducer().getFax());
+			email.setText(event.getProducer().getEmail());
+			url.setText(event.getProducer().getUrl());
+			if (event.getProducer().getCountry() != null) {
+				country.setValue(event.getProducer().getCountry());
+			}
+			if (event.getProducer().getRegion() != null) {
+				region.setValue(event.getProducer().getRegion());
+			}
+		}
+
+	}
 
 	@FXML
 	private Label producerId;
@@ -99,65 +139,8 @@ public class ProducerDetailController implements Initializable {
 	@Autowired
 	private CountryService countryService;
 
-	@Component
-	class ShowProducerDetailEventHandler implements ApplicationListener<ProducerDetailsEvent> {
-
-		@Override
-		public void onApplicationEvent(ProducerDetailsEvent event) {
-			producerId.setText(Long.toString(event.getProducer().getId()));
-			name.setText(event.getProducer().getName());
-			company.setText(event.getProducer().getCompany());
-			addressLine1.setText(event.getProducer().getAddressLine1());
-			addressLine2.setText(event.getProducer().getAddressLine2());
-			zipCode.setText(event.getProducer().getZipCode());
-			place.setText(event.getProducer().getPlace());
-			phone.setText(event.getProducer().getPhone());
-			fax.setText(event.getProducer().getFax());
-			email.setText(event.getProducer().getEmail());
-			url.setText(event.getProducer().getUrl());
-			if (event.getProducer().getCountry() != null) {
-				country.setValue(event.getProducer().getCountry());
-			}
-			if (event.getProducer().getRegion() != null) {
-				region.setValue(event.getProducer().getRegion());
-			}
-		}
-
-	}
-
-	@Component
-	class SaveCountryEventHandler implements ApplicationListener<CountrySaveEvent> {
-
-		@Override
-		public void onApplicationEvent(CountrySaveEvent event) {
-			if (country != null) {
-				country.setItems(loadCountries());
-				country.setValue(event.getCountry());
-			}
-		}
-
-	}
-
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-
-		country.setItems(loadCountries());
-
-	}
-
-	private ObservableList<Country> loadCountries() {
-		ObservableList<Country> list = FXCollections.observableArrayList(countryService.findAll());
-		list.add(0, new Country());
-		return list;
-	}
-
-	private String getName() {
-		return name.getText();
-	}
-
-	public String getCompany() {
-		return company.getText();
-	}
+	@Autowired
+	private ControllerValidation validation;
 
 	public String getAddressLine1() {
 		return addressLine1.getText();
@@ -167,41 +150,39 @@ public class ProducerDetailController implements Initializable {
 		return addressLine2.getText();
 	}
 
-	public String getZipCode() {
-		return zipCode.getText();
-	}
-
-	public String getPlace() {
-		return place.getText();
-	}
-
-	public String getPhone() {
-		return phone.getText();
-	}
-
-	public String getFax() {
-		return fax.getText();
+	public String getCompany() {
+		return company.getText();
 	}
 
 	public String getEmail() {
 		return email.getText();
 	}
 
+	public String getFax() {
+		return fax.getText();
+	}
+
+	public String getPhone() {
+		return phone.getText();
+	}
+
+	public String getPlace() {
+		return place.getText();
+	}
+
 	public String getUrl() {
 		return url.getText();
 	}
 
-	private Country getCountry() {
-		return country.getValue();
+	public String getZipCode() {
+		return zipCode.getText();
 	}
 
-	private Region getRegion() {
-		return region.getValue();
-	}
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
 
-	@FXML
-	void reset(ActionEvent event) {
-		clearFields();
+		country.setItems(loadCountries());
+
 	}
 
 	private void clearFields() {
@@ -222,6 +203,18 @@ public class ProducerDetailController implements Initializable {
 
 	}
 
+	private Country getCountry() {
+		return country.getValue();
+	}
+
+	private String getName() {
+		return name.getText();
+	}
+
+	private Region getRegion() {
+		return region.getValue();
+	}
+
 	@FXML
 	private void handleRegionClicked() {
 
@@ -231,60 +224,10 @@ public class ProducerDetailController implements Initializable {
 		}
 	}
 
-	@FXML
-	private void saveProducer(ActionEvent event) {
-
-		/*
-		 * if (validate("Name", getName(), "[a-zA-Z]+") && validate("Type", getType(),
-		 * "[a-zA-Z]+") && emptyValidation("Classification", getClassification() &&
-		 * emptyValidation("Country", getCountry() {
-		 */
-
-		if (producerId.getText() == null || producerId.getText() == "") {
-
-			Producer producer = new Producer();
-			producer.setName(getName());
-			producer.setCompany(getCompany());
-			producer.setAddressLine1(getAddressLine1());
-			producer.setAddressLine2(getAddressLine2());
-			producer.setZipCode(getZipCode());
-			producer.setPlace(getPlace());
-			producer.setPhone(getPhone());
-			producer.setFax(getFax());
-			producer.setEmail(getEmail());
-			producer.setUrl(getUrl());
-			producer.setCountry(getCountry());
-			producer.setRegion(getRegion());
-
-			Producer newProducer = producerService.save(producer);
-
-			saveAlert(newProducer);
-
-			raiseEventSaveProducer(newProducer);
-
-		} else {
-			Producer producer = producerService.find(Long.parseLong(producerId.getText()));
-			producer.setName(getName());
-			producer.setCompany(getCompany());
-			producer.setAddressLine1(getAddressLine1());
-			producer.setAddressLine2(getAddressLine2());
-			producer.setZipCode(getZipCode());
-			producer.setPlace(getPlace());
-			producer.setPhone(getPhone());
-			producer.setFax(getFax());
-			producer.setEmail(getEmail());
-			producer.setUrl(getUrl());
-			producer.setCountry(getCountry());
-			producer.setRegion(getRegion());
-
-			Producer updatedProducer = producerService.update(producer);
-			updateAlert(updatedProducer);
-
-			raiseEventSaveProducer(updatedProducer);
-		}
-
-		clearFields();
-
+	private ObservableList<Country> loadCountries() {
+		ObservableList<Country> list = FXCollections.observableArrayList(countryService.findAll());
+		list.add(0, new Country());
+		return list;
 	}
 
 	private void raiseEventSaveProducer(final Producer producer) {
@@ -302,13 +245,72 @@ public class ProducerDetailController implements Initializable {
 		alert.showAndWait();
 	}
 
+	@FXML
+	private void saveProducer(ActionEvent event) {
+
+		if (validation.emptyValidation("Name", getName().isEmpty())) {
+
+			if (producerId.getText() == null || producerId.getText() == "") {
+
+				Producer producer = new Producer();
+				producer.setName(getName());
+				producer.setCompany(getCompany());
+				producer.setAddressLine1(getAddressLine1());
+				producer.setAddressLine2(getAddressLine2());
+				producer.setZipCode(getZipCode());
+				producer.setPlace(getPlace());
+				producer.setPhone(getPhone());
+				producer.setFax(getFax());
+				producer.setEmail(getEmail());
+				producer.setUrl(getUrl());
+				producer.setCountry(getCountry());
+				producer.setRegion(getRegion());
+
+				Producer newProducer = producerService.save(producer);
+
+				saveAlert(newProducer);
+
+				raiseEventSaveProducer(newProducer);
+
+			} else {
+				Producer producer = producerService.find(Long.parseLong(producerId.getText()));
+				producer.setName(getName());
+				producer.setCompany(getCompany());
+				producer.setAddressLine1(getAddressLine1());
+				producer.setAddressLine2(getAddressLine2());
+				producer.setZipCode(getZipCode());
+				producer.setPlace(getPlace());
+				producer.setPhone(getPhone());
+				producer.setFax(getFax());
+				producer.setEmail(getEmail());
+				producer.setUrl(getUrl());
+				producer.setCountry(getCountry());
+				producer.setRegion(getRegion());
+
+				Producer updatedProducer = producerService.update(producer);
+				updateAlert(updatedProducer);
+
+				raiseEventSaveProducer(updatedProducer);
+			}
+
+			clearFields();
+
+		}
+
+	}
+
 	private void updateAlert(Producer producer) {
 
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("User updated successfully.");
+		alert.setTitle("Producer updated successfully.");
 		alert.setHeaderText(null);
 		alert.setContentText("The producer " + producer.getName() + " has been updated.");
 		alert.showAndWait();
+	}
+
+	@FXML
+	void reset(ActionEvent event) {
+		clearFields();
 	}
 
 }

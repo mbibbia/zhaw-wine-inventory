@@ -115,6 +115,7 @@ public class CountryDetailController implements Initializable {
 	private void saveCountry(ActionEvent event) {
 
 		if (validation.emptyValidation("Code", getCode().isEmpty())
+				&& validation.validate("Code", getCode(), "[A-Z]{2}")
 				&& validation.emptyValidation("Name", getName().isEmpty())) {
 
 			if (countryId.getText() == null || countryId.getText() == "") {
