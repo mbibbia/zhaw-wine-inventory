@@ -151,6 +151,17 @@ public class ProducerDetailController extends MainDetailController {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		super.initialize(location, resources);
+		company.setStyle("-fx-opacity: 1;");
+		addressLine1.setStyle("-fx-opacity: 1;");
+		addressLine2.setStyle("-fx-opacity: 1;");
+		zipCode.setStyle("-fx-opacity: 1;");
+		place.setStyle("-fx-opacity: 1;");
+		phone.setStyle("-fx-opacity: 1;");
+		fax.setStyle("-fx-opacity: 1;");
+		email.setStyle("-fx-opacity: 1;");
+		url.setStyle("-fx-opacity: 1;");
+		country.setStyle("-fx-opacity: 1;");
+		region.setStyle("-fx-opacity: 1;");
 		country.setItems(loadCountries());
 	}
 
@@ -175,23 +186,6 @@ public class ProducerDetailController extends MainDetailController {
 		ObservableList<Country> list = FXCollections.observableArrayList(countryService.findAll());
 		list.add(0, new Country());
 		return list;
-	}
-
-	void clearFields() {
-
-		super.clearFields();
-		company.clear();
-		addressLine1.clear();
-		addressLine2.clear();
-		zipCode.clear();
-		place.clear();
-		phone.clear();
-		fax.clear();
-		email.clear();
-		url.clear();
-		country.setValue(null);
-		region.setValue(null);
-
 	}
 
 	@Override
@@ -277,6 +271,54 @@ public class ProducerDetailController extends MainDetailController {
 		ProducerSaveEvent producerEvent = new ProducerSaveEvent(this, (Producer) object);
 		applicationEventPublisher.publishEvent(producerEvent);
 
+	}
+
+	@Override
+	void setEditStateActivation() {
+		super.setEditStateActivation();
+		company.setDisable(false);
+		addressLine1.setDisable(false);
+		addressLine2.setDisable(false);
+		zipCode.setDisable(false);
+		place.setDisable(false);
+		phone.setDisable(false);
+		fax.setDisable(false);
+		email.setDisable(false);
+		url.setDisable(false);
+		country.setDisable(false);
+		region.setDisable(false);
+	}
+
+	@Override
+	void setResetStateActivation() {
+		super.setResetStateActivation();
+		company.setDisable(true);
+		addressLine1.setDisable(true);
+		addressLine2.setDisable(true);
+		zipCode.setDisable(true);
+		place.setDisable(true);
+		phone.setDisable(true);
+		fax.setDisable(true);
+		email.setDisable(true);
+		url.setDisable(true);
+		country.setDisable(true);
+		region.setDisable(true);
+	}
+
+	@Override
+	void setResetStateProperties() {
+		super.setResetStateProperties();
+		company.clear();
+		addressLine1.clear();
+		addressLine2.clear();
+		zipCode.clear();
+		place.clear();
+		phone.clear();
+		fax.clear();
+		email.clear();
+		url.clear();
+		country.setValue(null);
+		region.setValue(null);
 	}
 
 }
