@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import ch.zhaw.wineInventory.bean.Classification;
 import ch.zhaw.wineInventory.config.StageManager;
+import ch.zhaw.wineInventory.controller.validation.ControllerValidation;
 import ch.zhaw.wineInventory.event.ClassificationDetailsEvent;
 import ch.zhaw.wineInventory.event.ClassificationSaveEvent;
 import ch.zhaw.wineInventory.service.ClassificationService;
@@ -34,6 +35,17 @@ import javafx.scene.control.Alert.AlertType;
 @Controller
 public class ClassificationDetailController implements Initializable {
 
+	@Component
+	class ShowClassificationDetailEventHandler implements ApplicationListener<ClassificationDetailsEvent> {
+
+		@Override
+		public void onApplicationEvent(ClassificationDetailsEvent event) {
+			classificationId.setText(Long.toString(event.getClassification().getId()));
+			name.setText(event.getClassification().getName());
+		}
+
+	}
+
 	@FXML
 	private Label classificationId;
 
@@ -56,29 +68,12 @@ public class ClassificationDetailController implements Initializable {
 	@Autowired
 	private ClassificationService classificationService;
 
-	@Component
-	class ShowClassificationDetailEventHandler implements ApplicationListener<ClassificationDetailsEvent> {
-
-		@Override
-		public void onApplicationEvent(ClassificationDetailsEvent event) {
-			classificationId.setText(Long.toString(event.getClassification().getId()));
-			name.setText(event.getClassification().getName());
-		}
-
-	}
+	@Autowired
+	private ControllerValidation validation;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-	}
-
-	private String getName() {
-		return name.getText();
-	}
-
-	@FXML
-	void reset(ActionEvent event) {
-		clearFields();
 	}
 
 	private void clearFields() {
@@ -88,37 +83,8 @@ public class ClassificationDetailController implements Initializable {
 
 	}
 
-	@FXML
-	private void saveClassification(ActionEvent event) {
-
-		/*
-		 * if (validate("Name", getName(), "[a-zA-Z]+") && validate("Type", getType(),
-		 * "[a-zA-Z]+") && emptyValidation("Classification", getClassification() &&
-		 * emptyValidation("Classification", getClassification() {
-		 */
-
-		if (classificationId.getText() == null || classificationId.getText() == "") {
-
-			Classification classification = new Classification();
-			classification.setName(getName());
-
-			Classification newClassification = classificationService.save(classification);
-
-			saveAlert(newClassification);
-
-			raiseEventSaveClassification(newClassification);
-
-		} else {
-			Classification classification = classificationService.find(Long.parseLong(classificationId.getText()));
-			classification.setName(getName());
-			Classification updatedClassification = classificationService.update(classification);
-			updateAlert(updatedClassification);
-
-			raiseEventSaveClassification(updatedClassification);
-		}
-
-		clearFields();
-
+	private String getName() {
+		return name.getText();
 	}
 
 	private void raiseEventSaveClassification(final Classification classification) {
@@ -136,6 +102,37 @@ public class ClassificationDetailController implements Initializable {
 		alert.showAndWait();
 	}
 
+	@FXML
+	private void saveClassification(ActionEvent event) {
+
+		if (validation.emptyValidation("Name", getName().isEmpty())) {
+
+			if (classificationId.getText() == null || classificationId.getText() == "") {
+
+				Classification classification = new Classification();
+				classification.setName(getName());
+
+				Classification newClassification = classificationService.save(classification);
+
+				saveAlert(newClassification);
+
+				raiseEventSaveClassification(newClassification);
+
+			} else {
+				Classification classification = classificationService.find(Long.parseLong(classificationId.getText()));
+				classification.setName(getName());
+				Classification updatedClassification = classificationService.update(classification);
+				updateAlert(updatedClassification);
+
+				raiseEventSaveClassification(updatedClassification);
+			}
+
+			clearFields();
+
+		}
+
+	}
+
 	private void updateAlert(Classification classification) {
 
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -143,6 +140,11 @@ public class ClassificationDetailController implements Initializable {
 		alert.setHeaderText(null);
 		alert.setContentText("The classification " + classification.getName() + " has been updated.");
 		alert.showAndWait();
+	}
+
+	@FXML
+	void reset(ActionEvent event) {
+		clearFields();
 	}
 
 }

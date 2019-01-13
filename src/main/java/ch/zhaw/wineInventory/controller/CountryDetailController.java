@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.config.StageManager;
+import ch.zhaw.wineInventory.controller.validation.ControllerValidation;
 import ch.zhaw.wineInventory.event.CountryDetailsEvent;
 import ch.zhaw.wineInventory.event.CountrySaveEvent;
 import ch.zhaw.wineInventory.service.CountryService;
@@ -33,7 +34,19 @@ import javafx.scene.control.Alert.AlertType;
 
 @Controller
 public class CountryDetailController implements Initializable {
-	
+
+	@Component
+	class ShowCountryDetailEventHandler implements ApplicationListener<CountryDetailsEvent> {
+
+		@Override
+		public void onApplicationEvent(CountryDetailsEvent event) {
+			countryId.setText(Long.toString(event.getCountry().getId()));
+			code.setText(event.getCountry().getCode());
+			name.setText(event.getCountry().getName());
+		}
+
+	}
+
 	@FXML
 	private Label countryId;
 
@@ -59,34 +72,12 @@ public class CountryDetailController implements Initializable {
 	@Autowired
 	private CountryService countryService;
 
-	@Component
-	class ShowCountryDetailEventHandler implements ApplicationListener<CountryDetailsEvent> {
-
-		@Override
-		public void onApplicationEvent(CountryDetailsEvent event) {
-			countryId.setText(Long.toString(event.getCountry().getId()));
-			code.setText(event.getCountry().getCode());
-			name.setText(event.getCountry().getName());
-		}
-
-	}
+	@Autowired
+	private ControllerValidation validation;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-	}
-
-	private String getCode() {
-		return code.getText();
-	}
-
-	private String getName() {
-		return name.getText();
-	}
-
-	@FXML
-	void reset(ActionEvent event) {
-		clearFields();
 	}
 
 	private void clearFields() {
@@ -97,39 +88,12 @@ public class CountryDetailController implements Initializable {
 
 	}
 
-	@FXML
-	private void saveCountry(ActionEvent event) {
+	private String getCode() {
+		return code.getText();
+	}
 
-		/*
-		 * if (validate("Name", getName(), "[a-zA-Z]+") && validate("Type", getType(),
-		 * "[a-zA-Z]+") && emptyValidation("Classification", getClassification() &&
-		 * emptyValidation("Country", getCountry() {
-		 */
-
-		if (countryId.getText() == null || countryId.getText() == "") {
-
-			Country country = new Country();
-			country.setCode(getCode());
-			country.setName(getName());
-
-			Country newCountry = countryService.save(country);
-
-			saveAlert(newCountry);
-
-			raiseEventSaveCountry(newCountry);
-
-		} else {
-			Country country = countryService.find(Long.parseLong(countryId.getText()));
-			country.setCode(getCode());
-			country.setName(getName());
-			Country updatedCountry = countryService.update(country);
-			updateAlert(updatedCountry);
-
-			raiseEventSaveCountry(updatedCountry);
-		}
-
-		clearFields();
-
+	private String getName() {
+		return name.getText();
 	}
 
 	private void raiseEventSaveCountry(final Country country) {
@@ -147,6 +111,40 @@ public class CountryDetailController implements Initializable {
 		alert.showAndWait();
 	}
 
+	@FXML
+	private void saveCountry(ActionEvent event) {
+
+		if (validation.emptyValidation("Code", getCode().isEmpty())
+				&& validation.emptyValidation("Name", getName().isEmpty())) {
+
+			if (countryId.getText() == null || countryId.getText() == "") {
+
+				Country country = new Country();
+				country.setCode(getCode());
+				country.setName(getName());
+
+				Country newCountry = countryService.save(country);
+
+				saveAlert(newCountry);
+
+				raiseEventSaveCountry(newCountry);
+
+			} else {
+				Country country = countryService.find(Long.parseLong(countryId.getText()));
+				country.setCode(getCode());
+				country.setName(getName());
+				Country updatedCountry = countryService.update(country);
+				updateAlert(updatedCountry);
+
+				raiseEventSaveCountry(updatedCountry);
+			}
+
+			clearFields();
+
+		}
+
+	}
+
 	private void updateAlert(Country country) {
 
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -154,6 +152,11 @@ public class CountryDetailController implements Initializable {
 		alert.setHeaderText(null);
 		alert.setContentText("The country " + country.getName() + " has been updated.");
 		alert.showAndWait();
+	}
+
+	@FXML
+	void reset(ActionEvent event) {
+		clearFields();
 	}
 
 }

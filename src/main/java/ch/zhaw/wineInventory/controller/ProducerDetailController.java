@@ -115,9 +115,12 @@ public class ProducerDetailController implements Initializable {
 			fax.setText(event.getProducer().getFax());
 			email.setText(event.getProducer().getEmail());
 			url.setText(event.getProducer().getUrl());
-			country.setValue(event.getProducer().getCountry());
-			region.setValue(event.getProducer().getRegion());
-
+			if (event.getProducer().getCountry() != null) {
+				country.setValue(event.getProducer().getCountry());
+			}
+			if (event.getProducer().getRegion() != null) {
+				region.setValue(event.getProducer().getRegion());
+			}
 		}
 
 	}
@@ -127,8 +130,10 @@ public class ProducerDetailController implements Initializable {
 
 		@Override
 		public void onApplicationEvent(CountrySaveEvent event) {
-			country.setItems(loadCountries());
-			country.setValue(event.getCountry());
+			if (country != null) {
+				country.setItems(loadCountries());
+				country.setValue(event.getCountry());
+			}
 		}
 
 	}

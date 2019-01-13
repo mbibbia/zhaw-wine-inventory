@@ -85,8 +85,10 @@ public class RegionDetailController implements Initializable {
 
 		@Override
 		public void onApplicationEvent(CountrySaveEvent event) {
-			country.setItems(loadCountries());
-			country.setValue(event.getCountry());
+			if (country != null) {
+				country.setItems(loadCountries());
+				country.setValue(event.getCountry());
+			}
 		}
 
 	}
