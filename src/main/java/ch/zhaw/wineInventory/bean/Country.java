@@ -115,6 +115,9 @@ public class Country {
 	 */
 	@Override
 	public String toString() {
+		if (this.code == null) {
+			return null;
+		}
 		return this.code + "\t - " + this.name;
 	}
 

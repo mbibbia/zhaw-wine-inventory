@@ -292,6 +292,9 @@ public class Producer {
 	 */
 	@Override
 	public String toString() {
+		if (this.name == null) {
+			return null;
+		}
 		return this.name + " - " + this.place;
 	}
 

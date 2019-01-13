@@ -97,7 +97,10 @@ public class RegionDetailController implements Initializable {
 	}
 
 	private ObservableList<Country> loadCountries() {
-		return FXCollections.observableArrayList(countryService.findAll());
+		ObservableList<Country> list = FXCollections.observableArrayList(countryService.findAll());
+		list.add(0, new Country());
+		return list;
+
 	}
 
 	private Country getCountry() {

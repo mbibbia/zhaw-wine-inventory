@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import ch.zhaw.wineInventory.bean.WineType;
 import ch.zhaw.wineInventory.config.StageManager;
+import ch.zhaw.wineInventory.controller.validation.ControllerValidation;
 import ch.zhaw.wineInventory.event.WineTypeSaveEvent;
 import ch.zhaw.wineInventory.event.WineTypeDetailsEvent;
 import ch.zhaw.wineInventory.service.WineTypeService;
@@ -56,6 +57,9 @@ public class WineTypeDetailController implements Initializable {
 	@Autowired
 	private WineTypeService wineTypeService;
 
+	@Autowired
+	private ControllerValidation validation;
+
 	@Component
 	class ShowWineTypeDetailEventHandler implements ApplicationListener<WineTypeDetailsEvent> {
 
@@ -91,33 +95,31 @@ public class WineTypeDetailController implements Initializable {
 	@FXML
 	private void saveWineType(ActionEvent event) {
 
-		/*
-		 * if (validate("Name", getName(), "[a-zA-Z]+") && validate("Type", getType(),
-		 * "[a-zA-Z]+") && emptyValidation("WineType", getWineType() &&
-		 * emptyValidation("WineType", getWineType() {
-		 */
+		if (validation.emptyValidation("Name", getName() == null)) {
 
-		if (wineTypeId.getText() == null || wineTypeId.getText() == "") {
+			if (wineTypeId.getText() == null || wineTypeId.getText() == "") {
 
-			WineType wineType = new WineType();
-			wineType.setName(getName());
+				WineType wineType = new WineType();
+				wineType.setName(getName());
 
-			WineType newWineType = wineTypeService.save(wineType);
+				WineType newWineType = wineTypeService.save(wineType);
 
-			saveAlert(newWineType);
+				saveAlert(newWineType);
 
-			raiseEventSaveWineType(newWineType);
+				raiseEventSaveWineType(newWineType);
 
-		} else {
-			WineType wineType = wineTypeService.find(Long.parseLong(wineTypeId.getText()));
-			wineType.setName(getName());
-			WineType updatedWineType = wineTypeService.update(wineType);
-			updateAlert(updatedWineType);
+			} else {
+				WineType wineType = wineTypeService.find(Long.parseLong(wineTypeId.getText()));
+				wineType.setName(getName());
+				WineType updatedWineType = wineTypeService.update(wineType);
+				updateAlert(updatedWineType);
 
-			raiseEventSaveWineType(updatedWineType);
+				raiseEventSaveWineType(updatedWineType);
+			}
+
+			clearFields();
+
 		}
-
-		clearFields();
 
 	}
 
@@ -131,8 +133,8 @@ public class WineTypeDetailController implements Initializable {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Wine saved successfully.");
 		alert.setHeaderText(null);
-		alert.setContentText("The wine type " + wineType.getName() + " has been created and \n id is "
-				+ wineType.getId() + ".");
+		alert.setContentText(
+				"The wine type " + wineType.getName() + " has been created and \n id is " + wineType.getId() + ".");
 		alert.showAndWait();
 	}
 
