@@ -36,7 +36,7 @@ public class CountryDetailController extends MainDetailController {
 			id.setText(Long.toString(event.getCountry().getId()));
 			code.setText(event.getCountry().getCode());
 			name.setText(event.getCountry().getName());
-			
+
 			changeState(ControllerState.VIEW);
 		}
 
@@ -47,29 +47,34 @@ public class CountryDetailController extends MainDetailController {
 
 	@Autowired
 	private CountryService countryService;
-	
+
 	private boolean codeValid = false;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		super.initialize(location, resources);
 	}
-	
+
 	protected void initializeEventListenersForSaveButton() {
 		super.initializeEventListenersForSaveButton();
-		
-		code.textProperty().addListener(
-			(observable, oldValue, newValue) -> {
-				if (!newValue.trim().isEmpty()) {
-					codeValid = true;
-				} else {
-					codeValid = false;
-				}
-				updateSaveButton();
+
+		code.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue.trim().isEmpty()) {
+				codeValid = true;
+			} else {
+				codeValid = false;
 			}
-		);
+			updateSaveButton();
+		});
 	}
-	
+
+	@Override
+	boolean isValid() {
+		return validation.emptyValidation("Name", getName().isEmpty())
+				&& validation.validate("Code", getCode(), "[A-Z]{2}");
+
+	}
+
 	protected boolean getSaveButtonValidState() {
 		return codeValid && super.getSaveButtonValidState();
 	}
@@ -80,8 +85,8 @@ public class CountryDetailController extends MainDetailController {
 		// Text field and combo boxes should be readable
 		// also in VIEW state.
 		code.setStyle("-fx-opacity: 1;");
-	}	
-	
+	}
+
 	private String getCode() {
 		return code.getText();
 	}
@@ -166,5 +171,5 @@ public class CountryDetailController extends MainDetailController {
 
 		code.clear();
 	}
-	
+
 }
