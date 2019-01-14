@@ -28,7 +28,6 @@ import ch.zhaw.wineInventory.service.WineService;
 import ch.zhaw.wineInventory.service.WineTypeService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
@@ -157,13 +156,26 @@ public class WineDetailController extends MainDetailController {
 		producer.setStyle("-fx-opacity: 1;");
 	}
 
-	@FXML
-	private void editWine(ActionEvent event) {
-		if (controllerState == ControllerState.RESET) {
-			changeState(ControllerState.CREATE);
-		} else if (controllerState == ControllerState.VIEW) {
-			changeState(ControllerState.EDIT);
-		}
+	@Override
+	protected void setInputControlsCleared() {
+		super.setInputControlsCleared();
+
+		wineType.setValue(null);
+		classification.setValue(null);
+		country.setValue(null);
+		region.setValue(null);
+		producer.setValue(null);
+	}
+
+	@Override
+	protected void setInputControlsDisabled(boolean disabled) {
+		super.setInputControlsDisabled(disabled);
+
+		wineType.setDisable(disabled);
+		classification.setDisable(disabled);
+		country.setDisable(disabled);
+		region.setDisable(disabled);
+		producer.setDisable(disabled);
 	}
 
 	private Classification getClassification() {
@@ -265,7 +277,7 @@ public class WineDetailController extends MainDetailController {
 		alert.showAndWait();
 
 	}
-
+		
 	@Override
 	void raiseEventDelete(Object object) {
 		WineDeleteEvent wineEvent = new WineDeleteEvent(this, (Wine) object);
@@ -278,28 +290,6 @@ public class WineDetailController extends MainDetailController {
 		WineSaveEvent wineEvent = new WineSaveEvent(this, (Wine) object);
 		applicationEventPublisher.publishEvent(wineEvent);
 
-	}
-		
-	@Override
-	protected void setInputControlsDisabled(boolean disabled) {
-		super.setInputControlsDisabled(disabled);
-
-		wineType.setDisable(disabled);
-		classification.setDisable(disabled);
-		country.setDisable(disabled);
-		region.setDisable(disabled);
-		producer.setDisable(disabled);
-	}
-
-	@Override
-	protected void setInputControlsCleared() {
-		super.setInputControlsCleared();
-
-		wineType.setValue(null);
-		classification.setValue(null);
-		country.setValue(null);
-		region.setValue(null);
-		producer.setValue(null);
 	}
 
 }
