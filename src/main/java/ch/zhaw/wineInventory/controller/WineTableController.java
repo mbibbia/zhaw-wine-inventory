@@ -30,6 +30,7 @@ import ch.zhaw.wineInventory.service.WineService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -44,6 +45,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
 /**
@@ -159,14 +161,15 @@ public class WineTableController implements Initializable {
 		loadWines();
 
 		// Notify detail view.
-		wineTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-    		if (newSelection != null) {
-    			int index = wineTable.getSelectionModel().getSelectedIndex();
-    			Wine wine = wineTable.getSelectionModel().getTableView().getItems().get(index);
-				raiseEventShowWine(wine);
-    		}
-		});
-
+	    wineTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
+	        @Override
+	        public void handle(MouseEvent event) {
+	        	Wine wine = wineTable.getSelectionModel().getSelectedItem();
+	        	if (wine != null) {
+	        		raiseEventShowWine(wine);
+	        	}
+	        }
+	    });
 	}
 
 	private void setColumnProperties() {

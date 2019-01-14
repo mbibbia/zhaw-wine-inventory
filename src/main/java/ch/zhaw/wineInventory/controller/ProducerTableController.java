@@ -22,6 +22,7 @@ import ch.zhaw.wineInventory.service.ProducerService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -36,6 +37,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
 /**
@@ -123,14 +125,15 @@ public class ProducerTableController implements Initializable {
 		loadProducers();
 		
 		// Notify detail view.
-		producerTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-    		if (newSelection != null) {
-    			int index = producerTable.getSelectionModel().getSelectedIndex();
-    			Producer producer = producerTable.getSelectionModel().getTableView().getItems().get(index);
-				raiseEventShowProducer(producer);
-    		}
-		});
-
+		producerTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
+	        @Override
+	        public void handle(MouseEvent event) {
+	        	Producer producer = producerTable.getSelectionModel().getSelectedItem();
+	        	if (producer != null) {
+					raiseEventShowProducer(producer);
+	        	}
+	        }
+	    });
 	}
 
 	private void setColumnProperties() {

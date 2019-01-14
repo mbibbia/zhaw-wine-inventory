@@ -22,6 +22,7 @@ import ch.zhaw.wineInventory.service.RegionService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -36,6 +37,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
 /**
@@ -94,14 +96,15 @@ public class RegionTableController implements Initializable {
 		loadRegions();
 
 		// Notify detail view.
-		regionTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-    		if (newSelection != null) {
-    			int index = regionTable.getSelectionModel().getSelectedIndex();
-    			Region region = regionTable.getSelectionModel().getTableView().getItems().get(index);
-				raiseEventShowRegion(region);
-    		}
-		});
-		
+		regionTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
+	        @Override
+	        public void handle(MouseEvent event) {
+	        	Region region = regionTable.getSelectionModel().getSelectedItem();
+	        	if (region != null) {
+					raiseEventShowRegion(region);
+	        	}
+	        }
+	    });
 	}
 
 	@Component
@@ -124,11 +127,7 @@ public class RegionTableController implements Initializable {
 	private void loadRegions() {
 		regionList.clear();
 		regionList.addAll(regionService.findAll());
-		if (regionTable != null) {
-			regionTable.setItems(regionList);
-		} else {
-			System.out.println("regionTable not initialized");
-		}
+		regionTable.setItems(regionList);
 	}
 
 	private void raiseEventShowRegion(final Region region) {
