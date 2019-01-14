@@ -18,23 +18,15 @@
    <children>
       <VBox prefHeight="571.0" prefWidth="306.0" spacing="10.0" styleClass="region_background" stylesheets="@../styles/Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label stylesheets="@../styles/Styles.css" text="Region Detail">
+            <Label styleClass="region_title" stylesheets="@../styles/Styles.css" text="Region Detail">
                <VBox.margin>
                   <Insets bottom="10.0" left="20.0" top="30.0" />
                </VBox.margin>
-               <styleClass>
-                  <String fx:value="textTitle" />
-                  <String fx:value="region_title" />
-               </styleClass>
             </Label>
             <HBox prefHeight="30.0" prefWidth="265.0">
                <children>
-                  <Label styleClass="region_subtitle" stylesheets="@../styles/Styles.css" text="Region ID - " />
-                  <Label fx:id="id">
-                     <HBox.margin>
-                        <Insets left="25.0" />
-                     </HBox.margin>
-                  </Label>
+                  <Label styleClass="region_subtitle" stylesheets="@../styles/Styles.css" text="Region ID: " />
+                  <Label fx:id="id" styleClass="region_subtitle" stylesheets="@../styles/Styles.css" />
                </children>
                <VBox.margin>
                   <Insets left="25.0" />
