@@ -93,7 +93,7 @@ public class ClassificationTableController implements Initializable {
 	private void setColumnProperties() {
 		colClassificationId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colName.setCellValueFactory(new PropertyValueFactory<>("name"));
-		colEdit.setCellFactory(cellFactory);
+		
 	}
 
 	private void loadClassifications() {

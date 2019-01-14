@@ -10,7 +10,7 @@
    <children>
       <TableView fx:id="wineTable" prefHeight="383.0" prefWidth="748.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columns>
-            <TableColumn fx:id="colWineId" maxWidth="700.0" prefWidth="20.0" text="ID" />
+            <TableColumn fx:id="colWineId" maxWidth="700.0" prefWidth="20.0" text="ID" visible="false" />
             <TableColumn fx:id="colName" maxWidth="4000.0" prefWidth="75.0" text="Name" />
             <TableColumn fx:id="colType" maxWidth="4000.0" prefWidth="75.0" text="Type" />
             <TableColumn fx:id="colClassification" maxWidth="4000.0" prefWidth="75.0" text="Classification" />
@@ -24,7 +24,6 @@
          <contextMenu>
             <ContextMenu>
               <items>
-                  <MenuItem fx:id="editWine" mnemonicParsing="false" onAction="#editWine" text="Edit" />
                 <MenuItem fx:id="deleteWines" mnemonicParsing="false" onAction="#deleteWines" text="Delete" />
               </items>
             </ContextMenu>

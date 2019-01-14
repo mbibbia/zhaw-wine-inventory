@@ -138,7 +138,7 @@ public class ProducerTableController implements Initializable {
 		colUrl.setCellValueFactory(new PropertyValueFactory<>("url"));
 		colCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
 		colRegion.setCellValueFactory(new PropertyValueFactory<>("region"));
-		colEdit.setCellFactory(cellFactory);
+		
 	}
 
 	private void loadProducers() {

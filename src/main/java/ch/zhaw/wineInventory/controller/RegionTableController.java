@@ -109,7 +109,7 @@ public class RegionTableController implements Initializable {
 		colRegionId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
 		colName.setCellValueFactory(new PropertyValueFactory<>("name"));
-		colEdit.setCellFactory(cellFactory);
+
 	}
 
 	private void loadRegions() {

@@ -28,7 +28,7 @@
             <HBox prefHeight="30.0" prefWidth="265.0">
                <children>
                   <Label styleClass="region_subtitle" stylesheets="@../styles/Styles.css" text="Region ID - " />
-                  <Label fx:id="regionId">
+                  <Label fx:id="id">
                      <HBox.margin>
                         <Insets left="25.0" />
                      </HBox.margin>
@@ -55,7 +55,7 @@
                         <DropShadow blurType="ONE_PASS_BOX" color="#1965d0" />
                      </effect>
                   </Button>
-                  <Button fx:id="saveRegion" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveRegion" prefHeight="30.0" prefWidth="75.0" styleClass="btnGreen" text="Save" textFill="WHITE">
+                  <Button fx:id="save" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#save" prefHeight="30.0" prefWidth="75.0" styleClass="btnGreen" text="Save" textFill="WHITE">
                      <font>
                         <Font size="15.0" />
                      </font>

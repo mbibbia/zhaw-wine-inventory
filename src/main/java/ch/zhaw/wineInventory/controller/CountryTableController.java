@@ -97,7 +97,7 @@ public class CountryTableController implements Initializable {
 		colCountryId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colCode.setCellValueFactory(new PropertyValueFactory<>("code"));
 		colName.setCellValueFactory(new PropertyValueFactory<>("name"));
-		colEdit.setCellFactory(cellFactory);
+		
 	}
 
 	private void loadCountries() {

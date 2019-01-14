@@ -176,6 +176,7 @@ public class WineTableController implements Initializable {
 		colCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
 		colRegion.setCellValueFactory(new PropertyValueFactory<>("region"));
 		colProducer.setCellValueFactory(new PropertyValueFactory<>("producer"));
+
 	}
 
 	private void loadWines() {
