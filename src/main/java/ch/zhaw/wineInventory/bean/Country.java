@@ -34,7 +34,7 @@ public class Country {
 
 	private String name;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	@JoinColumn(name = "country_id")
 	private Set<Region> regions;
 
