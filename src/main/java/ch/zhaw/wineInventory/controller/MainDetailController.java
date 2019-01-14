@@ -256,7 +256,7 @@ abstract class MainDetailController implements Initializable {
 	}
 	
 	private void setCreateStateActivation() {
-		setInputControlsDisabled(true);
+		setInputControlsDisabled(false);
 	};
 
 	private void setCreateStateButtons() {
