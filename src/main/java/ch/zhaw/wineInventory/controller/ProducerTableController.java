@@ -121,6 +121,15 @@ public class ProducerTableController implements Initializable {
 		producerTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		setColumnProperties();
 		loadProducers();
+		
+		// Notify detail view.
+		producerTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+    		if (newSelection != null) {
+    			int index = producerTable.getSelectionModel().getSelectedIndex();
+    			Producer producer = producerTable.getSelectionModel().getTableView().getItems().get(index);
+				raiseEventShowProducer(producer);
+    		}
+		});
 
 	}
 

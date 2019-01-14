@@ -93,6 +93,15 @@ public class RegionTableController implements Initializable {
 		setColumnProperties();
 		loadRegions();
 
+		// Notify detail view.
+		regionTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+    		if (newSelection != null) {
+    			int index = regionTable.getSelectionModel().getSelectedIndex();
+    			Region region = regionTable.getSelectionModel().getTableView().getItems().get(index);
+				raiseEventShowRegion(region);
+    		}
+		});
+		
 	}
 
 	@Component
@@ -115,7 +124,11 @@ public class RegionTableController implements Initializable {
 	private void loadRegions() {
 		regionList.clear();
 		regionList.addAll(regionService.findAll());
-		regionTable.setItems(regionList);
+		if (regionTable != null) {
+			regionTable.setItems(regionList);
+		} else {
+			System.out.println("regionTable not initialized");
+		}
 	}
 
 	private void raiseEventShowRegion(final Region region) {

@@ -143,7 +143,11 @@ public class WineDetailController extends MainDetailController {
 		classification.setItems(loadClassifications());
 		country.setItems(loadCountries());
 		producer.setItems(loadProducers());
-
+	}
+	
+	@Override
+	protected void initializeInputControlsStyle() {
+		super.initializeInputControlsStyle();
 		// Text field and combo boxes should be readable
 		// also in VIEW state.
 		wineType.setStyle("-fx-opacity: 1;");
@@ -274,6 +278,28 @@ public class WineDetailController extends MainDetailController {
 		WineSaveEvent wineEvent = new WineSaveEvent(this, (Wine) object);
 		applicationEventPublisher.publishEvent(wineEvent);
 
+	}
+		
+	@Override
+	protected void setInputControlsDisabled(boolean disabled) {
+		super.setInputControlsDisabled(disabled);
+
+		wineType.setDisable(disabled);
+		classification.setDisable(disabled);
+		country.setDisable(disabled);
+		region.setDisable(disabled);
+		producer.setDisable(disabled);
+	}
+
+	@Override
+	protected void setInputControlsCleared() {
+		super.setInputControlsCleared();
+
+		wineType.setValue(null);
+		classification.setValue(null);
+		country.setValue(null);
+		region.setValue(null);
+		producer.setValue(null);
 	}
 
 }

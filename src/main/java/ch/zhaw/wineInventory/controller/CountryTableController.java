@@ -90,6 +90,15 @@ public class CountryTableController implements Initializable {
 		countryTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		setColumnProperties();
 		loadCountries();
+		
+		// Notify detail view.
+		countryTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+    		if (newSelection != null) {
+    			int index = countryTable.getSelectionModel().getSelectedIndex();
+    			Country country = countryTable.getSelectionModel().getTableView().getItems().get(index);
+				raiseEventShowCountry(country);
+    		}
+		});
 
 	}
 

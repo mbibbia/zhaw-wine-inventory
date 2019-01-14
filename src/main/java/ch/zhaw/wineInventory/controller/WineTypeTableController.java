@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
+import ch.zhaw.wineInventory.bean.Wine;
 import ch.zhaw.wineInventory.bean.WineType;
 import ch.zhaw.wineInventory.config.StageManager;
 import ch.zhaw.wineInventory.event.WineTypeSaveEvent;
@@ -87,6 +88,15 @@ public class WineTypeTableController implements Initializable {
 		wineTypeTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		setColumnProperties();
 		loadWineTypes();
+		
+		// Notify detail view.
+		wineTypeTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+    		if (newSelection != null) {
+    			int index = wineTypeTable.getSelectionModel().getSelectedIndex();
+    			WineType wineType = wineTypeTable.getSelectionModel().getTableView().getItems().get(index);
+				raiseEventShowWineType(wineType);
+    		}
+		});
 
 	}
 

@@ -57,13 +57,46 @@ abstract class MainDetailController implements Initializable {
 
 	@FXML
 	Button save;
+	
+	private boolean nameValid = false;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		initializeEventListenersForSaveButton();
+		initializeInputControlsStyle();
+		changeState(ControllerState.RESET);
+	}
+	
+	protected void initializeEventListenersForSaveButton() {
+		name.textProperty().addListener(
+			(observable, oldValue, newValue) -> {
+				if (!newValue.trim().isEmpty()) {
+					nameValid = true;
+				} else {
+					nameValid = false;
+				}
+				updateSaveButton();
+			}
+		);
+	}
+	
+	protected boolean getSaveButtonValidState() {
+		return nameValid;
+	}
+	
+	protected void updateSaveButton() {
+		if (controllerState == ControllerState.RESET || 
+			controllerState == ControllerState.VIEW) {
+			save.setDisable(true);
+		} else {
+			save.setDisable(!getSaveButtonValidState());
+		}
+	}
+	
+	protected void initializeInputControlsStyle() {
 		// Text field and combo boxes should be readable
 		// also in VIEW state.
 		name.setStyle("-fx-opacity: 1;");
-		changeState(ControllerState.RESET);
 	}
 
 	private void create() {
@@ -86,19 +119,6 @@ abstract class MainDetailController implements Initializable {
 		}
 		System.out.println(String.format("%s => %s", controllerState, newState));
 
-		if (controllerState != null) {
-			switch (controllerState) {
-			case EDIT:
-			case CREATE:
-				name.textProperty().addListener((observable, oldValue, newValue) -> {
-				});
-				break;
-
-			default:
-				break;
-			}
-		}
-
 		controllerState = newState;
 
 		switch (controllerState) {
@@ -118,46 +138,40 @@ abstract class MainDetailController implements Initializable {
 			// Buttons
 			setViewStateButtons();
 
+			// Text field and combo boxes view
+			setViewStateProperties();
+
+			// Text field and combo boxes activation state
 			setViewStateActivation();
+
 			break;
 
 		case EDIT:
 			setEditStateButtons();
 
+			// Text field and combo boxes view
+			setEditStateProperties();
+
 			// Text field and combo boxes activation state
 			setEditStateActivation();
 
-			setEventListener();
 			break;
 
 		case CREATE:
 			// Buttons
 			setCreateStateButtons();
 
+			// Text field and combo boxes view
+			setCreateStateProperties();
+
 			// Text field and combo boxes activation state
 			setCreateStateActivation();
 
-			// Event listener
-			setEventListener();
 			break;
 
 		default:
 			break;
 		}
-	}
-
-	void setEventListener() {
-		name.textProperty().addListener((observable, oldValue, newValue) -> {
-			if (!newValue.trim().isEmpty()) {
-				save.setDisable(false);
-			} else {
-				save.setDisable(true);
-			}
-		});
-	};
-
-	void clearFields() {
-		setResetStateProperties();
 	}
 
 	@FXML
@@ -180,11 +194,6 @@ abstract class MainDetailController implements Initializable {
 
 	abstract void deletePersistent(Object object);
 
-	void disableAllFields() {
-		setResetStateActivation();
-
-	}
-
 	@FXML
 	void edit() {
 		if (controllerState == ControllerState.RESET) {
@@ -192,11 +201,6 @@ abstract class MainDetailController implements Initializable {
 		} else if (controllerState == ControllerState.VIEW) {
 			changeState(ControllerState.EDIT);
 		}
-	}
-
-	void enableAllFields() {
-		setEditStateActivation();
-
 	}
 
 	String getName() {
@@ -242,11 +246,20 @@ abstract class MainDetailController implements Initializable {
 		changeState(ControllerState.VIEW);
 	};
 
-	void setCreateStateActivation() {
-		setEditStateActivation();
+	protected void setInputControlsDisabled(boolean disabled) {
+		name.setDisable(disabled);
+	}
+
+	protected void setInputControlsCleared() {
+		id.setText(null);
+		name.clear();
+	}
+	
+	private void setCreateStateActivation() {
+		setInputControlsDisabled(true);
 	};
 
-	void setCreateStateButtons() {
+	private void setCreateStateButtons() {
 		if (edit != null) {
 			edit.setDisable(true);
 		}
@@ -261,11 +274,14 @@ abstract class MainDetailController implements Initializable {
 		}
 	}
 
-	void setEditStateActivation() {
-		name.setDisable(false);
+	private void setCreateStateProperties() {
+	};
+
+	protected void setEditStateActivation() {
+		setInputControlsDisabled(false);
 	}
 
-	void setEditStateButtons() {
+	private void setEditStateButtons() {
 		if (edit != null) {
 			edit.setDisable(true);
 		}
@@ -280,11 +296,14 @@ abstract class MainDetailController implements Initializable {
 		}
 	}
 
-	void setResetStateActivation() {
-		name.setDisable(true);
+	private void setEditStateProperties() {
 	}
 
-	void setResetStateButtons() {
+	private void setResetStateActivation() {
+		setInputControlsDisabled(true);
+	}
+
+	private void setResetStateButtons() {
 		if (edit != null) {
 			edit.setDisable(false);
 		}
@@ -299,16 +318,15 @@ abstract class MainDetailController implements Initializable {
 		}
 	}
 
-	void setResetStateProperties() {
-		id.setText(null);
-		name.clear();
+	private void setResetStateProperties() {
+		setInputControlsCleared();
 	}
 
-	void setViewStateActivation() {
-		setResetStateActivation();
+	private void setViewStateActivation() {
+		setInputControlsDisabled(true);
 	}
 
-	void setViewStateButtons() {
+	private void setViewStateButtons() {
 		if (edit != null) {
 			edit.setDisable(false);
 		}
@@ -321,6 +339,10 @@ abstract class MainDetailController implements Initializable {
 		if (delete != null) {
 			delete.setDisable(true);
 		}
+	}
+
+	private void setViewStateProperties() {
+		// Nothing to do.
 	}
 
 }

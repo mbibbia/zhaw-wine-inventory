@@ -158,6 +158,7 @@ public class WineTableController implements Initializable {
 		setColumnProperties();
 		loadWines();
 
+		// Notify detail view.
 		wineTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
     		if (newSelection != null) {
     			int index = wineTable.getSelectionModel().getSelectedIndex();

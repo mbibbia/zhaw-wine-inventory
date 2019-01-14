@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import ch.zhaw.wineInventory.bean.Classification;
+import ch.zhaw.wineInventory.controller.helper.ControllerState;
 import ch.zhaw.wineInventory.event.ClassificationDetailsEvent;
 import ch.zhaw.wineInventory.event.ClassificationSaveEvent;
 import ch.zhaw.wineInventory.service.ClassificationService;
@@ -32,6 +33,8 @@ public class ClassificationDetailController extends MainDetailController {
 		public void onApplicationEvent(ClassificationDetailsEvent event) {
 			id.setText(Long.toString(event.getClassification().getId()));
 			name.setText(event.getClassification().getName());
+			
+			changeState(ControllerState.VIEW);
 		}
 
 	}
@@ -42,7 +45,6 @@ public class ClassificationDetailController extends MainDetailController {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		super.initialize(location, resources);
-
 	}
 
 	@Override

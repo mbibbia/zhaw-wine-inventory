@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 
 import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Region;
+import ch.zhaw.wineInventory.controller.helper.ControllerState;
 import ch.zhaw.wineInventory.event.CountrySaveEvent;
 import ch.zhaw.wineInventory.event.RegionDetailsEvent;
 import ch.zhaw.wineInventory.event.RegionSaveEvent;
@@ -53,6 +54,8 @@ public class RegionDetailController extends MainDetailController {
 			id.setText(Long.toString(event.getRegion().getId()));
 			country.setValue(event.getRegion().getCountry());
 			name.setText(event.getRegion().getName());
+			
+			changeState(ControllerState.VIEW);
 		}
 
 	}
@@ -69,8 +72,15 @@ public class RegionDetailController extends MainDetailController {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		super.initialize(location, resources);
-		country.setStyle("-fx-opacity: 1;");
 		country.setItems(loadCountries());
+	}
+	
+	@Override
+	protected void initializeInputControlsStyle() {
+		super.initializeInputControlsStyle();
+		// Text field and combo boxes should be readable
+		// also in VIEW state.
+		country.setStyle("-fx-opacity: 1;");
 	}
 
 	private Country getCountry() {
@@ -155,20 +165,16 @@ public class RegionDetailController extends MainDetailController {
 	}
 
 	@Override
-	void setEditStateActivation() {
-		super.setEditStateActivation();
-		country.setDisable(false);
+	protected void setInputControlsDisabled(boolean disabled) {
+		super.setInputControlsDisabled(disabled);
+
+		country.setDisable(disabled);
 	}
 
 	@Override
-	void setResetStateActivation() {
-		super.setResetStateActivation();
-		country.setDisable(true);
-	}
+	protected void setInputControlsCleared() {
+		super.setInputControlsCleared();
 
-	@Override
-	void setResetStateProperties() {
-		super.setResetStateProperties();
 		country.setValue(null);
 	}
 

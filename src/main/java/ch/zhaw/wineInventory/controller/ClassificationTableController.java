@@ -87,7 +87,16 @@ public class ClassificationTableController implements Initializable {
 		classificationTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		setColumnProperties();
 		loadClassifications();
-
+		
+		// Notify detail view.
+		classificationTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+    		if (newSelection != null) {
+    			int index = classificationTable.getSelectionModel().getSelectedIndex();
+    			Classification classification = classificationTable.getSelectionModel().getTableView().getItems().get(index);
+				raiseEventShowClassification(classification);
+    		}
+		});
+		
 	}
 
 	private void setColumnProperties() {

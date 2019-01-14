@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import ch.zhaw.wineInventory.bean.WineType;
+import ch.zhaw.wineInventory.controller.helper.ControllerState;
 import ch.zhaw.wineInventory.event.WineTypeSaveEvent;
 import ch.zhaw.wineInventory.event.WineTypeDetailsEvent;
 import ch.zhaw.wineInventory.service.WineTypeService;
@@ -32,6 +33,8 @@ public class WineTypeDetailController extends MainDetailController {
 		public void onApplicationEvent(WineTypeDetailsEvent event) {
 			id.setText(Long.toString(event.getWineType().getId()));
 			name.setText(event.getWineType().getName());
+			
+			changeState(ControllerState.VIEW);
 		}
 
 	}

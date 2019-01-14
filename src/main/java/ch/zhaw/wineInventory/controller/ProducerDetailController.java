@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Producer;
 import ch.zhaw.wineInventory.bean.Region;
+import ch.zhaw.wineInventory.controller.helper.ControllerState;
 import ch.zhaw.wineInventory.event.CountrySaveEvent;
 import ch.zhaw.wineInventory.event.ProducerDetailsEvent;
 import ch.zhaw.wineInventory.event.ProducerSaveEvent;
@@ -41,7 +42,7 @@ public class ProducerDetailController extends MainDetailController {
 		public void onApplicationEvent(CountrySaveEvent event) {
 			if (country != null) {
 				country.setItems(loadCountries());
-				country.setValue(event.getCountry());
+				country.setValue(event.getCountry());				
 			}
 		}
 
@@ -69,6 +70,8 @@ public class ProducerDetailController extends MainDetailController {
 			if (event.getProducer().getRegion() != null) {
 				region.setValue(event.getProducer().getRegion());
 			}
+			
+			changeState(ControllerState.VIEW);
 		}
 
 	}
@@ -151,6 +154,13 @@ public class ProducerDetailController extends MainDetailController {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		super.initialize(location, resources);
+	}
+
+	@Override
+	protected void initializeInputControlsStyle() {
+		super.initializeInputControlsStyle();
+		// Text field and combo boxes should be readable
+		// also in VIEW state.
 		company.setStyle("-fx-opacity: 1;");
 		addressLine1.setStyle("-fx-opacity: 1;");
 		addressLine2.setStyle("-fx-opacity: 1;");
@@ -164,7 +174,7 @@ public class ProducerDetailController extends MainDetailController {
 		region.setStyle("-fx-opacity: 1;");
 		country.setItems(loadCountries());
 	}
-
+	
 	private Country getCountry() {
 		return country.getValue();
 	}
@@ -274,40 +284,26 @@ public class ProducerDetailController extends MainDetailController {
 	}
 
 	@Override
-	void setEditStateActivation() {
-		super.setEditStateActivation();
-		company.setDisable(false);
-		addressLine1.setDisable(false);
-		addressLine2.setDisable(false);
-		zipCode.setDisable(false);
-		place.setDisable(false);
-		phone.setDisable(false);
-		fax.setDisable(false);
-		email.setDisable(false);
-		url.setDisable(false);
-		country.setDisable(false);
-		region.setDisable(false);
+	protected void setInputControlsDisabled(boolean disabled) {
+		super.setInputControlsDisabled(disabled);
+
+		company.setDisable(disabled);
+		addressLine1.setDisable(disabled);
+		addressLine2.setDisable(disabled);
+		zipCode.setDisable(disabled);
+		place.setDisable(disabled);
+		phone.setDisable(disabled);
+		fax.setDisable(disabled);
+		email.setDisable(disabled);
+		url.setDisable(disabled);
+		country.setDisable(disabled);
+		region.setDisable(disabled);
 	}
 
 	@Override
-	void setResetStateActivation() {
-		super.setResetStateActivation();
-		company.setDisable(true);
-		addressLine1.setDisable(true);
-		addressLine2.setDisable(true);
-		zipCode.setDisable(true);
-		place.setDisable(true);
-		phone.setDisable(true);
-		fax.setDisable(true);
-		email.setDisable(true);
-		url.setDisable(true);
-		country.setDisable(true);
-		region.setDisable(true);
-	}
+	protected void setInputControlsCleared() {
+		super.setInputControlsCleared();
 
-	@Override
-	void setResetStateProperties() {
-		super.setResetStateProperties();
 		company.clear();
 		addressLine1.clear();
 		addressLine2.clear();
@@ -320,5 +316,6 @@ public class ProducerDetailController extends MainDetailController {
 		country.setValue(null);
 		region.setValue(null);
 	}
+
 
 }
