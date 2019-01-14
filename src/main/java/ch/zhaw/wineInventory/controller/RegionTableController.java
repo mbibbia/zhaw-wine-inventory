@@ -97,14 +97,14 @@ public class RegionTableController implements Initializable {
 
 		// Notify detail view.
 		regionTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
-	        @Override
-	        public void handle(MouseEvent event) {
-	        	Region region = regionTable.getSelectionModel().getSelectedItem();
-	        	if (region != null) {
+			@Override
+			public void handle(MouseEvent event) {
+				Region region = regionTable.getSelectionModel().getSelectedItem();
+				if (region != null) {
 					raiseEventShowRegion(region);
-	        	}
-	        }
-	    });
+				}
+			}
+		});
 	}
 
 	@Component
@@ -112,7 +112,9 @@ public class RegionTableController implements Initializable {
 
 		@Override
 		public void onApplicationEvent(CountrySaveEvent event) {
-			loadRegions();
+			if (regionTable != null) {
+				loadRegions();
+			}
 		}
 
 	}
