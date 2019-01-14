@@ -24,17 +24,8 @@
             </Label>
             <HBox prefHeight="30.0" prefWidth="265.0">
                <children>
-                  <Label stylesheets="@../styles/Styles.css" text="Wine Type ID - ">
-                     <styleClass>
-                        <String fx:value="winedetail_subtitle" />
-                        <String fx:value="winetype_subtitle" />
-                     </styleClass>
-                  </Label>
-                  <Label fx:id="id">
-                     <HBox.margin>
-                        <Insets left="25.0" />
-                     </HBox.margin>
-                  </Label>
+                  <Label styleClass="country_subtitle" stylesheets="@../styles/Styles.css" text="Wine Type ID: " />            
+                  <Label fx:id="id" styleClass="country_subtitle" stylesheets="@../styles/Styles.css" />
                </children>
                <VBox.margin>
                   <Insets left="25.0" />

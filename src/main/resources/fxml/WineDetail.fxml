@@ -17,26 +17,15 @@
    <children>
       <VBox prefHeight="571.0" prefWidth="306.0" spacing="10.0" styleClass="winedetail_background" stylesheets="@../styles/Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label styleClass="winedetail_title" stylesheets="@../styles/Styles.css" text="Wine Detail">
-               <font>
-                  <Font size="20.0" />
-               </font>
+            <Label styleClass="winedetail_title" stylesheets="@../styles/Styles.css" text="Wine Detail" >
                <VBox.margin>
                   <Insets bottom="10.0" left="20.0" top="30.0" />
                </VBox.margin>
             </Label>
             <HBox prefWidth="246.0" styleClass="winedetail_subtitle" stylesheets="@../styles/Styles.css">
                <children>
-                  <Label styleClass="winedetail_subtitle" stylesheets="@../styles/Styles.css" text="Wine ID - ">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="id">
-                     <HBox.margin>
-                        <Insets left="25.0" />
-                     </HBox.margin>
-                  </Label>
+                  <Label styleClass="winedetail_subtitle" stylesheets="@../styles/Styles.css" text="Wine ID: " />
+                  <Label fx:id="id" styleClass="winedetail_subtitle" stylesheets="@../styles/Styles.css" />
                </children>
                <VBox.margin>
                   <Insets left="25.0" right="25.0" />
