@@ -14,8 +14,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.repository.CountryRepository;
+import ch.zhaw.wineInventory.repository.RegionRepository;
 import ch.zhaw.wineInventory.service.CountryService;
+import ch.zhaw.wineInventory.service.RegionService;
 import ch.zhaw.wineInventory.service.impl.CountryServiceImpl;
+import ch.zhaw.wineInventory.service.impl.RegionServiceImpl;
 
 @RunWith(SpringRunner.class)
 public class CountryServiceImplIntegrationTest {
@@ -28,6 +31,11 @@ public class CountryServiceImplIntegrationTest {
 			return new CountryServiceImpl();
 		}
 
+		@Bean
+		public RegionService regionService() {
+			return new RegionServiceImpl();
+		}
+
 	}
 
 	@Autowired
@@ -35,6 +43,9 @@ public class CountryServiceImplIntegrationTest {
 
 	@MockBean
 	private CountryRepository countryRepository;
+
+	@MockBean
+	private RegionRepository regionRepository;
 
 	@Before
 	public void setUp() {
