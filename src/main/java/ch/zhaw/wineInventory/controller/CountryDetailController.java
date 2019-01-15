@@ -90,7 +90,7 @@ public class CountryDetailController extends MainDetailController {
 	private String getCode() {
 		return code.getText();
 	}
-
+	
 	@Override
 	void deletePersistent(Object object) {
 		countryService.delete((Country) object);
