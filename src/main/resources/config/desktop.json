@@ -37,7 +37,11 @@
 				{
 					"type": "view",
 					"name": "wineTable"
-				}
+				},
+				{
+					"type": "view",
+					"name": "wineImageDetail"
+				}				
 			]
 		},
 		{
@@ -147,6 +151,10 @@
 		{
 			"name": "classificationDetail",
 			"fxmlFile": "/fxml/ClassificationDetail.fxml"
+		},
+		{
+			"name": "wineImageDetail",
+			"fxmlFile": "/fxml/WineImageDetail.fxml"
 		},
 		{
 			"name": "wineTypeTable",

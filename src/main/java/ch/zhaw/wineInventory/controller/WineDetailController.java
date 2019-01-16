@@ -1,7 +1,14 @@
 package ch.zhaw.wineInventory.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javax.imageio.ImageIO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
@@ -9,6 +16,7 @@ import org.springframework.stereotype.Controller;
 
 import ch.zhaw.wineInventory.bean.Classification;
 import ch.zhaw.wineInventory.bean.Country;
+import ch.zhaw.wineInventory.bean.Image;
 import ch.zhaw.wineInventory.bean.Producer;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.bean.Wine;
@@ -19,10 +27,12 @@ import ch.zhaw.wineInventory.event.WineTypeSaveEvent;
 import ch.zhaw.wineInventory.event.ClassificationSaveEvent;
 import ch.zhaw.wineInventory.event.CountrySaveEvent;
 import ch.zhaw.wineInventory.event.ProducerSaveEvent;
+import ch.zhaw.wineInventory.event.ImageDetailsEvent;
 import ch.zhaw.wineInventory.event.WineDeleteEvent;
 import ch.zhaw.wineInventory.event.WineDetailsEvent;
 import ch.zhaw.wineInventory.service.ClassificationService;
 import ch.zhaw.wineInventory.service.CountryService;
+import ch.zhaw.wineInventory.service.ImageService;
 import ch.zhaw.wineInventory.service.ProducerService;
 import ch.zhaw.wineInventory.service.WineService;
 import ch.zhaw.wineInventory.service.WineTypeService;
@@ -31,7 +41,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.stage.FileChooser;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 
 /**
  * 
@@ -120,6 +132,12 @@ public class WineDetailController extends MainDetailController {
 	@FXML
 	private ComboBox<Producer> producer;
 
+	@FXML
+	private Button browseImage;
+
+	@FXML
+	private Button removeImage;
+
 	@Autowired
 	private WineService wineService;
 
@@ -134,6 +152,11 @@ public class WineDetailController extends MainDetailController {
 
 	@Autowired
 	private ProducerService producerService;
+	
+	@Autowired
+	private ImageService imageService;
+	
+	private Image image;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -291,5 +314,57 @@ public class WineDetailController extends MainDetailController {
 		applicationEventPublisher.publishEvent(wineEvent);
 
 	}
+	
+	@FXML
+	private void browseImage() {
+		FileChooser fileChooser = new FileChooser();
+		File file = fileChooser.showOpenDialog(browseImage.getScene().getWindow());
+
+		if (file != null) {
+
+			BufferedImage bImage;
+			try {
+				bImage = ImageIO.read(file);
+				ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				ImageIO.write(bImage, "jpg", bos);
+				byte[] data = bos.toByteArray();
+				image = new Image();
+				image.setName(file.getName());
+				image.setType(getFileExtension(file));
+				image.setData(data);
+				imageService.save(image);
+				raiseEventShowImage(image);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+
+	}
+
+	@FXML
+	private void removeImage() {
+		image = null;
+		if (id.getText() != null || id.getText() != "") {
+			Wine wine = wineService.find(Long.parseLong(id.getText()));
+			wine.setImage(image);
+			raiseEventShowImage(image);
+		}
+
+	}
+
+	private static String getFileExtension(File file) {
+		String fileName = file.getName();
+		if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
+			return fileName.substring(fileName.lastIndexOf(".") + 1);
+		else
+			return "";
+	}
+	
+	private void raiseEventShowImage(Image image) {
+		ImageDetailsEvent imageEvent = new ImageDetailsEvent(this, image);
+		applicationEventPublisher.publishEvent(imageEvent);
+	}
+	
 
 }

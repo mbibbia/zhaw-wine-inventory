@@ -42,6 +42,9 @@ public class Wine {
 
 	@OneToOne(fetch = FetchType.LAZY)
 	private Producer producer;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	private Image image;
 
 	/**
 	 * Returns identification of wine bean.
@@ -168,6 +171,14 @@ public class Wine {
 	public void setProducer(Producer producer) {
 		this.producer = producer;
 	}
+	
+	public Image getImage() {
+		return image;
+	}
+
+	public void setImage(Image image) {
+		this.image = image;
+	}	
 
 	/**
 	 * Converts wine data to string value.
