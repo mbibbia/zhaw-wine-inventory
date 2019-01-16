@@ -30,7 +30,7 @@ public class Image {
 
 	@Lob
 	private byte[] data;
-	
+
 	public long getId() {
 		return id;
 	}

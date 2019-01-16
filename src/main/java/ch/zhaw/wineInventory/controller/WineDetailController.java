@@ -265,6 +265,7 @@ public class WineDetailController extends MainDetailController {
 		wine.setCountry(getCountry());
 		wine.setRegion(getRegion());
 		wine.setProducer(getProducer());
+		wine.setImage(image);
 		return wineService.update(wine);
 	}
 
@@ -277,6 +278,7 @@ public class WineDetailController extends MainDetailController {
 		wine.setCountry(getCountry());
 		wine.setRegion(getRegion());
 		wine.setProducer(getProducer());
+		wine.setImage(image);
 		return wineService.save(wine);
 	}
 
