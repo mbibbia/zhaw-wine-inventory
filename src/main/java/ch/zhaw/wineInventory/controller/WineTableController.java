@@ -15,12 +15,11 @@ import ch.zhaw.wineInventory.bean.Producer;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.bean.Wine;
 import ch.zhaw.wineInventory.bean.WineType;
-import ch.zhaw.wineInventory.event.WineSaveEvent;
-import ch.zhaw.wineInventory.event.WineTypeSaveEvent;
-import ch.zhaw.wineInventory.event.ClassificationSaveEvent;
-import ch.zhaw.wineInventory.event.CountrySaveEvent;
-import ch.zhaw.wineInventory.event.ProducerSaveEvent;
-import ch.zhaw.wineInventory.event.WineDeleteEvent;
+import ch.zhaw.wineInventory.event.ChangeWineEvent;
+import ch.zhaw.wineInventory.event.ChangeWineTypeEvent;
+import ch.zhaw.wineInventory.event.ChangeClassificationEvent;
+import ch.zhaw.wineInventory.event.ChangeCountryEvent;
+import ch.zhaw.wineInventory.event.ChangeProducerEvent;
 import ch.zhaw.wineInventory.event.WineDetailsEvent;
 import ch.zhaw.wineInventory.service.WineService;
 import javafx.collections.FXCollections;
@@ -41,60 +40,50 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class WineTableController extends MainTableController {
 
 	@Component
-	class DeleteWineEventHandler implements ApplicationListener<WineDeleteEvent> {
+	class SaveClassificationEventHandler implements ApplicationListener<ChangeClassificationEvent> {
 
 		@Override
-		public void onApplicationEvent(WineDeleteEvent event) {
+		public void onApplicationEvent(ChangeClassificationEvent event) {
 			loadData();
 		}
 
 	}
 
 	@Component
-	class SaveClassificationEventHandler implements ApplicationListener<ClassificationSaveEvent> {
+	class SaveCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
 
 		@Override
-		public void onApplicationEvent(ClassificationSaveEvent event) {
+		public void onApplicationEvent(ChangeCountryEvent event) {
 			loadData();
 		}
 
 	}
 
 	@Component
-	class SaveCountryEventHandler implements ApplicationListener<CountrySaveEvent> {
+	class SaveProducerEventHandler implements ApplicationListener<ChangeProducerEvent> {
 
 		@Override
-		public void onApplicationEvent(CountrySaveEvent event) {
+		public void onApplicationEvent(ChangeProducerEvent event) {
 			loadData();
 		}
 
 	}
 
 	@Component
-	class SaveProducerEventHandler implements ApplicationListener<ProducerSaveEvent> {
+	class SaveWineEventHandler implements ApplicationListener<ChangeWineEvent> {
 
 		@Override
-		public void onApplicationEvent(ProducerSaveEvent event) {
+		public void onApplicationEvent(ChangeWineEvent event) {
 			loadData();
 		}
 
 	}
 
 	@Component
-	class SaveWineEventHandler implements ApplicationListener<WineSaveEvent> {
+	class SaveWineTypeEventHandler implements ApplicationListener<ChangeWineTypeEvent> {
 
 		@Override
-		public void onApplicationEvent(WineSaveEvent event) {
-			loadData();
-		}
-
-	}
-
-	@Component
-	class SaveWineTypeEventHandler implements ApplicationListener<WineTypeSaveEvent> {
-
-		@Override
-		public void onApplicationEvent(WineTypeSaveEvent event) {
+		public void onApplicationEvent(ChangeWineTypeEvent event) {
 			loadData();
 		}
 

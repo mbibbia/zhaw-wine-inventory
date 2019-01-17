@@ -11,13 +11,13 @@ import ch.zhaw.wineInventory.bean.Classification;
  *         Application Event when a classification is saved.
  *
  */
-public class ClassificationSaveEvent extends ApplicationEvent {
+public class ChangeClassificationEvent extends ApplicationEvent {
 
 	private Classification classification;
 
 	private static final long serialVersionUID = 1L;
 
-	public ClassificationSaveEvent(Object source, Classification classification) {
+	public ChangeClassificationEvent(Object source, Classification classification) {
 		super(source);
 		this.classification = classification;
 

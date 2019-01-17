@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import ch.zhaw.wineInventory.bean.Classification;
 import ch.zhaw.wineInventory.event.ClassificationDetailsEvent;
-import ch.zhaw.wineInventory.event.ClassificationSaveEvent;
+import ch.zhaw.wineInventory.event.ChangeClassificationEvent;
 import ch.zhaw.wineInventory.service.ClassificationService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,10 +28,10 @@ import javafx.collections.ObservableList;
 public class ClassificationTableController extends MainTableController {
 
 	@Component
-	class SaveClassificationEventHandler implements ApplicationListener<ClassificationSaveEvent> {
+	class SaveClassificationEventHandler implements ApplicationListener<ChangeClassificationEvent> {
 
 		@Override
-		public void onApplicationEvent(ClassificationSaveEvent event) {
+		public void onApplicationEvent(ChangeClassificationEvent event) {
 			loadData();
 		}
 

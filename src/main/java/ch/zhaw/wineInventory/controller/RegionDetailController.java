@@ -10,9 +10,9 @@ import org.springframework.stereotype.Controller;
 import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.controller.helper.ControllerState;
-import ch.zhaw.wineInventory.event.CountrySaveEvent;
+import ch.zhaw.wineInventory.event.ChangeCountryEvent;
 import ch.zhaw.wineInventory.event.RegionDetailsEvent;
-import ch.zhaw.wineInventory.event.RegionSaveEvent;
+import ch.zhaw.wineInventory.event.ChangeRegionEvent;
 import ch.zhaw.wineInventory.service.CountryService;
 import ch.zhaw.wineInventory.service.RegionService;
 import javafx.collections.FXCollections;
@@ -34,10 +34,10 @@ import javafx.scene.control.Alert.AlertType;
 public class RegionDetailController extends MainDetailController {
 
 	@Component
-	class SaveCountryEventHandler implements ApplicationListener<CountrySaveEvent> {
+	class SaveCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
 
 		@Override
-		public void onApplicationEvent(CountrySaveEvent event) {
+		public void onApplicationEvent(ChangeCountryEvent event) {
 			if (country != null) {
 				country.setItems(loadCountries());
 				country.setValue(event.getCountry());
@@ -159,7 +159,7 @@ public class RegionDetailController extends MainDetailController {
 
 	@Override
 	void raiseEventSave(Object object) {
-		RegionSaveEvent regionEvent = new RegionSaveEvent(this, (Region) object);
+		ChangeRegionEvent regionEvent = new ChangeRegionEvent(this, (Region) object);
 		applicationEventPublisher.publishEvent(regionEvent);
 
 	}

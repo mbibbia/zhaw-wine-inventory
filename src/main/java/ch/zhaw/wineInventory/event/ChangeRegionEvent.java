@@ -11,13 +11,13 @@ import ch.zhaw.wineInventory.bean.Region;
  *         Application Event when a region is saved.
  *
  */
-public class RegionSaveEvent extends ApplicationEvent {
+public class ChangeRegionEvent extends ApplicationEvent {
 
 	private Region region;
 
 	private static final long serialVersionUID = 1L;
 
-	public RegionSaveEvent(Object source, Region region) {
+	public ChangeRegionEvent(Object source, Region region) {
 		super(source);
 		this.region = region;
 

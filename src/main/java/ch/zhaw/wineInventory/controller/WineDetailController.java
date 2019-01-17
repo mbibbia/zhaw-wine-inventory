@@ -14,12 +14,11 @@ import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.bean.Wine;
 import ch.zhaw.wineInventory.bean.WineType;
 import ch.zhaw.wineInventory.controller.helper.ControllerState;
-import ch.zhaw.wineInventory.event.WineSaveEvent;
-import ch.zhaw.wineInventory.event.WineTypeSaveEvent;
-import ch.zhaw.wineInventory.event.ClassificationSaveEvent;
-import ch.zhaw.wineInventory.event.CountrySaveEvent;
-import ch.zhaw.wineInventory.event.ProducerSaveEvent;
-import ch.zhaw.wineInventory.event.WineDeleteEvent;
+import ch.zhaw.wineInventory.event.ChangeWineEvent;
+import ch.zhaw.wineInventory.event.ChangeWineTypeEvent;
+import ch.zhaw.wineInventory.event.ChangeClassificationEvent;
+import ch.zhaw.wineInventory.event.ChangeCountryEvent;
+import ch.zhaw.wineInventory.event.ChangeProducerEvent;
 import ch.zhaw.wineInventory.event.WineDetailsEvent;
 import ch.zhaw.wineInventory.service.ClassificationService;
 import ch.zhaw.wineInventory.service.CountryService;
@@ -44,10 +43,10 @@ import javafx.scene.control.Alert.AlertType;
 public class WineDetailController extends MainDetailController {
 
 	@Component
-	class SaveClassificationEventHandler implements ApplicationListener<ClassificationSaveEvent> {
+	class SaveClassificationEventHandler implements ApplicationListener<ChangeClassificationEvent> {
 
 		@Override
-		public void onApplicationEvent(ClassificationSaveEvent event) {
+		public void onApplicationEvent(ChangeClassificationEvent event) {
 			classification.setItems(loadClassifications());
 			classification.setValue(event.getClassification());
 		}
@@ -55,10 +54,10 @@ public class WineDetailController extends MainDetailController {
 	}
 
 	@Component
-	class SaveCountryEventHandler implements ApplicationListener<CountrySaveEvent> {
+	class SaveCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
 
 		@Override
-		public void onApplicationEvent(CountrySaveEvent event) {
+		public void onApplicationEvent(ChangeCountryEvent event) {
 			country.setItems(loadCountries());
 			country.setValue(event.getCountry());
 		}
@@ -66,10 +65,10 @@ public class WineDetailController extends MainDetailController {
 	}
 
 	@Component
-	class SaveProducerEventHandler implements ApplicationListener<ProducerSaveEvent> {
+	class SaveProducerEventHandler implements ApplicationListener<ChangeProducerEvent> {
 
 		@Override
-		public void onApplicationEvent(ProducerSaveEvent event) {
+		public void onApplicationEvent(ChangeProducerEvent event) {
 			producer.setItems(loadProducers());
 			producer.setValue(event.getProducer());
 		}
@@ -77,10 +76,10 @@ public class WineDetailController extends MainDetailController {
 	}
 
 	@Component
-	class SaveWineTypeEventHandler implements ApplicationListener<WineTypeSaveEvent> {
+	class SaveWineTypeEventHandler implements ApplicationListener<ChangeWineTypeEvent> {
 
 		@Override
-		public void onApplicationEvent(WineTypeSaveEvent event) {
+		public void onApplicationEvent(ChangeWineTypeEvent event) {
 			wineType.setItems(loadTypes());
 			wineType.setValue(event.getWineType());
 		}
@@ -280,14 +279,12 @@ public class WineDetailController extends MainDetailController {
 		
 	@Override
 	void raiseEventDelete(Object object) {
-		WineDeleteEvent wineEvent = new WineDeleteEvent(this, (Wine) object);
-		applicationEventPublisher.publishEvent(wineEvent);
-
+		raiseEventSave(object);
 	}
 
 	@Override
 	void raiseEventSave(Object object) {
-		WineSaveEvent wineEvent = new WineSaveEvent(this, (Wine) object);
+		ChangeWineEvent wineEvent = new ChangeWineEvent(this, (Wine) object);
 		applicationEventPublisher.publishEvent(wineEvent);
 
 	}

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import ch.zhaw.wineInventory.bean.WineType;
-import ch.zhaw.wineInventory.event.WineTypeSaveEvent;
+import ch.zhaw.wineInventory.event.ChangeWineTypeEvent;
 import ch.zhaw.wineInventory.event.WineTypeDetailsEvent;
 import ch.zhaw.wineInventory.service.WineTypeService;
 import javafx.collections.FXCollections;
@@ -28,10 +28,10 @@ import javafx.collections.ObservableList;
 public class WineTypeTableController extends MainTableController {
 
 	@Component
-	class SaveWineTypeEventHandler implements ApplicationListener<WineTypeSaveEvent> {
+	class SaveWineTypeEventHandler implements ApplicationListener<ChangeWineTypeEvent> {
 
 		@Override
-		public void onApplicationEvent(WineTypeSaveEvent event) {
+		public void onApplicationEvent(ChangeWineTypeEvent event) {
 			loadData();
 		}
 

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.controller.helper.ControllerState;
 import ch.zhaw.wineInventory.event.CountryDetailsEvent;
-import ch.zhaw.wineInventory.event.CountrySaveEvent;
+import ch.zhaw.wineInventory.event.ChangeCountryEvent;
 import ch.zhaw.wineInventory.service.CountryService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -90,7 +90,7 @@ public class CountryDetailController extends MainDetailController {
 	private String getCode() {
 		return code.getText();
 	}
-	
+
 	@Override
 	void deletePersistent(Object object) {
 		countryService.delete((Country) object);
@@ -143,17 +143,14 @@ public class CountryDetailController extends MainDetailController {
 
 	@Override
 	void raiseEventDelete(Object object) {
-		// TODO Auto-generated method stub
-
-		// CountryDeleteEvent countryEvent = new
-		// CountryDeleteEvent(this, (Country) object);
-		// applicationEventPublisher.publishEvent(countryEvent);
+//		CountryDeleteEvent countryEvent = new CountryDeleteEvent(this, (Country) object);
+//		applicationEventPublisher.publishEvent(countryEvent);
 
 	}
 
 	@Override
 	void raiseEventSave(Object object) {
-		CountrySaveEvent countryEvent = new CountrySaveEvent(this, (Country) object);
+		ChangeCountryEvent countryEvent = new ChangeCountryEvent(this, (Country) object);
 		applicationEventPublisher.publishEvent(countryEvent);
 
 	}

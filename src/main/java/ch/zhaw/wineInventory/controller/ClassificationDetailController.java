@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import ch.zhaw.wineInventory.bean.Classification;
 import ch.zhaw.wineInventory.controller.helper.ControllerState;
 import ch.zhaw.wineInventory.event.ClassificationDetailsEvent;
-import ch.zhaw.wineInventory.event.ClassificationSaveEvent;
+import ch.zhaw.wineInventory.event.ChangeClassificationEvent;
 import ch.zhaw.wineInventory.service.ClassificationService;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -108,7 +108,7 @@ public class ClassificationDetailController extends MainDetailController {
 
 	@Override
 	void raiseEventSave(Object object) {
-		ClassificationSaveEvent classificationEvent = new ClassificationSaveEvent(this, (Classification) object);
+		ChangeClassificationEvent classificationEvent = new ChangeClassificationEvent(this, (Classification) object);
 		applicationEventPublisher.publishEvent(classificationEvent);
 
 	}

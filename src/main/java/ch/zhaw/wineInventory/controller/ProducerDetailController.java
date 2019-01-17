@@ -11,9 +11,9 @@ import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Producer;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.controller.helper.ControllerState;
-import ch.zhaw.wineInventory.event.CountrySaveEvent;
+import ch.zhaw.wineInventory.event.ChangeCountryEvent;
 import ch.zhaw.wineInventory.event.ProducerDetailsEvent;
-import ch.zhaw.wineInventory.event.ProducerSaveEvent;
+import ch.zhaw.wineInventory.event.ChangeProducerEvent;
 import ch.zhaw.wineInventory.service.CountryService;
 import ch.zhaw.wineInventory.service.ProducerService;
 import javafx.collections.FXCollections;
@@ -36,10 +36,10 @@ import javafx.scene.control.Alert.AlertType;
 public class ProducerDetailController extends MainDetailController {
 
 	@Component
-	class SaveCountryEventHandler implements ApplicationListener<CountrySaveEvent> {
+	class SaveCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
 
 		@Override
-		public void onApplicationEvent(CountrySaveEvent event) {
+		public void onApplicationEvent(ChangeCountryEvent event) {
 			if (country != null) {
 				country.setItems(loadCountries());
 				country.setValue(event.getCountry());				
@@ -278,7 +278,7 @@ public class ProducerDetailController extends MainDetailController {
 
 	@Override
 	void raiseEventSave(Object object) {
-		ProducerSaveEvent producerEvent = new ProducerSaveEvent(this, (Producer) object);
+		ChangeProducerEvent producerEvent = new ChangeProducerEvent(this, (Producer) object);
 		applicationEventPublisher.publishEvent(producerEvent);
 
 	}
