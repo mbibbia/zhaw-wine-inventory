@@ -10,7 +10,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
-import ch.zhaw.wineInventory.bean.Classification;
 import ch.zhaw.wineInventory.config.StageManager;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -28,20 +27,20 @@ import javafx.scene.input.MouseEvent;
 abstract class MainTableController implements Initializable {
 
 	@FXML
-	private TableView<Object> tableView;
+	TableView<Object> tableView;
 
 	@FXML
-	private TableColumn<Object, Long> colId;
+	TableColumn<Object, Long> colId;
 
 	@FXML
-	private TableColumn<Object, String> colName;
+	TableColumn<Object, String> colName;
 
 	@Lazy
 	@Autowired
-	private StageManager stageManager;
+	StageManager stageManager;
 
 	@Autowired
-	private ApplicationEventPublisher applicationEventPublisher;
+	ApplicationEventPublisher applicationEventPublisher;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -67,6 +66,18 @@ abstract class MainTableController implements Initializable {
 		loadData();
 	}
 
+	abstract void deleteInBatch(List<Object> objects);
+
+	@FXML
+	void edit() {
+
+		Object object = tableView.getSelectionModel().getSelectedItem();
+		raiseEventShow(object);
+
+	}
+
+	abstract void loadData();
+
 	void notifyDetailView() {
 		tableView.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
@@ -80,21 +91,7 @@ abstract class MainTableController implements Initializable {
 
 	}
 
-	@FXML
-	void edit() {
-
-		Object object = tableView.getSelectionModel().getSelectedItem();
-		raiseEventShow(object);
-
-	}
-
-	abstract void deleteInBatch(List<Object> objects);
-
-	abstract void loadData();
-
-	void raiseEventShow(Object object) {
-
-	}
+	abstract void raiseEventShow(Object object);
 
 	void setColumnProperties() {
 

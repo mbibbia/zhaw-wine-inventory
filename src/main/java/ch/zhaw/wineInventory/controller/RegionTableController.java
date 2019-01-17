@@ -2,43 +2,24 @@ package ch.zhaw.wineInventory.controller;
 
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Region;
-import ch.zhaw.wineInventory.config.StageManager;
 import ch.zhaw.wineInventory.event.CountrySaveEvent;
 import ch.zhaw.wineInventory.event.RegionDetailsEvent;
 import ch.zhaw.wineInventory.event.RegionSaveEvent;
 import ch.zhaw.wineInventory.service.RegionService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.util.Callback;
 
 /**
  * 
@@ -49,153 +30,71 @@ import javafx.util.Callback;
  */
 
 @Controller
-public class RegionTableController implements Initializable {
-
-	@FXML
-	private TableView<Region> regionTable;
-
-	@FXML
-	private TableColumn<Region, Long> colRegionId;
-
-	@FXML
-	private TableColumn<Region, Country> colCountry;
-
-	@FXML
-	private TableColumn<Region, String> colName;
-
-	@FXML
-	private TableColumn<Region, Boolean> colEdit;
-
-	@Lazy
-	@Autowired
-	private StageManager stageManager;
-
-	@Autowired
-	private RegionService regionService;
-
-	@Autowired
-	private ApplicationEventPublisher applicationEventPublisher;
-
-	private final ObservableList<Region> regionList = FXCollections.observableArrayList();
-
-	@Component
-	class SaveRegionEventHandler implements ApplicationListener<RegionSaveEvent> {
-
-		@Override
-		public void onApplicationEvent(RegionSaveEvent event) {
-			loadRegions();
-		}
-
-	}
-
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-
-		regionTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		setColumnProperties();
-		loadRegions();
-
-		// Notify detail view.
-		regionTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				Region region = regionTable.getSelectionModel().getSelectedItem();
-				if (region != null) {
-					raiseEventShowRegion(region);
-				}
-			}
-		});
-	}
+public class RegionTableController extends MainTableController {
 
 	@Component
 	class SaveCountryEventHandler implements ApplicationListener<CountrySaveEvent> {
 
 		@Override
 		public void onApplicationEvent(CountrySaveEvent event) {
-			if (regionTable != null) {
-				loadRegions();
+			if (tableView != null) {
+				loadData();
 			}
 		}
 
 	}
 
-	private void setColumnProperties() {
-		colRegionId.setCellValueFactory(new PropertyValueFactory<>("id"));
-		colCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
-		colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+	@Component
+	class SaveRegionEventHandler implements ApplicationListener<RegionSaveEvent> {
+
+		@Override
+		public void onApplicationEvent(RegionSaveEvent event) {
+			loadData();
+		}
 
 	}
 
-	private void loadRegions() {
+	@FXML
+	private TableColumn<Region, Country> colCountry;
+
+	@Autowired
+	private RegionService regionService;
+
+	private final ObservableList<Region> regionList = FXCollections.observableArrayList();
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		super.initialize(location, resources);
+	}
+
+	@Override
+	void deleteInBatch(List<Object> objects) {
+		@SuppressWarnings("unchecked")
+		List<Region> regions = (List<Region>) (List<?>) objects;
+		regionService.deleteInBatch(regions);
+
+	}
+
+	@Override
+	void loadData() {
 		regionList.clear();
 		regionList.addAll(regionService.findAll());
-		regionTable.setItems(regionList);
+		@SuppressWarnings("unchecked")
+		ObservableList<Object> list = (ObservableList<Object>) (ObservableList<?>) regionList;
+		tableView.setItems(list);
 	}
 
-	private void raiseEventShowRegion(final Region region) {
-		RegionDetailsEvent regionEvent = new RegionDetailsEvent(this, region);
+	@Override
+	void raiseEventShow(Object object) {
+		RegionDetailsEvent regionEvent = new RegionDetailsEvent(this, (Region) object);
 		applicationEventPublisher.publishEvent(regionEvent);
-	}
-
-	Callback<TableColumn<Region, Boolean>, TableCell<Region, Boolean>> cellFactory = new Callback<TableColumn<Region, Boolean>, TableCell<Region, Boolean>>() {
-		@Override
-		public TableCell<Region, Boolean> call(final TableColumn<Region, Boolean> param) {
-			final TableCell<Region, Boolean> cell = new TableCell<Region, Boolean>() {
-				Image imgEdit = new Image(getClass().getResourceAsStream("/images/edit.png"));
-				final Button btnEdit = new Button();
-
-				@Override
-				public void updateItem(Boolean check, boolean empty) {
-					super.updateItem(check, empty);
-					if (empty) {
-						setGraphic(null);
-						setText(null);
-					} else {
-						btnEdit.setOnAction(e -> {
-							Region region = getTableView().getItems().get(getIndex());
-							raiseEventShowRegion(region);
-						});
-
-						btnEdit.setStyle("-fx-background-color: transparent;");
-						ImageView iv = new ImageView();
-						iv.setImage(imgEdit);
-						iv.setPreserveRatio(true);
-						iv.setSmooth(true);
-						iv.setCache(true);
-						btnEdit.setGraphic(iv);
-
-						setGraphic(btnEdit);
-						setAlignment(Pos.CENTER);
-						setText(null);
-					}
-				}
-
-			};
-			return cell;
-		}
-	};
-
-	@FXML
-	void editRegion(ActionEvent event) {
-		Region region = regionTable.getSelectionModel().getSelectedItem();
-		raiseEventShowRegion(region);
 
 	}
 
-	@FXML
-	void deleteRegions(ActionEvent event) {
-		List<Region> regions = regionTable.getSelectionModel().getSelectedItems();
-
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Confirmation Dialog");
-		alert.setHeaderText(null);
-		alert.setContentText("Are you sure you want to delete selected?");
-		Optional<ButtonType> action = alert.showAndWait();
-
-		if (action.get() == ButtonType.OK)
-			regionService.deleteInBatch(regions);
-
-		loadRegions();
+	@Override
+	void setColumnProperties() {
+		super.setColumnProperties();
+		colCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
 	}
 
 }

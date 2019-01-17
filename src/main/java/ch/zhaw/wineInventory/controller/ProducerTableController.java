@@ -2,43 +2,24 @@ package ch.zhaw.wineInventory.controller;
 
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Producer;
 import ch.zhaw.wineInventory.bean.Region;
-import ch.zhaw.wineInventory.config.StageManager;
 import ch.zhaw.wineInventory.event.ProducerDetailsEvent;
 import ch.zhaw.wineInventory.event.ProducerSaveEvent;
 import ch.zhaw.wineInventory.service.ProducerService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.util.Callback;
 
 /**
  * 
@@ -49,15 +30,7 @@ import javafx.util.Callback;
  */
 
 @Controller
-public class ProducerTableController implements Initializable {
-	@FXML
-	private TableView<Producer> producerTable;
-
-	@FXML
-	private TableColumn<Producer, Long> colProducerId;
-
-	@FXML
-	private TableColumn<Producer, String> colName;
+public class ProducerTableController extends MainTableController {
 
 	@FXML
 	private TableColumn<Producer, String> colCompany;
@@ -92,18 +65,8 @@ public class ProducerTableController implements Initializable {
 	@FXML
 	private TableColumn<Producer, Region> colRegion;
 
-	@FXML
-	private TableColumn<Producer, Boolean> colEdit;
-
-	@Lazy
-	@Autowired
-	private StageManager stageManager;
-
 	@Autowired
 	private ProducerService producerService;
-
-	@Autowired
-	private ApplicationEventPublisher applicationEventPublisher;
 
 	private final ObservableList<Producer> producerList = FXCollections.observableArrayList();
 
@@ -112,33 +75,43 @@ public class ProducerTableController implements Initializable {
 
 		@Override
 		public void onApplicationEvent(ProducerSaveEvent event) {
-			loadProducers();
+			loadData();
 		}
 
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
-		producerTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		setColumnProperties();
-		loadProducers();
-		
-		// Notify detail view.
-		producerTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
-	        @Override
-	        public void handle(MouseEvent event) {
-	        	Producer producer = producerTable.getSelectionModel().getSelectedItem();
-	        	if (producer != null) {
-					raiseEventShowProducer(producer);
-	        	}
-	        }
-	    });
+		super.initialize(location, resources);
 	}
 
-	private void setColumnProperties() {
-		colProducerId.setCellValueFactory(new PropertyValueFactory<>("id"));
-		colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+	@Override
+	void deleteInBatch(List<Object> objects) {
+		@SuppressWarnings("unchecked")
+		List<Producer> producers = (List<Producer>) (List<?>) objects;
+		producerService.deleteInBatch(producers);
+	}
+
+	@Override
+	void loadData() {
+		producerList.clear();
+		producerList.addAll(producerService.findAll());
+		@SuppressWarnings("unchecked")
+		ObservableList<Object> list = (ObservableList<Object>) (ObservableList<?>) producerList;
+		tableView.setItems(list);
+
+	}
+
+	@Override
+	void raiseEventShow(Object object) {
+		ProducerDetailsEvent producerEvent = new ProducerDetailsEvent(this, (Producer) object);
+		applicationEventPublisher.publishEvent(producerEvent);
+
+	}
+
+	@Override
+	void setColumnProperties() {
+		super.setColumnProperties();
 		colCompany.setCellValueFactory(new PropertyValueFactory<>("company"));
 		colAddressLine1.setCellValueFactory(new PropertyValueFactory<>("addressLine1"));
 		colAddressLine2.setCellValueFactory(new PropertyValueFactory<>("addressLine2"));
@@ -150,79 +123,7 @@ public class ProducerTableController implements Initializable {
 		colUrl.setCellValueFactory(new PropertyValueFactory<>("url"));
 		colCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
 		colRegion.setCellValueFactory(new PropertyValueFactory<>("region"));
-		
-	}
 
-	private void loadProducers() {
-		producerList.clear();
-		producerList.addAll(producerService.findAll());
-		producerTable.setItems(producerList);
-	}
-
-	private void raiseEventShowProducer(final Producer producer) {
-		ProducerDetailsEvent producerEvent = new ProducerDetailsEvent(this, producer);
-		applicationEventPublisher.publishEvent(producerEvent);
-	}
-
-	Callback<TableColumn<Producer, Boolean>, TableCell<Producer, Boolean>> cellFactory = new Callback<TableColumn<Producer, Boolean>, TableCell<Producer, Boolean>>() {
-		@Override
-		public TableCell<Producer, Boolean> call(final TableColumn<Producer, Boolean> param) {
-			final TableCell<Producer, Boolean> cell = new TableCell<Producer, Boolean>() {
-				Image imgEdit = new Image(getClass().getResourceAsStream("/images/edit.png"));
-				final Button btnEdit = new Button();
-
-				@Override
-				public void updateItem(Boolean check, boolean empty) {
-					super.updateItem(check, empty);
-					if (empty) {
-						setGraphic(null);
-						setText(null);
-					} else {
-						btnEdit.setOnAction(e -> {
-							Producer producer = getTableView().getItems().get(getIndex());
-							raiseEventShowProducer(producer);
-						});
-
-						btnEdit.setStyle("-fx-background-color: transparent;");
-						ImageView iv = new ImageView();
-						iv.setImage(imgEdit);
-						iv.setPreserveRatio(true);
-						iv.setSmooth(true);
-						iv.setCache(true);
-						btnEdit.setGraphic(iv);
-
-						setGraphic(btnEdit);
-						setAlignment(Pos.CENTER);
-						setText(null);
-					}
-				}
-
-			};
-			return cell;
-		}
-	};
-
-	@FXML
-	void editProducer(ActionEvent event) {
-		Producer producer = producerTable.getSelectionModel().getSelectedItem();
-		raiseEventShowProducer(producer);
-
-	}
-
-	@FXML
-	void deleteProducers(ActionEvent event) {
-		List<Producer> producers = producerTable.getSelectionModel().getSelectedItems();
-
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Confirmation Dialog");
-		alert.setHeaderText(null);
-		alert.setContentText("Are you sure you want to delete selected?");
-		Optional<ButtonType> action = alert.showAndWait();
-
-		if (action.get() == ButtonType.OK)
-			producerService.deleteInBatch(producers);
-
-		loadProducers();
 	}
 
 }

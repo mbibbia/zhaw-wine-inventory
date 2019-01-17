@@ -8,9 +8,9 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.zhaw.wineInventory.controller.WineTypeTableController">
    <children>
-      <TableView fx:id="wineTypeTable" prefHeight="383.0" prefWidth="748.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <TableView fx:id="tableView" prefHeight="383.0" prefWidth="748.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columns>
-            <TableColumn fx:id="colWineTypeId" maxWidth="700.0" prefWidth="20.0" text="ID" visible="false" />
+            <TableColumn fx:id="colId" maxWidth="700.0" prefWidth="20.0" text="ID" visible="false" />
             <TableColumn fx:id="colName" maxWidth="4000.0" prefWidth="578.0" text="Name" />
          </columns>
          <columnResizePolicy>
@@ -19,7 +19,7 @@
          <contextMenu>
             <ContextMenu>
               <items>
-                <MenuItem fx:id="deleteWineTypes" mnemonicParsing="false" onAction="#deleteWineTypes" text="Delete" />
+                <MenuItem mnemonicParsing="false" onAction="#delete" text="Delete" />
               </items>
             </ContextMenu>
          </contextMenu>

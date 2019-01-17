@@ -2,42 +2,19 @@ package ch.zhaw.wineInventory.controller;
 
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
-import ch.zhaw.wineInventory.bean.Wine;
 import ch.zhaw.wineInventory.bean.WineType;
-import ch.zhaw.wineInventory.config.StageManager;
 import ch.zhaw.wineInventory.event.WineTypeSaveEvent;
 import ch.zhaw.wineInventory.event.WineTypeDetailsEvent;
 import ch.zhaw.wineInventory.service.WineTypeService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.util.Callback;
 
 /**
  * 
@@ -48,137 +25,56 @@ import javafx.util.Callback;
  */
 
 @Controller
-public class WineTypeTableController implements Initializable {
-
-	@FXML
-	private TableView<WineType> wineTypeTable;
-
-	@FXML
-	private TableColumn<WineType, Long> colWineTypeId;
-
-	@FXML
-	private TableColumn<WineType, String> colName;
-
-	@FXML
-	private TableColumn<WineType, Boolean> colEdit;
-
-	@Lazy
-	@Autowired
-	private StageManager stageManager;
-
-	@Autowired
-	private WineTypeService wineTypeService;
-
-	@Autowired
-	private ApplicationEventPublisher applicationEventPublisher;
-
-	private final ObservableList<WineType> wineTypeList = FXCollections.observableArrayList();
+public class WineTypeTableController extends MainTableController {
 
 	@Component
 	class SaveWineTypeEventHandler implements ApplicationListener<WineTypeSaveEvent> {
 
 		@Override
 		public void onApplicationEvent(WineTypeSaveEvent event) {
-			loadWineTypes();
+			loadData();
 		}
+
+	}
+
+	@Autowired
+	private WineTypeService wineTypeService;
+
+	private final ObservableList<WineType> wineTypeList = FXCollections.observableArrayList();
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		super.initialize(location, resources);
+	}
+
+	@Override
+	void deleteInBatch(List<Object> objects) {
+		@SuppressWarnings("unchecked")
+		List<WineType> wineTypes = (List<WineType>) (List<?>) objects;
+		wineTypeService.deleteInBatch(wineTypes);
 
 	}
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-
-		wineTypeTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		setColumnProperties();
-		loadWineTypes();
-		
-		// Notify detail view.
-		wineTypeTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
-	        @Override
-	        public void handle(MouseEvent event) {
-	        	WineType wineType = wineTypeTable.getSelectionModel().getSelectedItem();
-	        	if (wineType != null) {
-					raiseEventShowWineType(wineType);
-	        	}
-	        }
-	    });
-	}
-
-	private void setColumnProperties() {
-		colWineTypeId.setCellValueFactory(new PropertyValueFactory<>("id"));
-		colName.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-	}
-
-	private void loadWineTypes() {
+	void loadData() {
 		wineTypeList.clear();
 		wineTypeList.addAll(wineTypeService.findAll());
-		wineTypeTable.setItems(wineTypeList);
+		@SuppressWarnings("unchecked")
+		ObservableList<Object> list = (ObservableList<Object>) (ObservableList<?>) wineTypeList;
+		tableView.setItems(list);
+
 	}
 
-	private void raiseEventShowWineType(final WineType wineType) {
-		WineTypeDetailsEvent wineTypeEvent = new WineTypeDetailsEvent(this, wineType);
+	@Override
+	void raiseEventShow(Object object) {
+		WineTypeDetailsEvent wineTypeEvent = new WineTypeDetailsEvent(this, (WineType) object);
 		applicationEventPublisher.publishEvent(wineTypeEvent);
-	}
-
-	Callback<TableColumn<WineType, Boolean>, TableCell<WineType, Boolean>> cellFactory = new Callback<TableColumn<WineType, Boolean>, TableCell<WineType, Boolean>>() {
-		@Override
-		public TableCell<WineType, Boolean> call(final TableColumn<WineType, Boolean> param) {
-			final TableCell<WineType, Boolean> cell = new TableCell<WineType, Boolean>() {
-				Image imgEdit = new Image(getClass().getResourceAsStream("/images/edit.png"));
-				final Button btnEdit = new Button();
-
-				@Override
-				public void updateItem(Boolean check, boolean empty) {
-					super.updateItem(check, empty);
-					if (empty) {
-						setGraphic(null);
-						setText(null);
-					} else {
-						btnEdit.setOnAction(e -> {
-							WineType wineType = getTableView().getItems().get(getIndex());
-							raiseEventShowWineType(wineType);
-						});
-
-						btnEdit.setStyle("-fx-background-color: transparent;");
-						ImageView iv = new ImageView();
-						iv.setImage(imgEdit);
-						iv.setPreserveRatio(true);
-						iv.setSmooth(true);
-						iv.setCache(true);
-						btnEdit.setGraphic(iv);
-
-						setGraphic(btnEdit);
-						setAlignment(Pos.CENTER);
-						setText(null);
-					}
-				}
-
-			};
-			return cell;
-		}
-	};
-
-	@FXML
-	void editWineType(ActionEvent event) {
-		WineType wineType = wineTypeTable.getSelectionModel().getSelectedItem();
-		raiseEventShowWineType(wineType);
 
 	}
 
-	@FXML
-	void deleteWineTypes(ActionEvent event) {
-		List<WineType> countries = wineTypeTable.getSelectionModel().getSelectedItems();
-
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Confirmation Dialog");
-		alert.setHeaderText(null);
-		alert.setContentText("Are you sure you want to delete selected?");
-		Optional<ButtonType> action = alert.showAndWait();
-
-		if (action.get() == ButtonType.OK)
-			wineTypeService.deleteInBatch(countries);
-
-		loadWineTypes();
+	@Override
+	void setColumnProperties() {
+		super.setColumnProperties();
 	}
 
 }
