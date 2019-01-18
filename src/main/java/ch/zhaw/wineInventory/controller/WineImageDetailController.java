@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import ch.zhaw.wineInventory.config.StageManager;
 import ch.zhaw.wineInventory.event.ChangeWineEvent;
 import ch.zhaw.wineInventory.event.ImageDetailsEvent;
+import ch.zhaw.wineInventory.event.ResetWineEvent;
 import ch.zhaw.wineInventory.event.WineDetailsEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -64,6 +65,17 @@ public class WineImageDetailController implements Initializable {
 			if (event.getWine().getImage() != null) {
 				imageView.setImage(new Image(new ByteArrayInputStream(event.getWine().getImage().getData())));
 			}
+		}
+
+	}
+
+	@Component
+	class ResetWineEventHandler implements ApplicationListener<ResetWineEvent> {
+
+		@Override
+		public void onApplicationEvent(ResetWineEvent event) {
+			
+			imageView.setImage(null);
 		}
 
 	}
