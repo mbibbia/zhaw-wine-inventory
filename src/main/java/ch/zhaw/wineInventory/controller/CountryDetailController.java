@@ -70,8 +70,7 @@ public class CountryDetailController extends MainDetailController {
 
 	@Override
 	boolean isValid() {
-		return validation.emptyValidation("Name", getName().isEmpty())
-				&& validation.validate("Code", getCode(), "[A-Z]{2}");
+		return super.isValid() && validation.validate("Code", getCode(), "[A-Z]{2}");
 
 	}
 
