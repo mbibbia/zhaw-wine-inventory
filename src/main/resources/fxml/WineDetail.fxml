@@ -3,7 +3,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
@@ -60,53 +62,19 @@
                   <Insets left="25.0" />
                </VBox.margin>
             </ComboBox>
-            <HBox maxWidth="246.0">
-               <children>
-                  <TextField maxWidth="160.0" prefHeight="30.0" prefWidth="160.0" promptText="Image">
-                     <VBox.margin>
-                        <Insets left="25.0" right="25.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <HBox HBox.hgrow="ALWAYS" />
-                  <HBox alignment="TOP_RIGHT" prefHeight="20.0" spacing="10.0">
-                     <children>
-                        <Button fx:id="browseImage" mnemonicParsing="false" onAction="#browseImage">
-                           <graphic>
-                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icons/add.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <tooltip>
-                              <Tooltip text="Add Image" />
-                           </tooltip>
-                           <HBox.margin>
-                              <Insets top="2.0" />
-                           </HBox.margin>
-                        </Button>
-                        <Button fx:id="removeImage" mnemonicParsing="false" onAction="#removeImage">
-                           <graphic>
-                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icons/cut.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <tooltip>
-                              <Tooltip text="Remove Image" />
-                           </tooltip>
-                           <HBox.margin>
-                              <Insets top="2.0" />
-                           </HBox.margin>
-                        </Button>
-                     </children>
-                  </HBox>
-               </children>
+            <TextField fx:id="imageName" maxWidth="246.0" prefHeight="30.0" prefWidth="246.0" promptText="Name">
                <VBox.margin>
                   <Insets left="25.0" right="25.0" />
                </VBox.margin>
-            </HBox>            
+               <contextMenu>
+                  <ContextMenu>
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#browseImage" text="Browse Image..." />
+                        <MenuItem mnemonicParsing="false" onAction="#removeImage" text="Remove Image" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu>
+            </TextField>            
             <HBox maxWidth="246.0">
                <children>
                   <HBox prefHeight="20.0" spacing="10.0">

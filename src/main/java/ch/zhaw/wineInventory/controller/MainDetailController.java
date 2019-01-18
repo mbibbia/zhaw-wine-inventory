@@ -113,7 +113,7 @@ abstract class MainDetailController implements Initializable {
 
 	};
 
-	void changeState(ControllerState newState) {
+	protected void changeState(ControllerState newState) {
 		if (controllerState == newState) {
 			return;
 		}
@@ -342,7 +342,10 @@ abstract class MainDetailController implements Initializable {
 	}
 
 	private void setViewStateProperties() {
-		// Nothing to do.
+		setInputControlsViewState();
+	}
+	
+	protected void setInputControlsViewState() {
 	}
 
 }

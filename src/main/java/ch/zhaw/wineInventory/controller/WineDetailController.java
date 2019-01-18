@@ -41,6 +41,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -111,7 +112,7 @@ public class WineDetailController extends MainDetailController {
 			country.setValue(event.getWine().getCountry());
 			region.setValue(event.getWine().getRegion());
 			producer.setValue(event.getWine().getProducer());
-
+			image = event.getWine().getImage();
 			changeState(ControllerState.VIEW);
 		}
 
@@ -131,12 +132,9 @@ public class WineDetailController extends MainDetailController {
 
 	@FXML
 	private ComboBox<Producer> producer;
-
+	
 	@FXML
-	private Button browseImage;
-
-	@FXML
-	private Button removeImage;
+	private TextField imageName;
 
 	@Autowired
 	private WineService wineService;
@@ -157,7 +155,12 @@ public class WineDetailController extends MainDetailController {
 	private ImageService imageService;
 	
 	private Image image;
-
+	
+	private final String IMAGE_INITIAL = "<No Image set>";
+	private final String IMAGE_BROWSE = "Browse Image...";
+	private final String IMAGE_CHANGE =  "Change Image...";
+	private final String IMAGE_DELETE = "Delete Image...";
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		super.initialize(location, resources);
@@ -165,6 +168,7 @@ public class WineDetailController extends MainDetailController {
 		classification.setItems(loadClassifications());
 		country.setItems(loadCountries());
 		producer.setItems(loadProducers());
+
 	}
 	
 	@Override
@@ -177,6 +181,7 @@ public class WineDetailController extends MainDetailController {
 		country.setStyle("-fx-opacity: 1;");
 		region.setStyle("-fx-opacity: 1;");
 		producer.setStyle("-fx-opacity: 1;");
+		imageName.setStyle("-fx-opacity: 1;");
 	}
 
 	@Override
@@ -188,6 +193,10 @@ public class WineDetailController extends MainDetailController {
 		country.setValue(null);
 		region.setValue(null);
 		producer.setValue(null);
+		imageName.clear();
+		
+		// The image is not set in state cleared.
+		image = null;
 	}
 
 	@Override
@@ -199,7 +208,12 @@ public class WineDetailController extends MainDetailController {
 		country.setDisable(disabled);
 		region.setDisable(disabled);
 		producer.setDisable(disabled);
+		imageName.setDisable(disabled);
 	}
+	
+	@Override protected void setInputControlsViewState() {
+	}
+
 
 	private Classification getClassification() {
 		return classification.getValue();
@@ -220,7 +234,7 @@ public class WineDetailController extends MainDetailController {
 	private WineType getType() {
 		return wineType.getValue();
 	}
-
+	
 	@FXML
 	private void handleRegionClicked() {
 
@@ -245,7 +259,7 @@ public class WineDetailController extends MainDetailController {
 	private ObservableList<WineType> loadTypes() {
 		return FXCollections.observableArrayList(wineTypeService.findAll());
 	}
-
+	
 	@Override
 	void deletePersistent(Object object) {
 		wineService.delete((Wine) object);
@@ -320,7 +334,7 @@ public class WineDetailController extends MainDetailController {
 	@FXML
 	private void browseImage() {
 		FileChooser fileChooser = new FileChooser();
-		File file = fileChooser.showOpenDialog(browseImage.getScene().getWindow());
+		File file = fileChooser.showOpenDialog(imageName.getScene().getWindow());
 
 		if (file != null) {
 
@@ -336,6 +350,8 @@ public class WineDetailController extends MainDetailController {
 				image.setData(data);
 				imageService.save(image);
 				raiseEventShowImage(image);
+				// It does not matter if it is VIEW or EDIT.
+				fillImageNameTextfield(ControllerState.VIEW);
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -368,5 +384,31 @@ public class WineDetailController extends MainDetailController {
 		applicationEventPublisher.publishEvent(imageEvent);
 	}
 	
+	private void fillImageNameTextfield(ControllerState state) {
+		switch (controllerState) {
+		case RESET:
+			imageName.setText(IMAGE_INITIAL);
+			break;
+			
+		case VIEW:
+		case EDIT:
+		case CREATE:
+			if (image != null && !image.getName().isEmpty()) {
+				imageName.setText(image.getName());
+			} else {
+				imageName.setText(IMAGE_INITIAL);
+			}
+			break;
+			
+		default:
+			imageName.setText(IMAGE_INITIAL);
+			break;
+		}
+	}
 
+	@Override
+	protected void changeState(ControllerState newState) {
+		super.changeState(newState);
+		fillImageNameTextfield(newState);
+	}
 }
