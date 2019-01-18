@@ -6,8 +6,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 /**
  * 
@@ -47,9 +51,13 @@ public class Producer {
 	private String url;
 
 	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "country_id")
+	@NotFound(action = NotFoundAction.IGNORE)  
 	private Country country;
 
 	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "region_id")
+	@NotFound(action = NotFoundAction.IGNORE)  
 	private Region region;
 
 	/**

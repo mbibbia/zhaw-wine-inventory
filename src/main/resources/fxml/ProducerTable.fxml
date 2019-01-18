@@ -8,9 +8,9 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.zhaw.wineInventory.controller.ProducerTableController">
    <children>
-      <TableView fx:id="producerTable" prefHeight="488.0" prefWidth="1207.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <TableView fx:id="tableView" prefHeight="488.0" prefWidth="1207.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columns>
-            <TableColumn fx:id="colProducerId" maxWidth="700.0" prefWidth="20.0" text="ID" visible="false" />
+            <TableColumn fx:id="colId" maxWidth="700.0" prefWidth="20.0" text="ID" visible="false" />
             <TableColumn fx:id="colName" maxWidth="4000.0" prefWidth="75.0" text="Name" />
             <TableColumn fx:id="colCompany" maxWidth="4000.0" prefWidth="75.0" text="Company" visible="false" />
             <TableColumn fx:id="colAddressLine1" maxWidth="4000.0" prefWidth="119.0" text="Address Line 1" visible="false" />
@@ -30,7 +30,7 @@
          <contextMenu>
             <ContextMenu>
               <items>
-                <MenuItem fx:id="deleteProducers" mnemonicParsing="false" onAction="#deleteProducers" text="Delete" />
+                <MenuItem mnemonicParsing="false" onAction="#delete" text="Delete" />
               </items>
             </ContextMenu>
          </contextMenu>

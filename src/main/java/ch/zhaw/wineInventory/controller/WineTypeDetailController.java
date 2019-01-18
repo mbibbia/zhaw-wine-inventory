@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 
 import ch.zhaw.wineInventory.bean.WineType;
 import ch.zhaw.wineInventory.controller.helper.ControllerState;
-import ch.zhaw.wineInventory.event.WineTypeSaveEvent;
+import ch.zhaw.wineInventory.event.ChangeWineTypeEvent;
 import ch.zhaw.wineInventory.event.WineTypeDetailsEvent;
 import ch.zhaw.wineInventory.service.WineTypeService;
 import javafx.scene.control.Alert;
@@ -111,7 +111,7 @@ public class WineTypeDetailController extends MainDetailController {
 
 	@Override
 	void raiseEventSave(Object object) {
-		WineTypeSaveEvent wineTypeEvent = new WineTypeSaveEvent(this, (WineType) object);
+		ChangeWineTypeEvent wineTypeEvent = new ChangeWineTypeEvent(this, (WineType) object);
 		applicationEventPublisher.publishEvent(wineTypeEvent);
 
 	}

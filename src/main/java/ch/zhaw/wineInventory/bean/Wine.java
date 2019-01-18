@@ -9,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 /**
  * 
  * @author Christian Jeitziner / Marco Bibbia
@@ -29,18 +32,23 @@ public class Wine {
 	private String name;
 
 	@OneToOne(fetch = FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
 	private WineType type;
 
 	@OneToOne(fetch = FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
 	private Classification classification;
 
 	@OneToOne(fetch = FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
 	private Country country;
 
 	@OneToOne(fetch = FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
 	private Region region;
 
 	@OneToOne(fetch = FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
 	private Producer producer;
 	
 	@OneToOne(fetch = FetchType.LAZY)

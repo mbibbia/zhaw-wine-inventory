@@ -8,23 +8,23 @@ import ch.zhaw.wineInventory.bean.Wine;
  * 
  * @author Christian Jeitziner / Marco Bibbia
  * 
- *         Application Event when a wine is deleted.
+ *         Application Event when a wine is saved.
  *
  */
-public class WineDeleteEvent extends ApplicationEvent {
+public class ChangeWineEvent extends ApplicationEvent {
 
 	private Wine wine;
 
 	private static final long serialVersionUID = 1L;
 
-	public WineDeleteEvent(Object source, Wine wine) {
+	public ChangeWineEvent(Object source, Wine wine) {
 		super(source);
 		this.wine = wine;
 
 	}
 
 	/**
-	 * Returns wine bean that has been deleted.
+	 * Returns wine bean that has been saved.
 	 * 
 	 * @return Wine
 	 */

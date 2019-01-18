@@ -1,12 +1,15 @@
 package ch.zhaw.wineInventory.service.impl;
 
+import java.util.HashSet;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ch.zhaw.wineInventory.bean.Country;
+import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.repository.CountryRepository;
 import ch.zhaw.wineInventory.service.CountryService;
+import ch.zhaw.wineInventory.service.RegionService;
 
 /**
  * 
@@ -22,6 +25,9 @@ public class CountryServiceImpl implements CountryService {
 
 	@Autowired
 	private CountryRepository repository;
+
+	@Autowired
+	private RegionService regionService;
 
 	/**
 	 * Creates a new object.
@@ -39,16 +45,32 @@ public class CountryServiceImpl implements CountryService {
 	@Override
 	public void delete(Country entity) {
 		repository.delete(entity);
+		for (Region region : entity.getRegions()) {
+			regionService.delete(region);
+		}
+
 	}
 
 	@Override
 	public void delete(Long id) {
+		Country country = find(id);
 		repository.deleteById(id);
+		for (Region region : country.getRegions()) {
+			regionService.delete(region);
+		}
+
 	}
 
 	@Override
 	public void deleteInBatch(List<Country> entities) {
+		HashSet<Region> regions = new HashSet<Region>();
+		for (Country country : entities) {
+			regions.addAll(country.getRegions());
+		}
 		repository.deleteInBatch(entities);
+		for (Region region : regions) {
+			regionService.delete(region);
+		}
 	}
 
 	@Override

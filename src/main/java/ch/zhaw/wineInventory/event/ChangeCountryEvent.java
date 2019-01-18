@@ -11,13 +11,13 @@ import ch.zhaw.wineInventory.bean.Country;
  *         Application Event when a country is saved.
  *
  */
-public class CountrySaveEvent extends ApplicationEvent {
+public class ChangeCountryEvent extends ApplicationEvent {
 
 	private Country country;
 
 	private static final long serialVersionUID = 1L;
 
-	public CountrySaveEvent(Object source, Country country) {
+	public ChangeCountryEvent(Object source, Country country) {
 		super(source);
 		this.country = country;
 
