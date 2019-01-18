@@ -16,6 +16,7 @@ import ch.zhaw.wineInventory.bean.WineType;
 import ch.zhaw.wineInventory.controller.helper.ControllerState;
 import ch.zhaw.wineInventory.event.ChangeWineEvent;
 import ch.zhaw.wineInventory.event.ChangeWineTypeEvent;
+import ch.zhaw.wineInventory.event.ResetWineEvent;
 import ch.zhaw.wineInventory.event.ChangeClassificationEvent;
 import ch.zhaw.wineInventory.event.ChangeCountryEvent;
 import ch.zhaw.wineInventory.event.ChangeProducerEvent;
@@ -142,7 +143,7 @@ public class WineDetailController extends MainDetailController {
 		country.setItems(loadCountries());
 		producer.setItems(loadProducers());
 	}
-	
+
 	@Override
 	protected void initializeInputControlsStyle() {
 		super.initializeInputControlsStyle();
@@ -222,6 +223,12 @@ public class WineDetailController extends MainDetailController {
 		return FXCollections.observableArrayList(wineTypeService.findAll());
 	}
 
+	private void raiseResetEvent() {
+		ResetWineEvent event = new ResetWineEvent(this);
+		applicationEventPublisher.publishEvent(event);
+
+	}
+
 	@Override
 	void deletePersistent(Object object) {
 		wineService.delete((Wine) object);
@@ -276,7 +283,7 @@ public class WineDetailController extends MainDetailController {
 		alert.showAndWait();
 
 	}
-		
+
 	@Override
 	void raiseEventDelete(Object object) {
 		raiseEventSave(object);
@@ -287,6 +294,12 @@ public class WineDetailController extends MainDetailController {
 		ChangeWineEvent wineEvent = new ChangeWineEvent(this, (Wine) object);
 		applicationEventPublisher.publishEvent(wineEvent);
 
+	}
+
+	@Override
+	void reset() {
+		super.reset();
+		raiseResetEvent();
 	}
 
 }
