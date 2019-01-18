@@ -242,8 +242,8 @@ abstract class MainDetailController implements Initializable {
 			} else {
 				update();
 			}
+			changeState(ControllerState.VIEW);
 		}
-		changeState(ControllerState.VIEW);
 	};
 
 	protected void setInputControlsDisabled(boolean disabled) {
