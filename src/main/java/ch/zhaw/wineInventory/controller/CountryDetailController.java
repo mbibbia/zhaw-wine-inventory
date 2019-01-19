@@ -151,7 +151,6 @@ public class CountryDetailController extends MainDetailController {
 	void raiseEventSave(Object object) {
 		ChangeCountryEvent countryEvent = new ChangeCountryEvent(this, (Country) object);
 		applicationEventPublisher.publishEvent(countryEvent);
-
 	}
 
 	@Override

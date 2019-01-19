@@ -52,7 +52,6 @@ public class WineTypeTableController extends MainTableController {
 		@SuppressWarnings("unchecked")
 		List<WineType> wineTypes = (List<WineType>) (List<?>) objects;
 		wineTypeService.deleteInBatch(wineTypes);
-
 	}
 
 	@Override
@@ -62,14 +61,18 @@ public class WineTypeTableController extends MainTableController {
 		@SuppressWarnings("unchecked")
 		ObservableList<Object> list = (ObservableList<Object>) (ObservableList<?>) wineTypeList;
 		tableView.setItems(list);
-
 	}
 
 	@Override
 	void raiseEventShow(Object object) {
 		WineTypeDetailsEvent wineTypeEvent = new WineTypeDetailsEvent(this, (WineType) object);
 		applicationEventPublisher.publishEvent(wineTypeEvent);
+	}
 
+	@Override
+	void raiseEventDelete(Object object) {
+		ChangeWineTypeEvent wineTypeEvent = new ChangeWineTypeEvent(this, null);
+		applicationEventPublisher.publishEvent(wineTypeEvent);
 	}
 
 	@Override

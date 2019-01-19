@@ -99,14 +99,18 @@ public class ProducerTableController extends MainTableController {
 		@SuppressWarnings("unchecked")
 		ObservableList<Object> list = (ObservableList<Object>) (ObservableList<?>) producerList;
 		tableView.setItems(list);
-
 	}
 
 	@Override
 	void raiseEventShow(Object object) {
 		ProducerDetailsEvent producerEvent = new ProducerDetailsEvent(this, (Producer) object);
 		applicationEventPublisher.publishEvent(producerEvent);
+	}
 
+	@Override
+	void raiseEventDelete(Object object) {
+		ChangeProducerEvent producerEvent = new ChangeProducerEvent(this, null);
+		applicationEventPublisher.publishEvent(producerEvent);
 	}
 
 	@Override
@@ -123,7 +127,6 @@ public class ProducerTableController extends MainTableController {
 		colUrl.setCellValueFactory(new PropertyValueFactory<>("url"));
 		colCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
 		colRegion.setCellValueFactory(new PropertyValueFactory<>("region"));
-
 	}
 
 }

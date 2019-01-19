@@ -57,7 +57,6 @@ public class CountryTableController extends MainTableController {
 	void setColumnProperties() {
 		super.setColumnProperties();
 		colCode.setCellValueFactory(new PropertyValueFactory<>("code"));
-
 	}
 
 	@Override
@@ -65,7 +64,6 @@ public class CountryTableController extends MainTableController {
 		@SuppressWarnings("unchecked")
 		List<Country> countries = (List<Country>) (List<?>) objects;
 		countryService.deleteInBatch(countries);
-
 	}
 
 	@Override
@@ -75,14 +73,18 @@ public class CountryTableController extends MainTableController {
 		@SuppressWarnings("unchecked")
 		ObservableList<Object> list = (ObservableList<Object>) (ObservableList<?>) countryList;
 		tableView.setItems(list);
-
 	}
 
 	@Override
 	void raiseEventShow(Object object) {
 		CountryDetailsEvent countryEvent = new CountryDetailsEvent(this, (Country) object);
 		applicationEventPublisher.publishEvent(countryEvent);
+	}
 
+	@Override
+	void raiseEventDelete(Object object) {
+		ChangeCountryEvent countryEvent = new ChangeCountryEvent(this, null);
+		applicationEventPublisher.publishEvent(countryEvent);
 	}
 
 }

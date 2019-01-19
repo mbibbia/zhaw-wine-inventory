@@ -57,7 +57,7 @@ public class WineImageDetailController implements Initializable {
 	}
 
 	@Component
-	class SaveWineEventHandler implements ApplicationListener<ChangeWineEvent> {
+	class ChangeWineEventHandler implements ApplicationListener<ChangeWineEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeWineEvent event) {

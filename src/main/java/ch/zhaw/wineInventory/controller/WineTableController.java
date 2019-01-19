@@ -70,7 +70,7 @@ public class WineTableController extends MainTableController {
 	}
 
 	@Component
-	class SaveWineEventHandler implements ApplicationListener<ChangeWineEvent> {
+	class ChangeWineEventHandler implements ApplicationListener<ChangeWineEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeWineEvent event) {
@@ -80,7 +80,7 @@ public class WineTableController extends MainTableController {
 	}
 
 	@Component
-	class SaveWineTypeEventHandler implements ApplicationListener<ChangeWineTypeEvent> {
+	class ChangeWineTypeEventHandler implements ApplicationListener<ChangeWineTypeEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeWineTypeEvent event) {
@@ -119,7 +119,6 @@ public class WineTableController extends MainTableController {
 		@SuppressWarnings("unchecked")
 		List<Wine> wines = (List<Wine>) (List<?>) objects;
 		wineService.deleteInBatch(wines);
-
 	}
 
 	@Override
@@ -135,7 +134,12 @@ public class WineTableController extends MainTableController {
 	void raiseEventShow(Object object) {
 		WineDetailsEvent wineEvent = new WineDetailsEvent(this, (Wine) object);
 		applicationEventPublisher.publishEvent(wineEvent);
+	}
 
+	@Override
+	void raiseEventDelete(Object object) {
+		ChangeWineEvent wineEvent = new ChangeWineEvent(this, null);
+		applicationEventPublisher.publishEvent(wineEvent);
 	}
 
 	@Override
@@ -146,7 +150,6 @@ public class WineTableController extends MainTableController {
 		colCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
 		colRegion.setCellValueFactory(new PropertyValueFactory<>("region"));
 		colProducer.setCellValueFactory(new PropertyValueFactory<>("producer"));
-
 	}
 
 }

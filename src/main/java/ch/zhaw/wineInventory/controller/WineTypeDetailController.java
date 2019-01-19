@@ -85,7 +85,6 @@ public class WineTypeDetailController extends MainDetailController {
 		alert.setContentText(
 				"The wine type " + wineType.getName() + " has been created and \n id is " + wineType.getId() + ".");
 		alert.showAndWait();
-
 	}
 
 	@Override
@@ -96,7 +95,6 @@ public class WineTypeDetailController extends MainDetailController {
 		alert.setHeaderText(null);
 		alert.setContentText("The wine type " + wineType.getName() + " has been updated.");
 		alert.showAndWait();
-
 	}
 
 	@Override
@@ -106,14 +104,12 @@ public class WineTypeDetailController extends MainDetailController {
 		// WineTypeDeleteEvent wineTypeEvent = new
 		// WineTypeDeleteEvent(this, (WineType) object);
 		// applicationEventPublisher.publishEvent(wineTypeEvent);
-
 	}
 
 	@Override
 	void raiseEventSave(Object object) {
 		ChangeWineTypeEvent wineTypeEvent = new ChangeWineTypeEvent(this, (WineType) object);
 		applicationEventPublisher.publishEvent(wineTypeEvent);
-
 	}
 
 }

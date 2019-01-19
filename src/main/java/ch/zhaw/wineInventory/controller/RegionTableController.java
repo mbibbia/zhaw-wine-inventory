@@ -72,7 +72,6 @@ public class RegionTableController extends MainTableController {
 		@SuppressWarnings("unchecked")
 		List<Region> regions = (List<Region>) (List<?>) objects;
 		regionService.deleteInBatch(regions);
-
 	}
 
 	@Override
@@ -88,7 +87,12 @@ public class RegionTableController extends MainTableController {
 	void raiseEventShow(Object object) {
 		RegionDetailsEvent regionEvent = new RegionDetailsEvent(this, (Region) object);
 		applicationEventPublisher.publishEvent(regionEvent);
+	}
 
+	@Override
+	void raiseEventDelete(Object object) {
+		ChangeRegionEvent regionEvent = new ChangeRegionEvent(this, null);
+		applicationEventPublisher.publishEvent(regionEvent);
 	}
 
 	@Override

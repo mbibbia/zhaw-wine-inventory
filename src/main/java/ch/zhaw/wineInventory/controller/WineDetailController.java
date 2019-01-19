@@ -121,6 +121,23 @@ public class WineDetailController extends MainDetailController {
 	}
 
 	@Component
+	class ChangeWineEventHandler implements ApplicationListener<ChangeWineEvent> {
+
+		@Override
+		public void onApplicationEvent(ChangeWineEvent event) {
+			Wine wine = event.getWine();
+			if (wine != null) {
+				WineDetailsEvent wineEvent = new WineDetailsEvent(this, wine);
+				applicationEventPublisher.publishEvent(wineEvent);
+			} else {
+				System.out.println("Set wine event received");
+				reset();
+			}
+		}
+	}
+
+
+	@Component
 	class ShowWineImageEventHandler implements ApplicationListener<ImageDetailsEvent> {
 		@Override
 		public void onApplicationEvent(ImageDetailsEvent event) {
@@ -130,7 +147,6 @@ public class WineDetailController extends MainDetailController {
 			}
 		}
 	}
-
 
 	@FXML
 	private ComboBox<WineType> wineType;
