@@ -130,7 +130,6 @@ public class WineDetailController extends MainDetailController {
 				WineDetailsEvent wineEvent = new WineDetailsEvent(this, wine);
 				applicationEventPublisher.publishEvent(wineEvent);
 			} else {
-				System.out.println("Set wine event received");
 				reset();
 			}
 		}
