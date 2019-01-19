@@ -41,6 +41,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Alert.AlertType;
@@ -112,10 +114,23 @@ public class WineDetailController extends MainDetailController {
 			region.setValue(event.getWine().getRegion());
 			producer.setValue(event.getWine().getProducer());
 			image = event.getWine().getImage();
+			raiseEventShowImage(image);
 			changeState(ControllerState.VIEW);
 		}
 
 	}
+
+	@Component
+	class ShowWineImageEventHandler implements ApplicationListener<ImageDetailsEvent> {
+		@Override
+		public void onApplicationEvent(ImageDetailsEvent event) {
+			imageName.setText(IMAGE_INITIAL);
+			if (event.getImage() != null) {
+				imageName.setText(event.getImage().getName());
+			}
+		}
+	}
+
 
 	@FXML
 	private ComboBox<WineType> wineType;
@@ -135,6 +150,10 @@ public class WineDetailController extends MainDetailController {
 	@FXML
 	private TextField imageName;
 
+	private ContextMenu imageNameContextMenu;
+	private MenuItem browseImage;
+	private MenuItem removeImage;
+	
 	@Autowired
 	private WineService wineService;
 
@@ -158,16 +177,16 @@ public class WineDetailController extends MainDetailController {
 	private final String IMAGE_INITIAL = "<No Image set>";
 	private final String IMAGE_BROWSE = "Browse Image...";
 	private final String IMAGE_CHANGE =  "Change Image...";
-	private final String IMAGE_DELETE = "Delete Image...";
+	private final String IMAGE_REMOVE = "Remove Image...";
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		super.initialize(location, resources);
 		wineType.setItems(loadTypes());
 		classification.setItems(loadClassifications());
 		country.setItems(loadCountries());
 		producer.setItems(loadProducers());
-
+		initImageNameContextMenu();
+		super.initialize(location, resources);
 	}
 
 	@Override
@@ -324,14 +343,17 @@ public class WineDetailController extends MainDetailController {
 
 	@Override
 	void raiseEventDelete(Object object) {
-		raiseEventSave(object);
+		ChangeWineEvent wineEvent = new ChangeWineEvent(this, null);
+		applicationEventPublisher.publishEvent(wineEvent);
+		raiseEventShowImage(null);
 	}
 
 	@Override
 	void raiseEventSave(Object object) {
-		ChangeWineEvent wineEvent = new ChangeWineEvent(this, (Wine) object);
+		Wine wine = (Wine) object;
+		ChangeWineEvent wineEvent = new ChangeWineEvent(this, wine);
 		applicationEventPublisher.publishEvent(wineEvent);
-
+		raiseEventShowImage(wine.getImage());
 	}
 	
 	@FXML
@@ -354,7 +376,7 @@ public class WineDetailController extends MainDetailController {
 				imageService.save(image);
 				raiseEventShowImage(image);
 				// It does not matter if it is VIEW or EDIT.
-				fillImageNameTextfield(ControllerState.VIEW);
+				setImageNameContextMenu(ControllerState.VIEW);
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -386,25 +408,50 @@ public class WineDetailController extends MainDetailController {
 		ImageDetailsEvent imageEvent = new ImageDetailsEvent(this, image);
 		applicationEventPublisher.publishEvent(imageEvent);
 	}
-	
-	private void fillImageNameTextfield(ControllerState state) {
+
+	private void initImageNameContextMenu() {
+		System.out.println("InitImageNamefield");
+		imageNameContextMenu = new ContextMenu();
+		browseImage = new MenuItem(IMAGE_BROWSE);
+		removeImage = new MenuItem(IMAGE_REMOVE);
+		browseImage.setOnAction(event -> browseImage());
+		removeImage.setOnAction(event -> removeImage());
+
+		imageNameContextMenu.getItems().add(browseImage);
+		imageNameContextMenu.getItems().add(removeImage);
+
+		imageName.setContextMenu(imageNameContextMenu);
+		
+		setImageNameContextMenu(ControllerState.RESET);
+	}
+
+	private void setImageNameContextMenu(ControllerState controllerState) {
+		// Set default state for browseImage, will be changed if image
+		// is set.		
+		browseImage.setText(IMAGE_BROWSE);
+
 		switch (controllerState) {
 		case RESET:
-			imageName.setText(IMAGE_INITIAL);
+			browseImage.setDisable(true);
+			removeImage.setDisable(true);
 			break;
 			
 		case VIEW:
 		case EDIT:
 		case CREATE:
+			browseImage.setDisable(false);
 			if (image != null && !image.getName().isEmpty()) {
-				imageName.setText(image.getName());
+				browseImage.setText(IMAGE_CHANGE);
+				removeImage.setDisable(false);
 			} else {
-				imageName.setText(IMAGE_INITIAL);
+				browseImage.setText(IMAGE_BROWSE);
+				removeImage.setDisable(true);
 			}
 			break;
 			
 		default:
-			imageName.setText(IMAGE_INITIAL);
+			browseImage.setDisable(true);
+			removeImage.setDisable(true);
 			break;
 		}
 	}
@@ -412,7 +459,7 @@ public class WineDetailController extends MainDetailController {
 	@Override
 	protected void changeState(ControllerState newState) {
 		super.changeState(newState);
-		fillImageNameTextfield(newState);
+		setImageNameContextMenu(newState);
 	}
 
 	@Override

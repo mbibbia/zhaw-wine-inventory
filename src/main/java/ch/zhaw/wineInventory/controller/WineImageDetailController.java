@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
+import ch.zhaw.wineInventory.bean.Wine;
 import ch.zhaw.wineInventory.config.StageManager;
 import ch.zhaw.wineInventory.event.ChangeWineEvent;
 import ch.zhaw.wineInventory.event.ImageDetailsEvent;
@@ -62,8 +63,11 @@ public class WineImageDetailController implements Initializable {
 		public void onApplicationEvent(ChangeWineEvent event) {
 			
 			imageView.setImage(null);
-			if (event.getWine().getImage() != null) {
+			Wine wine = event.getWine();
+			if (wine != null && wine.getImage() != null) {
 				imageView.setImage(new Image(new ByteArrayInputStream(event.getWine().getImage().getData())));
+			} else {
+				imageView.setImage(null);
 			}
 		}
 
