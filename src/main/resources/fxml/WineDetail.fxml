@@ -60,7 +60,7 @@
                   <Insets left="25.0" />
                </VBox.margin>
             </ComboBox>
-            <TextField fx:id="imageName" maxWidth="246.0" prefHeight="30.0" prefWidth="246.0" promptText="Name">
+            <TextField fx:id="imageName" maxWidth="246.0" prefHeight="30.0" prefWidth="246.0" promptText="Image">
                <VBox.margin>
                   <Insets left="25.0" right="25.0" />
                </VBox.margin>
