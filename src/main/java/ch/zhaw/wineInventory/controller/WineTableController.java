@@ -19,6 +19,7 @@ import ch.zhaw.wineInventory.event.ChangeWineEvent;
 import ch.zhaw.wineInventory.event.ChangeWineTypeEvent;
 import ch.zhaw.wineInventory.event.ChangeClassificationEvent;
 import ch.zhaw.wineInventory.event.ChangeCountryEvent;
+import ch.zhaw.wineInventory.event.ChangeEntityEventType;
 import ch.zhaw.wineInventory.event.ChangeProducerEvent;
 import ch.zhaw.wineInventory.event.WineDetailsEvent;
 import ch.zhaw.wineInventory.service.WineService;
@@ -138,7 +139,7 @@ public class WineTableController extends MainTableController {
 
 	@Override
 	void raiseEventDelete(Object object) {
-		ChangeWineEvent wineEvent = new ChangeWineEvent(this, null);
+		ChangeWineEvent wineEvent = new ChangeWineEvent(this, null, ChangeEntityEventType.DELETE);
 		applicationEventPublisher.publishEvent(wineEvent);
 	}
 
