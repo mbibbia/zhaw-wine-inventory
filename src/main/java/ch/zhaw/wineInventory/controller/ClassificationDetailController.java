@@ -29,6 +29,9 @@ import javafx.scene.control.Alert.AlertType;
 @Controller
 public class ClassificationDetailController extends MainDetailController {
 
+	/*
+	 * Event handler to display an object in the view.
+	 */
 	@Component
 	class ShowClassificationDetailEventHandler implements ApplicationListener<ClassificationDetailsEvent> {
 
@@ -42,6 +45,9 @@ public class ClassificationDetailController extends MainDetailController {
 
 	}
 	
+	/*
+	 * Event handler for a saved or deleted object.
+	 */
 	@Component
 	class ChangeClassificationEventHandler implements ApplicationListener<ChangeClassificationEvent> {
 
@@ -71,16 +77,25 @@ public class ClassificationDetailController extends MainDetailController {
 		super.initialize(location, resources);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#deletePersistent(java.lang.Object)
+	 */
 	@Override
 	void deletePersistent(Object object) {
 		classificationService.delete((Classification) object);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#getPersistent()
+	 */
 	@Override
 	Object getPersistent() {
 		return classificationService.find(Long.parseLong(id.getText()));
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#persistExisting()
+	 */
 	@Override
 	Object persistExisting() {
 		Classification classification = (Classification) getPersistent();
@@ -88,6 +103,9 @@ public class ClassificationDetailController extends MainDetailController {
 		return classificationService.update(classification);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#persistNew()
+	 */
 	@Override
 	Object persistNew() {
 		Classification classification = new Classification();
@@ -96,6 +114,9 @@ public class ClassificationDetailController extends MainDetailController {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseAlertNew(java.lang.Object)
+	 */
 	@Override
 	void raiseAlertNew(Object object) {
 		Classification classification = (Classification) object;
@@ -108,6 +129,9 @@ public class ClassificationDetailController extends MainDetailController {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseAlertUpdate(java.lang.Object)
+	 */
 	@Override
 	void raiseAlertUpdate(Object object) {
 		Classification classification = (Classification) object;
@@ -119,6 +143,9 @@ public class ClassificationDetailController extends MainDetailController {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseEventDelete(java.lang.Object)
+	 */
 	@Override
 	void raiseEventDelete(Object object) {
 		ChangeClassificationEvent classificationEvent = new ChangeClassificationEvent(this,
@@ -127,6 +154,9 @@ public class ClassificationDetailController extends MainDetailController {
 		applicationEventPublisher.publishEvent(classificationEvent);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseEventSave(java.lang.Object)
+	 */
 	@Override
 	void raiseEventSave(Object object) {
 		ChangeClassificationEvent classificationEvent = new ChangeClassificationEvent(this,

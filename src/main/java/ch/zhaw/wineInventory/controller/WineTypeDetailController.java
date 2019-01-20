@@ -28,8 +28,11 @@ import javafx.scene.control.Alert.AlertType;
 @Controller
 public class WineTypeDetailController extends MainDetailController {
 
+	/*
+	 * Event handler to display an object in the view.
+	 */
 	@Component
-	class ShowWineTypeDetailEventHandler implements ApplicationListener<WineTypeDetailsEvent> {
+	class WineTypeDetailEventHandler implements ApplicationListener<WineTypeDetailsEvent> {
 
 		@Override
 		public void onApplicationEvent(WineTypeDetailsEvent event) {
@@ -41,6 +44,9 @@ public class WineTypeDetailController extends MainDetailController {
 
 	}
 	
+	/*
+	 * Event handler for a saved or deleted object.
+	 */
 	@Component
 	class ChangeWineTypeEventHandler implements ApplicationListener<ChangeWineTypeEvent> {
 
@@ -70,16 +76,25 @@ public class WineTypeDetailController extends MainDetailController {
 		super.initialize(location, resources);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#deletePersistent(java.lang.Object)
+	 */
 	@Override
 	void deletePersistent(Object object) {
 		wineTypeService.delete((WineType) object);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#getPersistent()
+	 */
 	@Override
 	Object getPersistent() {
 		return wineTypeService.find(Long.parseLong(id.getText()));
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#persistExisting()
+	 */
 	@Override
 	Object persistExisting() {
 		WineType wineType = (WineType) getPersistent();
@@ -87,6 +102,9 @@ public class WineTypeDetailController extends MainDetailController {
 		return wineTypeService.save(wineType);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#persistNew()
+	 */
 	@Override
 	Object persistNew() {
 		WineType wineType = new WineType();
@@ -94,6 +112,9 @@ public class WineTypeDetailController extends MainDetailController {
 		return wineTypeService.save(wineType);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseAlertNew(java.lang.Object)
+	 */
 	@Override
 	void raiseAlertNew(Object object) {
 		WineType wineType = (WineType) object;
@@ -105,6 +126,9 @@ public class WineTypeDetailController extends MainDetailController {
 		alert.showAndWait();
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseAlertUpdate(java.lang.Object)
+	 */
 	@Override
 	void raiseAlertUpdate(Object object) {
 		WineType wineType = (WineType) object;
@@ -115,6 +139,9 @@ public class WineTypeDetailController extends MainDetailController {
 		alert.showAndWait();
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseEventDelete(java.lang.Object)
+	 */
 	@Override
 	void raiseEventDelete(Object object) {
 		ChangeWineTypeEvent wineTypeEvent = new ChangeWineTypeEvent(this,
@@ -123,6 +150,9 @@ public class WineTypeDetailController extends MainDetailController {
 		applicationEventPublisher.publishEvent(wineTypeEvent);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseEventSave(java.lang.Object)
+	 */
 	@Override
 	void raiseEventSave(Object object) {
 		ChangeWineTypeEvent wineTypeEvent = new ChangeWineTypeEvent(this,

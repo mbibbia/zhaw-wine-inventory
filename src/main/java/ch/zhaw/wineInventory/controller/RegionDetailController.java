@@ -35,19 +35,9 @@ import javafx.scene.control.Alert.AlertType;
 @Controller
 public class RegionDetailController extends MainDetailController {
 
-	@Component
-	class ChangeCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
-
-		@Override
-		public void onApplicationEvent(ChangeCountryEvent event) {
-			if (country != null) {
-				country.setItems(loadCountries());
-				country.setValue(event.getCountry());
-			}
-		}
-
-	}
-
+	/*
+	 * Event handler to display an object in the view.
+	 */
 	@Component
 	class ShowRegionDetailEventHandler implements ApplicationListener<RegionDetailsEvent> {
 
@@ -61,7 +51,26 @@ public class RegionDetailController extends MainDetailController {
 		}
 
 	}
-	
+
+	/*
+	 * Event handler for a saved or deleted object.
+	 */
+	@Component
+	class ChangeCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
+
+		@Override
+		public void onApplicationEvent(ChangeCountryEvent event) {
+			if (country != null) {
+				country.setItems(loadCountries());
+				country.setValue(event.getCountry());
+			}
+		}
+
+	}
+
+	/*
+	 * Event handler for a saved or deleted object.
+	 */
 	@Component
 	class ChangeRegionEventHandler implements ApplicationListener<ChangeRegionEvent> {
 
@@ -99,6 +108,9 @@ public class RegionDetailController extends MainDetailController {
 		country.setItems(loadCountries());
 	}
 	
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#initializeInputControlsStyle()
+	 */
 	@Override
 	protected void initializeInputControlsStyle() {
 		super.initializeInputControlsStyle();
@@ -111,26 +123,41 @@ public class RegionDetailController extends MainDetailController {
 		return country.getValue();
 	}
 
+	/** Loads all countries from the database.
+	 * @return an observable list of countries
+	 */
 	private ObservableList<Country> loadCountries() {
 		return FXCollections.observableArrayList(countryService.findAll());
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#deletePersistent(java.lang.Object)
+	 */
 	@Override
 	void deletePersistent(Object object) {
 		regionService.delete((Region) object);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#getPersistent()
+	 */
 	@Override
 	Object getPersistent() {
 		return regionService.find(Long.parseLong(id.getText()));
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#isValid()
+	 */
 	@Override
 	boolean isValid() {
 		return (validation.emptyValidation("Name", getName().isEmpty())
 				&& validation.emptyValidation("Country", getCountry() == null));
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#persistExisting()
+	 */
 	@Override
 	Object persistExisting() {
 		Region region = (Region) getPersistent();
@@ -140,6 +167,9 @@ public class RegionDetailController extends MainDetailController {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#persistNew()
+	 */
 	@Override
 	Object persistNew() {
 		Region region = new Region();
@@ -148,6 +178,9 @@ public class RegionDetailController extends MainDetailController {
 		return regionService.save(region);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseAlertNew(java.lang.Object)
+	 */
 	@Override
 	void raiseAlertNew(Object object) {
 		Region region = (Region) object;
@@ -160,6 +193,9 @@ public class RegionDetailController extends MainDetailController {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseAlertUpdate(java.lang.Object)
+	 */
 	@Override
 	void raiseAlertUpdate(Object object) {
 		Region region = (Region) object;
@@ -171,6 +207,9 @@ public class RegionDetailController extends MainDetailController {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseEventDelete(java.lang.Object)
+	 */
 	@Override
 	void raiseEventDelete(Object object) {
 		ChangeRegionEvent regionEvent = new ChangeRegionEvent(this,
@@ -179,6 +218,9 @@ public class RegionDetailController extends MainDetailController {
 		applicationEventPublisher.publishEvent(regionEvent);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseEventSave(java.lang.Object)
+	 */
 	@Override
 	void raiseEventSave(Object object) {
 		ChangeRegionEvent regionEvent = new ChangeRegionEvent(this,
@@ -187,6 +229,9 @@ public class RegionDetailController extends MainDetailController {
 		applicationEventPublisher.publishEvent(regionEvent);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#setInputControlsDisabled(boolean)
+	 */
 	@Override
 	protected void setInputControlsDisabled(boolean disabled) {
 		super.setInputControlsDisabled(disabled);
@@ -194,6 +239,9 @@ public class RegionDetailController extends MainDetailController {
 		country.setDisable(disabled);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#setInputControlsCleared()
+	 */
 	@Override
 	protected void setInputControlsCleared() {
 		super.setInputControlsCleared();

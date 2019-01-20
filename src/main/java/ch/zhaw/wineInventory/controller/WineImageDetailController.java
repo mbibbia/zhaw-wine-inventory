@@ -32,6 +32,9 @@ public class WineImageDetailController implements Initializable {
 	@Autowired
 	private StageManager stageManager;
 
+	/*
+	 * Event handler to display an object in the view.
+	 */
 	@Component
 	class WineDetailEventHandler implements ApplicationListener<WineDetailsEvent> {
 		@Override
@@ -44,8 +47,11 @@ public class WineImageDetailController implements Initializable {
 		}
 	}
 
+	/*
+	 * Event handler to display an object in the view.
+	 */
 	@Component
-	class ShowWineImageEventHandler implements ApplicationListener<ImageDetailsEvent> {
+	class WineImageDetailsEventHandler implements ApplicationListener<ImageDetailsEvent> {
 		@Override
 		public void onApplicationEvent(ImageDetailsEvent event) {
 			imageView.setImage(null);
@@ -56,6 +62,9 @@ public class WineImageDetailController implements Initializable {
 		}
 	}
 
+	/*
+	 * Event handler for a saved or deleted object.
+	 */
 	@Component
 	class ChangeWineEventHandler implements ApplicationListener<ChangeWineEvent> {
 
@@ -73,6 +82,9 @@ public class WineImageDetailController implements Initializable {
 
 	}
 
+	/*
+	 * Event handler when the dialog is reset.
+	 */
 	@Component
 	class ResetWineEventHandler implements ApplicationListener<ResetWineEvent> {
 

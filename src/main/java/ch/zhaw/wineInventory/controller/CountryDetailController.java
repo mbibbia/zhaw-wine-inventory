@@ -31,6 +31,9 @@ import javafx.scene.control.Alert.AlertType;
 @Controller
 public class CountryDetailController extends MainDetailController {
 
+	/*
+	 * Event handler to display an object in the view.
+	 */
 	@Component
 	class ShowCountryDetailEventHandler implements ApplicationListener<CountryDetailsEvent> {
 
@@ -45,6 +48,9 @@ public class CountryDetailController extends MainDetailController {
 
 	}
 	
+	/*
+	 * Event handler for a saved or deleted object.
+	 */
 	@Component
 	class ChangeCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
 
@@ -80,6 +86,9 @@ public class CountryDetailController extends MainDetailController {
 		super.initialize(location, resources);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#initializeEventListenersForSaveButton()
+	 */
 	protected void initializeEventListenersForSaveButton() {
 		super.initializeEventListenersForSaveButton();
 
@@ -93,16 +102,25 @@ public class CountryDetailController extends MainDetailController {
 		});
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#isValid()
+	 */
 	@Override
 	boolean isValid() {
 		return super.isValid() && validation.validate("Code", getCode(), "[A-Z]{2}");
 
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#getSaveButtonValidState()
+	 */
 	protected boolean getSaveButtonValidState() {
 		return codeValid && super.getSaveButtonValidState();
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#initializeInputControlsStyle()
+	 */
 	@Override
 	protected void initializeInputControlsStyle() {
 		super.initializeInputControlsStyle();
@@ -115,16 +133,25 @@ public class CountryDetailController extends MainDetailController {
 		return code.getText();
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#deletePersistent(java.lang.Object)
+	 */
 	@Override
 	void deletePersistent(Object object) {
 		countryService.delete((Country) object);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#getPersistent()
+	 */
 	@Override
 	Object getPersistent() {
 		return countryService.find(Long.parseLong(id.getText()));
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#persistExisting()
+	 */
 	@Override
 	Object persistExisting() {
 		Country country = (Country) getPersistent();
@@ -133,6 +160,9 @@ public class CountryDetailController extends MainDetailController {
 		return countryService.update(country);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#persistNew()
+	 */
 	@Override
 	Object persistNew() {
 		Country country = new Country();
@@ -141,6 +171,9 @@ public class CountryDetailController extends MainDetailController {
 		return countryService.save(country);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseAlertNew(java.lang.Object)
+	 */
 	@Override
 	void raiseAlertNew(Object object) {
 		Country country = (Country) object;
@@ -153,6 +186,9 @@ public class CountryDetailController extends MainDetailController {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseAlertUpdate(java.lang.Object)
+	 */
 	@Override
 	void raiseAlertUpdate(Object object) {
 		Country country = (Country) object;
@@ -164,6 +200,9 @@ public class CountryDetailController extends MainDetailController {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseEventDelete(java.lang.Object)
+	 */
 	@Override
 	void raiseEventDelete(Object object) {
 		ChangeCountryEvent countryEvent = new ChangeCountryEvent(this,
@@ -172,6 +211,9 @@ public class CountryDetailController extends MainDetailController {
 		applicationEventPublisher.publishEvent(countryEvent);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseEventSave(java.lang.Object)
+	 */
 	@Override
 	void raiseEventSave(Object object) {
 		ChangeCountryEvent countryEvent = new ChangeCountryEvent(this,
@@ -180,6 +222,9 @@ public class CountryDetailController extends MainDetailController {
 		applicationEventPublisher.publishEvent(countryEvent);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#setInputControlsDisabled(boolean)
+	 */
 	@Override
 	protected void setInputControlsDisabled(boolean disabled) {
 		super.setInputControlsDisabled(disabled);
@@ -187,6 +232,9 @@ public class CountryDetailController extends MainDetailController {
 		code.setDisable(disabled);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#setInputControlsCleared()
+	 */
 	@Override
 	protected void setInputControlsCleared() {
 		super.setInputControlsCleared();
