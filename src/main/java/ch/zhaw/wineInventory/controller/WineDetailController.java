@@ -59,7 +59,7 @@ import javafx.scene.control.Alert.AlertType;
 public class WineDetailController extends MainDetailController {
 
 	@Component
-	class SaveClassificationEventHandler implements ApplicationListener<ChangeClassificationEvent> {
+	class ChangeClassificationEventHandler implements ApplicationListener<ChangeClassificationEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeClassificationEvent event) {
@@ -81,7 +81,7 @@ public class WineDetailController extends MainDetailController {
 	}
 
 	@Component
-	class SaveProducerEventHandler implements ApplicationListener<ChangeProducerEvent> {
+	class ChangeProducerEventHandler implements ApplicationListener<ChangeProducerEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeProducerEvent event) {
@@ -92,7 +92,7 @@ public class WineDetailController extends MainDetailController {
 	}
 
 	@Component
-	class SaveWineTypeEventHandler implements ApplicationListener<ChangeWineTypeEvent> {
+	class ChangeWineTypeEventHandler implements ApplicationListener<ChangeWineTypeEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeWineTypeEvent event) {
@@ -126,7 +126,7 @@ public class WineDetailController extends MainDetailController {
 
 		@Override
 		public void onApplicationEvent(ChangeWineEvent event) {
-			switch (event.getType()) {
+			switch (event.getChangeType()) {
 			case SAVE:
 				WineDetailsEvent wineEvent = new WineDetailsEvent(this, event.getWine());
 				applicationEventPublisher.publishEvent(wineEvent);

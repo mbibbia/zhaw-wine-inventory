@@ -13,6 +13,7 @@ import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Producer;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.event.ProducerDetailsEvent;
+import ch.zhaw.wineInventory.event.ChangeEntityEventType;
 import ch.zhaw.wineInventory.event.ChangeProducerEvent;
 import ch.zhaw.wineInventory.service.ProducerService;
 import javafx.collections.FXCollections;
@@ -71,7 +72,7 @@ public class ProducerTableController extends MainTableController {
 	private final ObservableList<Producer> producerList = FXCollections.observableArrayList();
 
 	@Component
-	class SaveProducerEventHandler implements ApplicationListener<ChangeProducerEvent> {
+	class ChangeProducerEventHandler implements ApplicationListener<ChangeProducerEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeProducerEvent event) {
@@ -109,7 +110,9 @@ public class ProducerTableController extends MainTableController {
 
 	@Override
 	void raiseEventDelete(Object object) {
-		ChangeProducerEvent producerEvent = new ChangeProducerEvent(this, null);
+		ChangeProducerEvent producerEvent = new ChangeProducerEvent(this,
+			                                                        null,
+			                                                        ChangeEntityEventType.DELETE);
 		applicationEventPublisher.publishEvent(producerEvent);
 	}
 

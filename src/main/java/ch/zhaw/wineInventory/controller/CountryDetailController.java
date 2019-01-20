@@ -10,7 +10,10 @@ import org.springframework.stereotype.Controller;
 import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.controller.helper.ControllerState;
 import ch.zhaw.wineInventory.event.CountryDetailsEvent;
+import ch.zhaw.wineInventory.event.WineTypeDetailsEvent;
 import ch.zhaw.wineInventory.event.ChangeCountryEvent;
+import ch.zhaw.wineInventory.event.ChangeEntityEventType;
+import ch.zhaw.wineInventory.event.ChangeWineTypeEvent;
 import ch.zhaw.wineInventory.service.CountryService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -41,6 +44,28 @@ public class CountryDetailController extends MainDetailController {
 		}
 
 	}
+	
+	@Component
+	class ChangeCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
+
+		@Override
+		public void onApplicationEvent(ChangeCountryEvent event) {
+			switch (event.getChangeType()) {
+			case SAVE:
+				CountryDetailsEvent countryDetailsEvent = new CountryDetailsEvent(this, event.getCountry());
+				applicationEventPublisher.publishEvent(countryDetailsEvent);
+				break;
+			case DELETE:
+				reset();
+				break;
+			
+			default:
+				break;
+			}
+		}
+
+	}
+	
 
 	@FXML
 	private TextField code;
@@ -93,7 +118,6 @@ public class CountryDetailController extends MainDetailController {
 	@Override
 	void deletePersistent(Object object) {
 		countryService.delete((Country) object);
-
 	}
 
 	@Override
@@ -142,14 +166,17 @@ public class CountryDetailController extends MainDetailController {
 
 	@Override
 	void raiseEventDelete(Object object) {
-//		CountryDeleteEvent countryEvent = new CountryDeleteEvent(this, (Country) object);
-//		applicationEventPublisher.publishEvent(countryEvent);
-
+		ChangeCountryEvent countryEvent = new ChangeCountryEvent(this,
+			                                                     null,
+			                                                     ChangeEntityEventType.DELETE);
+		applicationEventPublisher.publishEvent(countryEvent);
 	}
 
 	@Override
 	void raiseEventSave(Object object) {
-		ChangeCountryEvent countryEvent = new ChangeCountryEvent(this, (Country) object);
+		ChangeCountryEvent countryEvent = new ChangeCountryEvent(this,
+			                                                     (Country)object,
+			                                                     ChangeEntityEventType.SAVE);
 		applicationEventPublisher.publishEvent(countryEvent);
 	}
 

@@ -11,8 +11,10 @@ import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.controller.helper.ControllerState;
 import ch.zhaw.wineInventory.event.ChangeCountryEvent;
+import ch.zhaw.wineInventory.event.ChangeEntityEventType;
 import ch.zhaw.wineInventory.event.RegionDetailsEvent;
 import ch.zhaw.wineInventory.event.ChangeRegionEvent;
+import ch.zhaw.wineInventory.event.CountryDetailsEvent;
 import ch.zhaw.wineInventory.service.CountryService;
 import ch.zhaw.wineInventory.service.RegionService;
 import javafx.collections.FXCollections;
@@ -34,7 +36,7 @@ import javafx.scene.control.Alert.AlertType;
 public class RegionDetailController extends MainDetailController {
 
 	@Component
-	class SaveCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
+	class ChangeCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeCountryEvent event) {
@@ -59,6 +61,28 @@ public class RegionDetailController extends MainDetailController {
 		}
 
 	}
+	
+	@Component
+	class ChangeRegionEventHandler implements ApplicationListener<ChangeRegionEvent> {
+
+		@Override
+		public void onApplicationEvent(ChangeRegionEvent event) {
+			switch (event.getChangeType()) {
+			case SAVE:
+				RegionDetailsEvent regionDetailsEvent = new RegionDetailsEvent(this, event.getRegion());
+				applicationEventPublisher.publishEvent(regionDetailsEvent);
+				break;
+			case DELETE:
+				reset();
+				break;
+			
+			default:
+				break;
+			}
+		}
+
+	}
+	
 
 	@FXML
 	private ComboBox<Country> country;
@@ -149,19 +173,18 @@ public class RegionDetailController extends MainDetailController {
 
 	@Override
 	void raiseEventDelete(Object object) {
-		// TODO Auto-generated method stub
-
-		// RegionDeleteEvent regionEvent = new
-		// RegionDeleteEvent(this, (Region) object);
-		// applicationEventPublisher.publishEvent(regionEvent);
-
+		ChangeRegionEvent regionEvent = new ChangeRegionEvent(this,
+			                                                  null,
+			                                                  ChangeEntityEventType.DELETE);
+		applicationEventPublisher.publishEvent(regionEvent);
 	}
 
 	@Override
 	void raiseEventSave(Object object) {
-		ChangeRegionEvent regionEvent = new ChangeRegionEvent(this, (Region) object);
+		ChangeRegionEvent regionEvent = new ChangeRegionEvent(this,
+			                                                  (Region) object,
+			                                                  ChangeEntityEventType.SAVE);
 		applicationEventPublisher.publishEvent(regionEvent);
-
 	}
 
 	@Override

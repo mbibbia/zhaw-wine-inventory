@@ -9,7 +9,9 @@ import org.springframework.stereotype.Controller;
 
 import ch.zhaw.wineInventory.bean.WineType;
 import ch.zhaw.wineInventory.controller.helper.ControllerState;
+import ch.zhaw.wineInventory.event.ChangeEntityEventType;
 import ch.zhaw.wineInventory.event.ChangeWineTypeEvent;
+import ch.zhaw.wineInventory.event.WineDetailsEvent;
 import ch.zhaw.wineInventory.event.WineTypeDetailsEvent;
 import ch.zhaw.wineInventory.service.WineTypeService;
 import javafx.scene.control.Alert;
@@ -38,7 +40,28 @@ public class WineTypeDetailController extends MainDetailController {
 		}
 
 	}
+	
+	@Component
+	class ChangeWineTypeEventHandler implements ApplicationListener<ChangeWineTypeEvent> {
 
+		@Override
+		public void onApplicationEvent(ChangeWineTypeEvent event) {
+			switch (event.getChangeType()) {
+			case SAVE:
+				WineTypeDetailsEvent wineTypeDetailsEvent = new WineTypeDetailsEvent(this, event.getWineType());
+				applicationEventPublisher.publishEvent(wineTypeDetailsEvent);
+				break;
+			case DELETE:
+				reset();
+				break;
+			
+			default:
+				break;
+			}
+		}
+
+	}
+	
 	@Autowired
 	private WineTypeService wineTypeService;
 
@@ -49,12 +72,7 @@ public class WineTypeDetailController extends MainDetailController {
 
 	@Override
 	void deletePersistent(Object object) {
-		// TODO Auto-generated method stub
-
-		// WineTypeDeleteEvent wineTypeEvent = new
-		// WineTypeDeleteEvent(this, (WineType) object);
-		// applicationEventPublisher.publishEvent(wineTypeEvent);
-
+		wineTypeService.delete((WineType) object);
 	}
 
 	@Override
@@ -99,16 +117,17 @@ public class WineTypeDetailController extends MainDetailController {
 
 	@Override
 	void raiseEventDelete(Object object) {
-		// TODO Auto-generated method stub
-
-		// WineTypeDeleteEvent wineTypeEvent = new
-		// WineTypeDeleteEvent(this, (WineType) object);
-		// applicationEventPublisher.publishEvent(wineTypeEvent);
+		ChangeWineTypeEvent wineTypeEvent = new ChangeWineTypeEvent(this,
+																	null,
+																	ChangeEntityEventType.DELETE);
+		applicationEventPublisher.publishEvent(wineTypeEvent);
 	}
 
 	@Override
 	void raiseEventSave(Object object) {
-		ChangeWineTypeEvent wineTypeEvent = new ChangeWineTypeEvent(this, (WineType) object);
+		ChangeWineTypeEvent wineTypeEvent = new ChangeWineTypeEvent(this,
+				                                                    (WineType) object,
+				                                                    ChangeEntityEventType.SAVE);
 		applicationEventPublisher.publishEvent(wineTypeEvent);
 	}
 

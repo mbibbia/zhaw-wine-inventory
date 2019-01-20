@@ -41,7 +41,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class WineTableController extends MainTableController {
 
 	@Component
-	class SaveClassificationEventHandler implements ApplicationListener<ChangeClassificationEvent> {
+	class ChangeClassificationEventHandler implements ApplicationListener<ChangeClassificationEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeClassificationEvent event) {
@@ -51,7 +51,7 @@ public class WineTableController extends MainTableController {
 	}
 
 	@Component
-	class SaveCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
+	class ChangeCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeCountryEvent event) {
@@ -61,7 +61,7 @@ public class WineTableController extends MainTableController {
 	}
 
 	@Component
-	class SaveProducerEventHandler implements ApplicationListener<ChangeProducerEvent> {
+	class ChangeProducerEventHandler implements ApplicationListener<ChangeProducerEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeProducerEvent event) {
