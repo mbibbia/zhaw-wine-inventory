@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import ch.zhaw.wineInventory.bean.Classification;
 import ch.zhaw.wineInventory.event.ClassificationDetailsEvent;
 import ch.zhaw.wineInventory.event.ChangeClassificationEvent;
+import ch.zhaw.wineInventory.event.ChangeEntityEventType;
 import ch.zhaw.wineInventory.service.ClassificationService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,7 +29,7 @@ import javafx.collections.ObservableList;
 public class ClassificationTableController extends MainTableController {
 
 	@Component
-	class SaveClassificationEventHandler implements ApplicationListener<ChangeClassificationEvent> {
+	class ChangeClassificationEventHandler implements ApplicationListener<ChangeClassificationEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeClassificationEvent event) {
@@ -45,7 +46,6 @@ public class ClassificationTableController extends MainTableController {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		super.initialize(location, resources);
-
 	}
 
 	@Override
@@ -63,15 +63,21 @@ public class ClassificationTableController extends MainTableController {
 		@SuppressWarnings("unchecked")
 		ObservableList<Object> list = (ObservableList<Object>) (ObservableList<?>) classificationList;
 		tableView.setItems(list);
-
 	}
 
 	@Override
 	void raiseEventShow(Object object) {
-
-		ClassificationDetailsEvent classificationEvent = new ClassificationDetailsEvent(this, (Classification) object);
+		ClassificationDetailsEvent classificationEvent = new ClassificationDetailsEvent(this,
+			                                                                            (Classification) object);
 		applicationEventPublisher.publishEvent(classificationEvent);
+	}
 
+	@Override
+	void raiseEventDelete(Object object) {
+		ChangeClassificationEvent classificationEvent = new ChangeClassificationEvent(this,
+			                                                                          null,
+			                                                                          ChangeEntityEventType.DELETE);
+		applicationEventPublisher.publishEvent(classificationEvent);
 	}
 
 }

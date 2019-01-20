@@ -19,6 +19,7 @@ import ch.zhaw.wineInventory.event.ChangeWineEvent;
 import ch.zhaw.wineInventory.event.ChangeWineTypeEvent;
 import ch.zhaw.wineInventory.event.ChangeClassificationEvent;
 import ch.zhaw.wineInventory.event.ChangeCountryEvent;
+import ch.zhaw.wineInventory.event.ChangeEntityEventType;
 import ch.zhaw.wineInventory.event.ChangeProducerEvent;
 import ch.zhaw.wineInventory.event.WineDetailsEvent;
 import ch.zhaw.wineInventory.service.WineService;
@@ -40,7 +41,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class WineTableController extends MainTableController {
 
 	@Component
-	class SaveClassificationEventHandler implements ApplicationListener<ChangeClassificationEvent> {
+	class ChangeClassificationEventHandler implements ApplicationListener<ChangeClassificationEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeClassificationEvent event) {
@@ -50,7 +51,7 @@ public class WineTableController extends MainTableController {
 	}
 
 	@Component
-	class SaveCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
+	class ChangeCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeCountryEvent event) {
@@ -60,7 +61,7 @@ public class WineTableController extends MainTableController {
 	}
 
 	@Component
-	class SaveProducerEventHandler implements ApplicationListener<ChangeProducerEvent> {
+	class ChangeProducerEventHandler implements ApplicationListener<ChangeProducerEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeProducerEvent event) {
@@ -70,7 +71,7 @@ public class WineTableController extends MainTableController {
 	}
 
 	@Component
-	class SaveWineEventHandler implements ApplicationListener<ChangeWineEvent> {
+	class ChangeWineEventHandler implements ApplicationListener<ChangeWineEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeWineEvent event) {
@@ -80,7 +81,7 @@ public class WineTableController extends MainTableController {
 	}
 
 	@Component
-	class SaveWineTypeEventHandler implements ApplicationListener<ChangeWineTypeEvent> {
+	class ChangeWineTypeEventHandler implements ApplicationListener<ChangeWineTypeEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeWineTypeEvent event) {
@@ -119,7 +120,6 @@ public class WineTableController extends MainTableController {
 		@SuppressWarnings("unchecked")
 		List<Wine> wines = (List<Wine>) (List<?>) objects;
 		wineService.deleteInBatch(wines);
-
 	}
 
 	@Override
@@ -135,7 +135,12 @@ public class WineTableController extends MainTableController {
 	void raiseEventShow(Object object) {
 		WineDetailsEvent wineEvent = new WineDetailsEvent(this, (Wine) object);
 		applicationEventPublisher.publishEvent(wineEvent);
+	}
 
+	@Override
+	void raiseEventDelete(Object object) {
+		ChangeWineEvent wineEvent = new ChangeWineEvent(this, null, ChangeEntityEventType.DELETE);
+		applicationEventPublisher.publishEvent(wineEvent);
 	}
 
 	@Override
@@ -146,7 +151,6 @@ public class WineTableController extends MainTableController {
 		colCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
 		colRegion.setCellValueFactory(new PropertyValueFactory<>("region"));
 		colProducer.setCellValueFactory(new PropertyValueFactory<>("producer"));
-
 	}
 
 }

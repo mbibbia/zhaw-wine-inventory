@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.event.ChangeCountryEvent;
+import ch.zhaw.wineInventory.event.ChangeEntityEventType;
 import ch.zhaw.wineInventory.event.RegionDetailsEvent;
 import ch.zhaw.wineInventory.event.ChangeRegionEvent;
 import ch.zhaw.wineInventory.service.RegionService;
@@ -33,7 +34,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class RegionTableController extends MainTableController {
 
 	@Component
-	class SaveCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
+	class ChangeCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeCountryEvent event) {
@@ -45,11 +46,13 @@ public class RegionTableController extends MainTableController {
 	}
 
 	@Component
-	class SaveRegionEventHandler implements ApplicationListener<ChangeRegionEvent> {
+	class ChangeRegionEventHandler implements ApplicationListener<ChangeRegionEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeRegionEvent event) {
-			loadData();
+			if (tableView != null) {
+				loadData();
+			}
 		}
 
 	}
@@ -72,7 +75,6 @@ public class RegionTableController extends MainTableController {
 		@SuppressWarnings("unchecked")
 		List<Region> regions = (List<Region>) (List<?>) objects;
 		regionService.deleteInBatch(regions);
-
 	}
 
 	@Override
@@ -88,7 +90,14 @@ public class RegionTableController extends MainTableController {
 	void raiseEventShow(Object object) {
 		RegionDetailsEvent regionEvent = new RegionDetailsEvent(this, (Region) object);
 		applicationEventPublisher.publishEvent(regionEvent);
+	}
 
+	@Override
+	void raiseEventDelete(Object object) {
+		ChangeRegionEvent regionEvent = new ChangeRegionEvent(this,
+			                                                  null,
+			                                                  ChangeEntityEventType.DELETE);
+		applicationEventPublisher.publishEvent(regionEvent);
 	}
 
 	@Override

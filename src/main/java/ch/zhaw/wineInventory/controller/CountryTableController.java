@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.event.CountryDetailsEvent;
 import ch.zhaw.wineInventory.event.ChangeCountryEvent;
+import ch.zhaw.wineInventory.event.ChangeEntityEventType;
 import ch.zhaw.wineInventory.service.CountryService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,7 +40,7 @@ public class CountryTableController extends MainTableController {
 	private final ObservableList<Country> countryList = FXCollections.observableArrayList();
 
 	@Component
-	class SaveCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
+	class ChangeCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeCountryEvent event) {
@@ -57,7 +58,6 @@ public class CountryTableController extends MainTableController {
 	void setColumnProperties() {
 		super.setColumnProperties();
 		colCode.setCellValueFactory(new PropertyValueFactory<>("code"));
-
 	}
 
 	@Override
@@ -65,7 +65,6 @@ public class CountryTableController extends MainTableController {
 		@SuppressWarnings("unchecked")
 		List<Country> countries = (List<Country>) (List<?>) objects;
 		countryService.deleteInBatch(countries);
-
 	}
 
 	@Override
@@ -75,14 +74,20 @@ public class CountryTableController extends MainTableController {
 		@SuppressWarnings("unchecked")
 		ObservableList<Object> list = (ObservableList<Object>) (ObservableList<?>) countryList;
 		tableView.setItems(list);
-
 	}
 
 	@Override
 	void raiseEventShow(Object object) {
-		CountryDetailsEvent countryEvent = new CountryDetailsEvent(this, (Country) object);
+		CountryDetailsEvent countryEvent = new CountryDetailsEvent(this,(Country) object);
 		applicationEventPublisher.publishEvent(countryEvent);
+	}
 
+	@Override
+	void raiseEventDelete(Object object) {
+		ChangeCountryEvent countryEvent = new ChangeCountryEvent(this,
+			                                                     null,
+			                                                     ChangeEntityEventType.DELETE);
+		applicationEventPublisher.publishEvent(countryEvent);
 	}
 
 }

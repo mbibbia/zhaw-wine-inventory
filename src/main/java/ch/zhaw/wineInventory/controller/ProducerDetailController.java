@@ -11,9 +11,12 @@ import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Producer;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.controller.helper.ControllerState;
+import ch.zhaw.wineInventory.event.ChangeClassificationEvent;
 import ch.zhaw.wineInventory.event.ChangeCountryEvent;
+import ch.zhaw.wineInventory.event.ChangeEntityEventType;
 import ch.zhaw.wineInventory.event.ProducerDetailsEvent;
 import ch.zhaw.wineInventory.event.ChangeProducerEvent;
+import ch.zhaw.wineInventory.event.ClassificationDetailsEvent;
 import ch.zhaw.wineInventory.service.CountryService;
 import ch.zhaw.wineInventory.service.ProducerService;
 import javafx.collections.FXCollections;
@@ -36,13 +39,13 @@ import javafx.scene.control.Alert.AlertType;
 public class ProducerDetailController extends MainDetailController {
 
 	@Component
-	class SaveCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
+	class ChangeCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeCountryEvent event) {
 			if (country != null) {
 				country.setItems(loadCountries());
-				country.setValue(event.getCountry());				
+				country.setValue(event.getCountry());
 			}
 		}
 
@@ -75,6 +78,27 @@ public class ProducerDetailController extends MainDetailController {
 		}
 
 	}
+	
+	@Component
+	class ChangeProducerEventHandler implements ApplicationListener<ChangeProducerEvent> {
+
+		@Override
+		public void onApplicationEvent(ChangeProducerEvent event) {
+			switch (event.getChangeType()) {
+			case SAVE:
+				ProducerDetailsEvent producerEvent = new ProducerDetailsEvent(this, event.getProducer());
+				applicationEventPublisher.publishEvent(producerEvent);
+				break;
+			case DELETE:
+				reset();
+				break;
+			default:
+				reset();
+				break;
+			}
+		}
+	}
+	
 
 	@FXML
 	private TextField company;
@@ -269,18 +293,18 @@ public class ProducerDetailController extends MainDetailController {
 
 	@Override
 	void raiseEventDelete(Object object) {
-		// TODO Auto-generated method stub
-
-		// ProducerDeleteEvent producerEvent = new
-		// ProducerDeleteEvent(this, (Producer) object);
-		// applicationEventPublisher.publishEvent(producerEvent);
+		ChangeProducerEvent producerEvent = new ChangeProducerEvent(this,
+																	null,
+																	ChangeEntityEventType.DELETE);
+		applicationEventPublisher.publishEvent(producerEvent);
 	}
 
 	@Override
 	void raiseEventSave(Object object) {
-		ChangeProducerEvent producerEvent = new ChangeProducerEvent(this, (Producer) object);
+		ChangeProducerEvent producerEvent = new ChangeProducerEvent(this,
+			                                                        (Producer) object,
+			                                                        ChangeEntityEventType.SAVE);
 		applicationEventPublisher.publishEvent(producerEvent);
-
 	}
 
 	@Override

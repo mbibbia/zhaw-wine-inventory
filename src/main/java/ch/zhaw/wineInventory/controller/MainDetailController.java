@@ -144,7 +144,6 @@ abstract class MainDetailController implements Initializable {
 	
 	@FXML
 	void delete() {
-
 		Object object = getPersistent();
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Confirmation Dialog");
@@ -157,7 +156,6 @@ abstract class MainDetailController implements Initializable {
 			raiseEventDelete(object);
 			changeState(ControllerState.RESET);
 		}
-
 	}
 
 	abstract void deletePersistent(Object object);

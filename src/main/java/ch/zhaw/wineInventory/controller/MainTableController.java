@@ -61,8 +61,14 @@ abstract class MainTableController implements Initializable {
 		alert.setContentText("Are you sure you want to delete selected?");
 		Optional<ButtonType> action = alert.showAndWait();
 
-		if (action.get() == ButtonType.OK)
+		if (action.get() == ButtonType.OK) {
 			deleteInBatch(objects);
+		}
+
+		for (Object object: objects) {
+			raiseEventDelete(object);
+		}
+
 		loadData();
 	}
 
@@ -70,10 +76,8 @@ abstract class MainTableController implements Initializable {
 
 	@FXML
 	void edit() {
-
 		Object object = tableView.getSelectionModel().getSelectedItem();
 		raiseEventShow(object);
-
 	}
 
 	abstract void loadData();
@@ -93,17 +97,15 @@ abstract class MainTableController implements Initializable {
 
 	abstract void raiseEventShow(Object object);
 
-	void setColumnProperties() {
+	abstract void raiseEventDelete(Object object);
 
+	void setColumnProperties() {
 		colId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colName.setCellValueFactory(new PropertyValueFactory<>("name"));
-
 	}
 
 	void setSelectionMode() {
-
 		tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
 	}
 
 }
