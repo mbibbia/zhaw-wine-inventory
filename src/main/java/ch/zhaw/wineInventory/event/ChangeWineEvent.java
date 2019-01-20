@@ -14,12 +14,14 @@ import ch.zhaw.wineInventory.bean.Wine;
 public class ChangeWineEvent extends ApplicationEvent {
 
 	private Wine wine;
+	private ChangeEntityEventType type;
 
 	private static final long serialVersionUID = 1L;
 
-	public ChangeWineEvent(Object source, Wine wine) {
+	public ChangeWineEvent(Object source, Wine wine, ChangeEntityEventType type) {
 		super(source);
 		this.wine = wine;
+		this.type = type;
 
 	}
 
@@ -30,6 +32,10 @@ public class ChangeWineEvent extends ApplicationEvent {
 	 */
 	public Wine getWine() {
 		return this.wine;
+	}
+
+	public ChangeEntityEventType getType() {
+		return this.type;
 	}
 
 }
