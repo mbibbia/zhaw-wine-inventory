@@ -57,7 +57,7 @@ abstract class MainDetailController implements Initializable {
 
 	@FXML
 	Button save;
-	
+
 	private boolean nameValid = false;
 
 	@Override
@@ -66,33 +66,30 @@ abstract class MainDetailController implements Initializable {
 		initializeInputControlsStyle();
 		changeState(ControllerState.RESET);
 	}
-	
+
 	protected void initializeEventListenersForSaveButton() {
-		name.textProperty().addListener(
-			(observable, oldValue, newValue) -> {
-				if (!newValue.trim().isEmpty()) {
-					nameValid = true;
-				} else {
-					nameValid = false;
-				}
-				updateSaveButton();
+		name.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue.trim().isEmpty()) {
+				nameValid = true;
+			} else {
+				nameValid = false;
 			}
-		);
+			updateSaveButton();
+		});
 	}
-	
+
 	protected boolean getSaveButtonValidState() {
 		return nameValid;
 	}
-	
+
 	protected void updateSaveButton() {
-		if (controllerState == ControllerState.RESET || 
-			controllerState == ControllerState.VIEW) {
+		if (controllerState == ControllerState.RESET || controllerState == ControllerState.VIEW) {
 			save.setDisable(true);
 		} else {
 			save.setDisable(!getSaveButtonValidState());
 		}
 	}
-	
+
 	protected void initializeInputControlsStyle() {
 		// Text field and combo boxes should be readable
 		// also in VIEW state.
@@ -188,6 +185,7 @@ abstract class MainDetailController implements Initializable {
 			raiseEventDelete(object);
 			changeState(ControllerState.RESET);
 		}
+
 	}
 
 	abstract void deletePersistent(Object object);
@@ -252,7 +250,7 @@ abstract class MainDetailController implements Initializable {
 		id.setText(null);
 		name.clear();
 	}
-	
+
 	private void setCreateStateActivation() {
 		setInputControlsDisabled(false);
 	};
@@ -342,7 +340,7 @@ abstract class MainDetailController implements Initializable {
 	private void setViewStateProperties() {
 		setInputControlsViewState();
 	}
-	
+
 	protected void setInputControlsViewState() {
 	}
 

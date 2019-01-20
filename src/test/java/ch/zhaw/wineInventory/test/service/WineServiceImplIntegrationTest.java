@@ -66,25 +66,25 @@ public class WineServiceImplIntegrationTest {
 		assertEquals(found.getName(), name);
 
 	}
-	
+
 	@Test
 	public void whenValidClassification_thenWineShouldBeFound() {
 
 		Classification classification = classificationRepository.findByName("DOCG");
-		
+
 		assertNotNull(wineService.findByClassification(classification));
 
 	}
-	
+
 	@Test
 	public void whenWineDeleted_thenWineNotFound() {
-		
+
 		String name = "Barolo";
 		Wine found = wineService.findByName(name);
 		wineService.delete(found);
-		
+
 		assertNull(wineService.find(found.getId()));
-		
+
 	}
 
 }
