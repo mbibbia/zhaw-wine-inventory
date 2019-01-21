@@ -29,14 +29,6 @@ import javafx.scene.control.Alert.AlertType;
  *         Abstract base class for all DetailControllers.
  *
  */
-/**
- * @author christian
- *
- */
-/**
- * @author christian
- *
- */
 @Controller
 abstract class MainDetailController implements Initializable {
 
@@ -199,7 +191,7 @@ abstract class MainDetailController implements Initializable {
 	/**
 	 * Used to delete an entity from the database, needs to be implemented
 	 * in the derived classes.
-	 * @param object : The object that should be deleeted.
+	 * @param object : The object that should be deleted.
 	 */
 	abstract void deletePersistent(Object object);
 

@@ -23,6 +23,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * 
+ * @author Christian Jeitziner / Marco Bibbia
+ * 
+ *         Abstract base class for all TableControllers.
+ *
+ */
 @Controller
 abstract class MainTableController implements Initializable {
 
@@ -51,6 +58,9 @@ abstract class MainTableController implements Initializable {
 
 	}
 
+	/**
+	 * To delete one or many selected objects.
+	 */
 	@FXML
 	void delete() {
 		List<Object> objects = tableView.getSelectionModel().getSelectedItems();
@@ -65,23 +75,39 @@ abstract class MainTableController implements Initializable {
 			deleteInBatch(objects);
 		}
 
-		for (Object object: objects) {
+		for (Object object : objects) {
 			raiseEventDelete(object);
 		}
 
 		loadData();
 	}
 
+	/**
+	 * Used to delete one or many entities from the database, needs to be
+	 * implemented in the derived classes.
+	 * 
+	 * @param objects that should be deleted
+	 */
 	abstract void deleteInBatch(List<Object> objects);
 
+	/**
+	 * To edit one or many objects.
+	 */
 	@FXML
 	void edit() {
 		Object object = tableView.getSelectionModel().getSelectedItem();
 		raiseEventShow(object);
 	}
 
+	/**
+	 * Used to load data from database, needs to be implemented in the derived
+	 * classes.
+	 */
 	abstract void loadData();
 
+	/**
+	 * Notify detail view on mouse clicked raising selected object.
+	 */
 	void notifyDetailView() {
 		tableView.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
@@ -95,15 +121,33 @@ abstract class MainTableController implements Initializable {
 
 	}
 
+	/**
+	 * To raise event when object shall be shown, needs to be implemented in derived
+	 * classes.
+	 * 
+	 * @param object to be shown
+	 */
 	abstract void raiseEventShow(Object object);
 
+	/**
+	 * To raise event when object is deleted, needs to be implemented in derived
+	 * classes.
+	 * 
+	 * @param object to be shown
+	 */
 	abstract void raiseEventDelete(Object object);
 
+	/**
+	 * Set column properties.
+	 */
 	void setColumnProperties() {
 		colId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colName.setCellValueFactory(new PropertyValueFactory<>("name"));
 	}
 
+	/**
+	 * Set row selection mode (single, multiple).
+	 */
 	void setSelectionMode() {
 		tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 	}
