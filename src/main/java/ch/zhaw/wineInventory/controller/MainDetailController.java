@@ -111,7 +111,6 @@ abstract class MainDetailController implements Initializable {
 		if (controllerState == newState) {
 			return;
 		}
-		System.out.println(String.format("%s => %s", controllerState, newState));
 
 		controllerState = newState;
 
