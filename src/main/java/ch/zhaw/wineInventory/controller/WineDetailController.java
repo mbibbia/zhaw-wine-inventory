@@ -285,6 +285,16 @@ public class WineDetailController extends MainDetailController {
 		}
 	}
 
+	@FXML
+	private void handleCountryClicked() {
+
+		region.setItems(null);
+		if (country.getValue() != null) {
+			ObservableList<Region> regions = FXCollections.observableArrayList(country.getValue().getRegions());
+			region.setItems(regions);
+		}
+	}
+
 	private ObservableList<Classification> loadClassifications() {
 		return FXCollections.observableArrayList(classificationService.findAll());
 	}
