@@ -75,7 +75,7 @@ abstract class MainDetailController implements Initializable {
 
 	@FXML
 	Button save;
-
+	
 	private boolean nameValid = false;
 
 	@Override
@@ -84,43 +84,10 @@ abstract class MainDetailController implements Initializable {
 		initializeInputControlsStyle();
 		changeState(ControllerState.RESET);
 	}
-<<<<<<< HEAD
-
-	protected void initializeEventListenersForSaveButton() {
-		name.textProperty().addListener((observable, oldValue, newValue) -> {
-			if (!newValue.trim().isEmpty()) {
-				nameValid = true;
-			} else {
-				nameValid = false;
-			}
-			updateSaveButton();
-		});
-	}
-
-	protected boolean getSaveButtonValidState() {
-		return nameValid;
-	}
-
-	protected void updateSaveButton() {
-		if (controllerState == ControllerState.RESET || controllerState == ControllerState.VIEW) {
-			save.setDisable(true);
-		} else {
-			save.setDisable(!getSaveButtonValidState());
-		}
-	}
-
-	protected void initializeInputControlsStyle() {
-		// Text field and combo boxes should be readable
-		// also in VIEW state.
-		name.setStyle("-fx-opacity: 1;");
-	}
-
-=======
 	
 	/**
 	 * Called when a new entity is created. in the database.
 	 */
->>>>>>> refs/heads/develop
 	private void create() {
 		Object object = persistNew();
 		raiseEventSave(object);
@@ -217,7 +184,6 @@ abstract class MainDetailController implements Initializable {
 			raiseEventDelete(object);
 			changeState(ControllerState.RESET);
 		}
-
 	}
 
 	
@@ -353,20 +319,11 @@ abstract class MainDetailController implements Initializable {
 		}
 	}
 
-<<<<<<< HEAD
-	protected void setInputControlsCleared() {
-		id.setText(null);
-		name.clear();
-	}
-
-	private void setCreateStateActivation() {
-=======
 	/**
 	 * Called when the controller enters the CREATE state. Used to enable the 
 	 * controls on the view (not Edit, Save, Reset and Delete buttons).
 	 */
 	void setCreateStateActivation() {
->>>>>>> refs/heads/develop
 		setInputControlsDisabled(false);
 	};
 
@@ -499,10 +456,6 @@ abstract class MainDetailController implements Initializable {
 	void setViewStateProperties() {
 		setInputControlsViewState();
 	}
-<<<<<<< HEAD
-
-	protected void setInputControlsViewState() {
-=======
 	
 	/**
 	 * Disables the save button in RESET and VIEW state, enables the save
@@ -516,7 +469,6 @@ abstract class MainDetailController implements Initializable {
 		} else {
 			save.setDisable(!getSaveButtonValidState());
 		}
->>>>>>> refs/heads/develop
 	}
 	
 	/**
