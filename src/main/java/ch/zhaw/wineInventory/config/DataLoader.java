@@ -4,13 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.*;
+import java.io.File;
+import java.io.IOException;
 import ch.zhaw.wineInventory.bean.Classification;
 import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Producer;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.bean.Wine;
 import ch.zhaw.wineInventory.bean.WineType;
+import ch.zhaw.wineInventory.config.AppJavaConfig;
 import ch.zhaw.wineInventory.service.ClassificationService;
 import ch.zhaw.wineInventory.service.CountryService;
 import ch.zhaw.wineInventory.service.ProducerService;
@@ -23,10 +28,14 @@ import ch.zhaw.wineInventory.service.WineTypeService;
  * @author Christian Jeitziner / Marco Bibbia
  * 
  *         This class is used to preload data when application is started.
+ *         Please note that this will work only when H2 Database is configured!
  *
  */
 @Component
 public class DataLoader implements ApplicationRunner {
+
+	@Autowired
+	AppJavaConfig config;
 
 	@Autowired
 	private WineTypeService wineTypeService;
@@ -67,15 +76,53 @@ public class DataLoader implements ApplicationRunner {
 	}
 
 	private void initWine() {
-		Wine wine = new Wine();
-		wine.setName("Barolo");
-		wine.setType(wineTypeService.findByName("Rotwein"));
-		wineService.save(wine);
 
-		wine = new Wine();
-		wine.setName("Langhe Nebbiolo");
-		wine.setType(wineTypeService.findByName("Rotwein"));
-		wineService.save(wine);
+		try {
+			Workbook workbook = WorkbookFactory.create(new File("src/test/resources/data/Wine.xlsx"));
+
+			Sheet sheet = workbook.getSheetAt(0);
+			DataFormatter dataFormatter = new DataFormatter();
+
+			sheet.forEach(row -> {
+
+				if (row.getRowNum() == 0) {
+					return;
+				}
+
+				Wine wine;
+				wine = new Wine();
+
+				row.forEach(cell -> {
+					String cellValue = dataFormatter.formatCellValue(cell);
+					switch (cell.getColumnIndex()) {
+					case 0: // name
+						wine.setName(cellValue);
+					case 1: // type
+						wine.setType(wineTypeService.findByName(cellValue));
+					case 2: // classification
+						wine.setClassification(classificationService.findByName(cellValue));
+					default:
+						break;
+
+					}
+
+				});
+				wineService.save(wine);
+			});
+
+			// Closing the workbook
+			workbook.close();
+
+		} catch (EncryptedDocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -153,64 +200,171 @@ public class DataLoader implements ApplicationRunner {
 
 	private void initCountries() {
 
-		Country country;
+		try {
+			Workbook workbook = WorkbookFactory.create(new File("src/test/resources/data/Country.xlsx"));
 
-		country = new Country();
-		country.setCode("CH");
-		country.setName("Schweiz");
-		countryService.save(country);
+			Sheet sheet = workbook.getSheetAt(0);
+			DataFormatter dataFormatter = new DataFormatter();
 
-		country = new Country();
-		country.setCode("FR");
-		country.setName("Frankreich");
-		countryService.save(country);
+			sheet.forEach(row -> {
 
-		country = new Country();
-		country.setCode("IT");
-		country.setName("Italien");
-		countryService.save(country);
+				if (row.getRowNum() == 0) {
+					return;
+				}
+
+				Country country;
+				country = new Country();
+
+				row.forEach(cell -> {
+					String cellValue = dataFormatter.formatCellValue(cell);
+					switch (cell.getColumnIndex()) {
+					case 0:
+						country.setCode(cellValue);
+					case 1:
+						country.setName(cellValue);
+					default:
+						break;
+
+					}
+
+				});
+				countryService.save(country);
+			});
+
+			// Closing the workbook
+			workbook.close();
+
+		} catch (EncryptedDocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
 	private void initRegions() {
 
-		Region region;
-		Country country;
+		try {
+			Workbook workbook = WorkbookFactory.create(new File("src/test/resources/data/Region.xlsx"));
 
-		country = countryService.findByCode("CH");
-		region = new Region();
-		region.setName("Zürich");
-		region.setCountry(country);
-		regionService.save(region);
+			Sheet sheet = workbook.getSheetAt(0);
+			DataFormatter dataFormatter = new DataFormatter();
 
-		country = countryService.findByCode("IT");
-		region = new Region();
-		region.setName("Piemont");
-		region.setCountry(country);
-		regionService.save(region);
+			sheet.forEach(row -> {
+
+				if (row.getRowNum() == 0) {
+					return;
+				}
+
+				Region region;
+				region = new Region();
+
+				row.forEach(cell -> {
+					String cellValue = dataFormatter.formatCellValue(cell);
+					switch (cell.getColumnIndex()) {
+					case 0:
+						region.setCountry(countryService.findByCode(cellValue));
+					case 1:
+						region.setName(cellValue);
+					default:
+						break;
+
+					}
+
+				});
+				regionService.save(region);
+			});
+
+			// Closing the workbook
+			workbook.close();
+
+		} catch (EncryptedDocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
 	private void initProducers() {
 
-		Producer producer;
-		Region region;
-		Country country;
+		try {
+			Workbook workbook = WorkbookFactory.create(new File("src/test/resources/data/Producer.xlsx"));
 
-		country = countryService.findByCode("IT");
-		region = regionService.findByName("Piemont");
-		producer = new Producer();
-		producer.setName("Parusso");
-		producer.setCompany("Parusso Armando di Parusso F.lli Società Agricola");
-		producer.setAddressLine1("Loc. Bussia 55");
-		producer.setZipCode("12065");
-		producer.setPlace("Monforte d'Alba");
-		producer.setPhone("0039 173 78257");
-		producer.setEmail("info@parusso.com");
-		producer.setUrl("http://parusso.com/");
-		producer.setCountry(country);
-		producer.setRegion(region);
-		producerService.save(producer);
+			Sheet sheet = workbook.getSheetAt(0);
+			DataFormatter dataFormatter = new DataFormatter();
+
+			sheet.forEach(row -> {
+
+				if (row.getRowNum() == 0) {
+					return;
+				}
+
+				Producer producer;
+				producer = new Producer();
+
+				row.forEach(cell -> {
+					String cellValue = dataFormatter.formatCellValue(cell);
+					switch (cell.getColumnIndex()) {
+					case 0: // name
+						if (cellValue.isEmpty()) {
+							return;
+						}
+						producer.setName(cellValue);
+					case 1: // company
+						producer.setCompany(cellValue);
+					case 2: // addressline1
+						producer.setAddressLine1(cellValue);
+					case 3: // addressline2
+						producer.setAddressLine2(cellValue);
+					case 4: // zipCode
+						producer.setZipCode(cellValue);
+					case 5: // place
+						producer.setPlace(cellValue);
+					case 6: // country
+						producer.setCountry(countryService.findByCode(cellValue));
+					case 7: // region
+						producer.setRegion(regionService.findByName(cellValue));
+					case 8: // phone
+						producer.setPhone(cellValue);
+					case 9: // fax
+						producer.setFax(cellValue);
+					case 10: // email
+						producer.setEmail(cellValue);
+					case 11: // website
+						producer.setUrl(cellValue);
+					default:
+						break;
+
+					}
+
+				});
+				producerService.save(producer);
+			});
+
+			// Closing the workbook
+			workbook.close();
+
+		} catch (EncryptedDocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

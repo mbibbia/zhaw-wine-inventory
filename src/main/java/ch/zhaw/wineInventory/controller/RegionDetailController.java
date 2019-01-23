@@ -14,7 +14,6 @@ import ch.zhaw.wineInventory.event.ChangeCountryEvent;
 import ch.zhaw.wineInventory.event.ChangeEntityEventType;
 import ch.zhaw.wineInventory.event.RegionDetailsEvent;
 import ch.zhaw.wineInventory.event.ChangeRegionEvent;
-import ch.zhaw.wineInventory.event.CountryDetailsEvent;
 import ch.zhaw.wineInventory.service.CountryService;
 import ch.zhaw.wineInventory.service.RegionService;
 import javafx.collections.FXCollections;

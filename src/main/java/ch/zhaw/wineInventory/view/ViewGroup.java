@@ -24,6 +24,7 @@ public class ViewGroup extends Component {
 	/**
 	 * Used for logging. 
 	 */
+	@SuppressWarnings("unused")
 	private static final Logger LOG = getLogger(ViewGroup.class);
 
 	/**

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-
 import ch.zhaw.wineInventory.view.Desktop;
 import javafx.application.Platform;
 import javafx.scene.control.Menu;

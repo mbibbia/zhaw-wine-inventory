@@ -11,7 +11,6 @@ import ch.zhaw.wineInventory.bean.WineType;
 import ch.zhaw.wineInventory.controller.helper.ControllerState;
 import ch.zhaw.wineInventory.event.ChangeEntityEventType;
 import ch.zhaw.wineInventory.event.ChangeWineTypeEvent;
-import ch.zhaw.wineInventory.event.WineDetailsEvent;
 import ch.zhaw.wineInventory.event.WineTypeDetailsEvent;
 import ch.zhaw.wineInventory.service.WineTypeService;
 import javafx.scene.control.Alert;
