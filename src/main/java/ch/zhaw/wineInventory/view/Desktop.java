@@ -295,6 +295,7 @@ public class Desktop extends ViewGroup {
 		if (viewGroups.size() == 0) {
 			return null;
 		}
+		@SuppressWarnings("unused")
 		ViewGroup rootViewGroup = null;
 
 		for (int vgi = 0; vgi < viewGroups.size(); ++vgi) {
