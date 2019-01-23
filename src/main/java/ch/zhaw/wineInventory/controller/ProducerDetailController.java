@@ -11,12 +11,10 @@ import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Producer;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.controller.helper.ControllerState;
-import ch.zhaw.wineInventory.event.ChangeClassificationEvent;
 import ch.zhaw.wineInventory.event.ChangeCountryEvent;
 import ch.zhaw.wineInventory.event.ChangeEntityEventType;
 import ch.zhaw.wineInventory.event.ProducerDetailsEvent;
 import ch.zhaw.wineInventory.event.ChangeProducerEvent;
-import ch.zhaw.wineInventory.event.ClassificationDetailsEvent;
 import ch.zhaw.wineInventory.service.CountryService;
 import ch.zhaw.wineInventory.service.ProducerService;
 import javafx.collections.FXCollections;
@@ -38,19 +36,9 @@ import javafx.scene.control.Alert.AlertType;
 @Controller
 public class ProducerDetailController extends MainDetailController {
 
-	@Component
-	class ChangeCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
-
-		@Override
-		public void onApplicationEvent(ChangeCountryEvent event) {
-			if (country != null) {
-				country.setItems(loadCountries());
-				country.setValue(event.getCountry());
-			}
-		}
-
-	}
-
+	/*
+	 * Event handler to display an object in the view.
+	 */
 	@Component
 	class ShowProducerDetailEventHandler implements ApplicationListener<ProducerDetailsEvent> {
 
@@ -73,12 +61,31 @@ public class ProducerDetailController extends MainDetailController {
 			if (event.getProducer().getRegion() != null) {
 				region.setValue(event.getProducer().getRegion());
 			}
-			
+
 			changeState(ControllerState.VIEW);
 		}
 
 	}
-	
+
+	/*
+	 * Event handler for a saved or deleted object.
+	 */
+	@Component
+	class ChangeCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
+
+		@Override
+		public void onApplicationEvent(ChangeCountryEvent event) {
+			if (country != null) {
+				country.setItems(loadCountries());
+				country.setValue(event.getCountry());
+			}
+		}
+
+	}
+
+	/*
+	 * Event handler for a saved or deleted object.
+	 */
 	@Component
 	class ChangeProducerEventHandler implements ApplicationListener<ChangeProducerEvent> {
 
@@ -98,7 +105,6 @@ public class ProducerDetailController extends MainDetailController {
 			}
 		}
 	}
-	
 
 	@FXML
 	private TextField company;
@@ -180,6 +186,12 @@ public class ProducerDetailController extends MainDetailController {
 		super.initialize(location, resources);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#
+	 * initializeInputControlsStyle()
+	 */
 	@Override
 	protected void initializeInputControlsStyle() {
 		super.initializeInputControlsStyle();
@@ -198,7 +210,7 @@ public class ProducerDetailController extends MainDetailController {
 		region.setStyle("-fx-opacity: 1;");
 		country.setItems(loadCountries());
 	}
-	
+
 	private Country getCountry() {
 		return country.getValue();
 	}
@@ -207,31 +219,64 @@ public class ProducerDetailController extends MainDetailController {
 		return region.getValue();
 	}
 
+	/**
+	 * Called when a region is clicked.
+	 */
 	@FXML
 	private void handleRegionClicked() {
 
-		if (country.getValue() != null) {
-			ObservableList<Region> regions = FXCollections.observableArrayList(country.getValue().getRegions());
-			region.setItems(regions);
-		}
+		/*
+		 * if (country.getValue() != null) { ObservableList<Region> regions =
+		 * FXCollections.observableArrayList(country.getValue().getRegions());
+		 * region.setItems(regions); }
+		 */
 	}
 
+	@FXML
+	private void handleCountryClicked() {
+
+//		handleRegionClicked();
+	}
+
+	/**
+	 * Loads all countries from the database.
+	 * 
+	 * @return a observable list of countries
+	 */
 	private ObservableList<Country> loadCountries() {
 		ObservableList<Country> list = FXCollections.observableArrayList(countryService.findAll());
 		list.add(0, new Country());
 		return list;
+
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ch.zhaw.wineInventory.controller.MainDetailController#deletePersistent(java.
+	 * lang.Object)
+	 */
 	@Override
 	void deletePersistent(Object object) {
 		producerService.delete((Producer) object);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#getPersistent()
+	 */
 	@Override
 	Object getPersistent() {
 		return producerService.find(Long.parseLong(id.getText()));
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#persistExisting()
+	 */
 	@Override
 	Object persistExisting() {
 		Producer producer = (Producer) getPersistent();
@@ -250,6 +295,11 @@ public class ProducerDetailController extends MainDetailController {
 		return producerService.update(producer);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#persistNew()
+	 */
 	@Override
 	Object persistNew() {
 		Producer producer = new Producer();
@@ -268,6 +318,13 @@ public class ProducerDetailController extends MainDetailController {
 		return producerService.save(producer);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ch.zhaw.wineInventory.controller.MainDetailController#raiseAlertNew(java.lang
+	 * .Object)
+	 */
 	@Override
 	void raiseAlertNew(Object object) {
 		Producer producer = (Producer) object;
@@ -280,6 +337,13 @@ public class ProducerDetailController extends MainDetailController {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ch.zhaw.wineInventory.controller.MainDetailController#raiseAlertUpdate(java.
+	 * lang.Object)
+	 */
 	@Override
 	void raiseAlertUpdate(Object object) {
 		Producer producer = (Producer) object;
@@ -291,22 +355,39 @@ public class ProducerDetailController extends MainDetailController {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ch.zhaw.wineInventory.controller.MainDetailController#raiseEventDelete(java.
+	 * lang.Object)
+	 */
 	@Override
 	void raiseEventDelete(Object object) {
-		ChangeProducerEvent producerEvent = new ChangeProducerEvent(this,
-																	null,
-																	ChangeEntityEventType.DELETE);
+		ChangeProducerEvent producerEvent = new ChangeProducerEvent(this, null, ChangeEntityEventType.DELETE);
 		applicationEventPublisher.publishEvent(producerEvent);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ch.zhaw.wineInventory.controller.MainDetailController#raiseEventSave(java.
+	 * lang.Object)
+	 */
 	@Override
 	void raiseEventSave(Object object) {
-		ChangeProducerEvent producerEvent = new ChangeProducerEvent(this,
-			                                                        (Producer) object,
-			                                                        ChangeEntityEventType.SAVE);
+		ChangeProducerEvent producerEvent = new ChangeProducerEvent(this, (Producer) object,
+				ChangeEntityEventType.SAVE);
 		applicationEventPublisher.publishEvent(producerEvent);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#
+	 * setInputControlsDisabled(boolean)
+	 */
 	@Override
 	protected void setInputControlsDisabled(boolean disabled) {
 		super.setInputControlsDisabled(disabled);
@@ -324,6 +405,13 @@ public class ProducerDetailController extends MainDetailController {
 		region.setDisable(disabled);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ch.zhaw.wineInventory.controller.MainDetailController#setInputControlsCleared
+	 * ()
+	 */
 	@Override
 	protected void setInputControlsCleared() {
 		super.setInputControlsCleared();
@@ -340,6 +428,5 @@ public class ProducerDetailController extends MainDetailController {
 		country.setValue(null);
 		region.setValue(null);
 	}
-
 
 }

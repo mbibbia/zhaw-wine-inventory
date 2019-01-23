@@ -22,6 +22,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 
+/**
+ * 
+ * @author Christian Jeitziner / Marco Bibbia
+ * 
+ *         Abstract base class for all DetailControllers.
+ *
+ */
 @Controller
 abstract class MainDetailController implements Initializable {
 
@@ -38,6 +45,17 @@ abstract class MainDetailController implements Initializable {
 	@Autowired
 	ProducerService producerService;
 
+	/**
+	 * Tracks the state of the view, used to enable/disable the edit, save
+	 * reset and save buttons. Also used to enable/disable all other controls
+	 * on the associated view.
+	 * RESET:  The view is in its initial state, all controls empty and disabled.
+	 * VIEW:   A database entity is displayed in the view, controls are populated
+	 *         but disabled.
+	 * EDIT:   Same as VIEW, but the controls are enabled.
+	 * CREATE: No database object is loaded, the controls can be edited, a new
+	 *         database entity can be created.
+	 */
 	ControllerState controllerState;
 
 	@FXML
@@ -66,6 +84,7 @@ abstract class MainDetailController implements Initializable {
 		initializeInputControlsStyle();
 		changeState(ControllerState.RESET);
 	}
+<<<<<<< HEAD
 
 	protected void initializeEventListenersForSaveButton() {
 		name.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -96,25 +115,35 @@ abstract class MainDetailController implements Initializable {
 		name.setStyle("-fx-opacity: 1;");
 	}
 
+=======
+	
+	/**
+	 * Called when a new entity is created. in the database.
+	 */
+>>>>>>> refs/heads/develop
 	private void create() {
 		Object object = persistNew();
 		raiseEventSave(object);
 		raiseAlertNew(object);
-
 	}
-
+	
+	/**
+	 * Called when an existing database entity is updated.
+	 */
 	private void update() {
 		Object object = persistExisting();
 		raiseEventSave(object);
 		raiseAlertUpdate(object);
-
-	};
-
-	protected void changeState(ControllerState newState) {
+	}
+	
+	/**
+	 * Called when this controller enters a new state. 
+	 * @param newState
+	 */
+	void changeState(ControllerState newState) {
 		if (controllerState == newState) {
 			return;
 		}
-		System.out.println(String.format("%s => %s", controllerState, newState));
 
 		controllerState = newState;
 
@@ -170,7 +199,10 @@ abstract class MainDetailController implements Initializable {
 			break;
 		}
 	}
-
+	
+	/**
+	 * To delete a database entity.
+	 */
 	@FXML
 	void delete() {
 		Object object = getPersistent();
@@ -188,8 +220,17 @@ abstract class MainDetailController implements Initializable {
 
 	}
 
+	
+	/**
+	 * Used to delete an entity from the database, needs to be implemented
+	 * in the derived classes.
+	 * @param object : The object that should be deleted.
+	 */
 	abstract void deletePersistent(Object object);
 
+	/**
+	 * Called when entering the EDIT mode of the controller.
+	 */
 	@FXML
 	void edit() {
 		if (controllerState == ControllerState.RESET) {
@@ -197,39 +238,109 @@ abstract class MainDetailController implements Initializable {
 		} else if (controllerState == ControllerState.VIEW) {
 			changeState(ControllerState.EDIT);
 		}
-	}
+	};
 
+	/**
+	 * @return the content of the name text field.
+	 */
 	String getName() {
 		return name.getText();
 	}
 
+	/**
+	 * @return a database entity.
+	 */
 	abstract Object getPersistent();
 
+	boolean getSaveButtonValidState() {
+		return nameValid;
+	}
+
+	/**
+	 * To initialize an event listener for the name text field.
+	 * Used to enable/disable the Save button.
+	 */
+	void initializeEventListenersForSaveButton() {
+		name.textProperty().addListener(
+			(observable, oldValue, newValue) -> {
+				if (!newValue.trim().isEmpty()) {
+					nameValid = true;
+				} else {
+					nameValid = false;
+				}
+				updateSaveButton();
+			}
+		);
+	}
+
+	/**
+	 * To initialize the appearance of the text fields and combo boxes.
+	 * Text field and combo boxes should be readable also in VIEW state.
+	 */
+	void initializeInputControlsStyle() {
+		name.setStyle("-fx-opacity: 1;");
+	}
+
+	/**
+	 * Helper function to determine whether we deal with a new database entity.
+	 * @return true, if the database entity does not yet exist.
+	 */
 	boolean isNew() {
 		return (id.getText() == null || id.getText() == "");
 	}
 
+	/**
+	 * Helper function to check if input controls have a valid value.
+	 * @return true, if the input controls have a valid value.
+	 */
 	boolean isValid() {
 		return validation.emptyValidation("Name", getName().isEmpty());
 	}
 
+	/** Used when an existing database entity is saved.
+	 * @return the database entity
+	 */
 	abstract Object persistExisting();
 
+	/**
+	 * Used when a new database entity is saved.
+	 * @return the database entity.
+	 */
 	abstract Object persistNew();
 
+	/** Opens a dialog to inform the user that a new database entity was
+	 * created.
+	 * @param object : the new database entity
+	 */
 	abstract void raiseAlertNew(Object object);
 
+	/** Opens a dialog to inform the user that a database entity was
+	 * updated.
+	 * @param object : the changed database entity
+	 */
 	abstract void raiseAlertUpdate(Object object);
 
+	/** Raises a event to signal that a database object was deleted.
+	 * @param object : the deleted database entity
+	 */
 	abstract void raiseEventDelete(Object object);
 
+	/** Raises a event to signal that a database object was saved.
+	 * @param object : the deleted database entity
+	 */
 	abstract void raiseEventSave(Object object);
 
+	/**
+	 * Method that is called when the reset button is pressed.
+	 */
 	@FXML
 	void reset() {
 		changeState(ControllerState.RESET);
 	}
 
+	/**
+	 * Method that is called when the save button is pressed.
+	 */
 	@FXML
 	void save() {
 		if (isValid()) {
@@ -240,22 +351,30 @@ abstract class MainDetailController implements Initializable {
 			}
 			changeState(ControllerState.VIEW);
 		}
-	};
-
-	protected void setInputControlsDisabled(boolean disabled) {
-		name.setDisable(disabled);
 	}
 
+<<<<<<< HEAD
 	protected void setInputControlsCleared() {
 		id.setText(null);
 		name.clear();
 	}
 
 	private void setCreateStateActivation() {
+=======
+	/**
+	 * Called when the controller enters the CREATE state. Used to enable the 
+	 * controls on the view (not Edit, Save, Reset and Delete buttons).
+	 */
+	void setCreateStateActivation() {
+>>>>>>> refs/heads/develop
 		setInputControlsDisabled(false);
 	};
 
-	private void setCreateStateButtons() {
+	/**
+	 * Called when the controller enters the CREATE state. Used to enable the
+	 * Edit, Save, Reset and Delete buttons.
+	 */
+	void setCreateStateButtons() {
 		if (edit != null) {
 			edit.setDisable(true);
 		}
@@ -270,14 +389,26 @@ abstract class MainDetailController implements Initializable {
 		}
 	}
 
-	private void setCreateStateProperties() {
+	/**
+	 * Called when the controller enters the CREATE state. Used to set the
+	 * content of the controls.
+	 */
+	void setCreateStateProperties() {
+	}
+	
+	/**
+	 * Called when the controller enters the EDIT state. Used to enable the 
+	 * controls on the view (not Edit, Save, Reset and Delete buttons).
+	 */
+	void setEditStateActivation() {
+		setInputControlsDisabled(false);
 	};
 
-	protected void setEditStateActivation() {
-		setInputControlsDisabled(false);
-	}
-
-	private void setEditStateButtons() {
+	/**
+	 * Called when the controller enters the EDIT state. Used to enable/disable the
+	 * Edit, Save, Reset and Delete buttons.
+	 */
+	void setEditStateButtons() {
 		if (edit != null) {
 			edit.setDisable(true);
 		}
@@ -292,14 +423,26 @@ abstract class MainDetailController implements Initializable {
 		}
 	}
 
-	private void setEditStateProperties() {
-	}
+	/**
+	 * Called when the controller enters the EDIT state. Used to set the
+	 * content of the controls.
+	 */
+	void setEditStateProperties() {
+	};
 
-	private void setResetStateActivation() {
+	/**
+	 * Called when the controller enters the EDIT state. Used to disable the 
+	 * controls on the view (not Edit, Save, Reset and Delete buttons).
+	 */
+	void setResetStateActivation() {
 		setInputControlsDisabled(true);
 	}
 
-	private void setResetStateButtons() {
+	/**
+	 * Called when the controller enters the RESET state. Used to disable the
+	 * Edit, Save, Reset and Delete buttons.
+	 */
+	void setResetStateButtons() {
 		if (edit != null) {
 			edit.setDisable(false);
 		}
@@ -314,15 +457,27 @@ abstract class MainDetailController implements Initializable {
 		}
 	}
 
-	private void setResetStateProperties() {
+	/**
+	 * Called when the controller enters the RESET state. Used to set the
+	 * content of the controls.
+	 */
+	void setResetStateProperties() {
 		setInputControlsCleared();
 	}
 
-	private void setViewStateActivation() {
+	/**
+	 * Called when the controller enters the VIEW state. Used to disable the 
+	 * controls on the view (not Edit, Save, Reset and Delete buttons).
+	 */
+	void setViewStateActivation() {
 		setInputControlsDisabled(true);
 	}
 
-	private void setViewStateButtons() {
+	/**
+	 * Called when the controller enters the CREATE state. Used to enable the
+	 * Edit, Save, Reset and Delete buttons.
+	 */
+	void setViewStateButtons() {
 		if (edit != null) {
 			edit.setDisable(false);
 		}
@@ -337,11 +492,54 @@ abstract class MainDetailController implements Initializable {
 		}
 	}
 
-	private void setViewStateProperties() {
+	/**
+	 * Called when the controller enters the VIEW state. Used to set the
+	 * content of the controls.
+	 */
+	void setViewStateProperties() {
 		setInputControlsViewState();
 	}
+<<<<<<< HEAD
 
 	protected void setInputControlsViewState() {
+=======
+	
+	/**
+	 * Disables the save button in RESET and VIEW state, enables the save
+	 * button depending on the method getSaveButtonValidŜtate which can be 
+	 * re-implemented in derived classes.
+	 */
+	void updateSaveButton() {
+		if (controllerState == ControllerState.RESET || 
+			controllerState == ControllerState.VIEW) {
+			save.setDisable(true);
+		} else {
+			save.setDisable(!getSaveButtonValidState());
+		}
+>>>>>>> refs/heads/develop
 	}
+	
+	/**
+	 * Clear all input controls, needs to be re-implemented in derived classes.
+	 */
+	void setInputControlsCleared() {
+		id.setText(null);
+		name.clear();
+	}
+
+	/** Enables/disables the input controls on the view. 
+	 * @param disabled : true, to disable the controls.
+	 */
+	void setInputControlsDisabled(boolean disabled) {
+		name.setDisable(disabled);
+	}
+
+	/**
+	 * To set the content of input controls in view state. Can be re-implemented
+	 * in derived classes but currently not used.
+	 */
+	void setInputControlsViewState() {
+	}
+	
 
 }

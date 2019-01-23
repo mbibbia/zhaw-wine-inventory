@@ -58,6 +58,28 @@ import javafx.scene.control.Alert.AlertType;
 @Controller
 public class WineDetailController extends MainDetailController {
 
+	/*
+	 * Event handler to display an object in the view.
+	 */
+	@Component
+	class ShowWineDetailEventHandler implements ApplicationListener<WineDetailsEvent> {
+
+		@Override
+		public void onApplicationEvent(WineDetailsEvent event) {
+			id.setText(Long.toString(event.getWine().getId()));
+			name.setText(event.getWine().getName());
+			wineType.setValue(event.getWine().getType());
+			classification.setValue(event.getWine().getClassification());
+			country.setValue(event.getWine().getCountry());
+			region.setValue(event.getWine().getRegion());
+			producer.setValue(event.getWine().getProducer());
+			image = event.getWine().getImage();
+			raiseEventShowImage(image);
+			changeState(ControllerState.VIEW);
+		}
+
+	}
+
 	@Component
 	class ChangeClassificationEventHandler implements ApplicationListener<ChangeClassificationEvent> {
 
@@ -70,7 +92,7 @@ public class WineDetailController extends MainDetailController {
 	}
 
 	@Component
-	class SaveCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
+	class ChangeCountryEventHandler implements ApplicationListener<ChangeCountryEvent> {
 
 		@Override
 		public void onApplicationEvent(ChangeCountryEvent event) {
@@ -98,25 +120,6 @@ public class WineDetailController extends MainDetailController {
 		public void onApplicationEvent(ChangeWineTypeEvent event) {
 			wineType.setItems(loadTypes());
 			wineType.setValue(event.getWineType());
-		}
-
-	}
-
-	@Component
-	class ShowWineDetailEventHandler implements ApplicationListener<WineDetailsEvent> {
-
-		@Override
-		public void onApplicationEvent(WineDetailsEvent event) {
-			id.setText(Long.toString(event.getWine().getId()));
-			name.setText(event.getWine().getName());
-			wineType.setValue(event.getWine().getType());
-			classification.setValue(event.getWine().getClassification());
-			country.setValue(event.getWine().getCountry());
-			region.setValue(event.getWine().getRegion());
-			producer.setValue(event.getWine().getProducer());
-			image = event.getWine().getImage();
-			raiseEventShowImage(image);
-			changeState(ControllerState.VIEW);
 		}
 
 	}
@@ -282,20 +285,37 @@ public class WineDetailController extends MainDetailController {
 		}
 	}
 
+	@FXML
+	private void handleCountryClicked() {
+
+		if (country.getValue() != null) {
+			ObservableList<Region> regions = FXCollections.observableArrayList(country.getValue().getRegions());
+			region.setItems(regions);
+		}
+	}
+
 	private ObservableList<Classification> loadClassifications() {
-		return FXCollections.observableArrayList(classificationService.findAll());
+		ObservableList<Classification> list = FXCollections.observableArrayList(classificationService.findAll());
+		list.add(0, new Classification());
+		return list;
 	}
 
 	private ObservableList<Country> loadCountries() {
-		return FXCollections.observableArrayList(countryService.findAll());
+		ObservableList<Country> list = FXCollections.observableArrayList(countryService.findAll());
+		list.add(0, new Country());
+		return list;
 	}
 
 	private ObservableList<Producer> loadProducers() {
-		return FXCollections.observableArrayList(producerService.findAll());
+		ObservableList<Producer> list = FXCollections.observableArrayList(producerService.findAll());
+		list.add(0, new Producer());
+		return list;
 	}
 
 	private ObservableList<WineType> loadTypes() {
-		return FXCollections.observableArrayList(wineTypeService.findAll());
+		ObservableList<WineType> list = FXCollections.observableArrayList(wineTypeService.findAll());
+		list.add(0, new WineType());
+		return list;
 	}
 
 	private void raiseResetEvent() {

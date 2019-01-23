@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-
 import ch.zhaw.wineInventory.bean.Classification;
 import ch.zhaw.wineInventory.bean.Country;
 import ch.zhaw.wineInventory.bean.Producer;
 import ch.zhaw.wineInventory.bean.Region;
 import ch.zhaw.wineInventory.bean.Wine;
 import ch.zhaw.wineInventory.bean.WineType;
+import ch.zhaw.wineInventory.config.AppJavaConfig;
 import ch.zhaw.wineInventory.service.ClassificationService;
 import ch.zhaw.wineInventory.service.CountryService;
 import ch.zhaw.wineInventory.service.ProducerService;
@@ -23,10 +23,14 @@ import ch.zhaw.wineInventory.service.WineTypeService;
  * @author Christian Jeitziner / Marco Bibbia
  * 
  *         This class is used to preload data when application is started.
+ *         Please note that this will work only when H2 Database is configured!
  *
  */
 @Component
 public class DataLoader implements ApplicationRunner {
+
+	@Autowired
+	AppJavaConfig config;
 
 	@Autowired
 	private WineTypeService wineTypeService;

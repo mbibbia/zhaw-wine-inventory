@@ -1,7 +1,5 @@
 package ch.zhaw.wineInventory.event;
 
-import org.springframework.context.ApplicationEvent;
-
 import ch.zhaw.wineInventory.bean.Region;
 
 /**

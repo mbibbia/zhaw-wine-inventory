@@ -1,8 +1,9 @@
 package ch.zhaw.wineInventory.gui;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
 import ch.zhaw.wineInventory.view.Desktop;
 import javafx.application.Platform;
 import javafx.scene.control.Menu;
@@ -65,7 +66,10 @@ public class DesktopView {
 		Menu menu = new Menu("Desktop");
 		
 		ToggleGroup group = new ToggleGroup();
-		for (String name: desktopMap.keySet()) {
+		ArrayList<String> desktopNames = new ArrayList<>();
+		desktopNames.addAll(desktopMap.keySet());
+		Collections.sort(desktopNames);
+		for (String name: desktopNames) {
 			RadioMenuItem desktopMenuItem = new RadioMenuItem(name);
 		    menu.getItems().add(desktopMenuItem);
 		    group.getToggles().add(desktopMenuItem);
