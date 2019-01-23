@@ -288,7 +288,6 @@ public class WineDetailController extends MainDetailController {
 	@FXML
 	private void handleCountryClicked() {
 
-		region.setItems(null);
 		if (country.getValue() != null) {
 			ObservableList<Region> regions = FXCollections.observableArrayList(country.getValue().getRegions());
 			region.setItems(regions);
@@ -296,19 +295,27 @@ public class WineDetailController extends MainDetailController {
 	}
 
 	private ObservableList<Classification> loadClassifications() {
-		return FXCollections.observableArrayList(classificationService.findAll());
+		ObservableList<Classification> list = FXCollections.observableArrayList(classificationService.findAll());
+		list.add(0, new Classification());
+		return list;
 	}
 
 	private ObservableList<Country> loadCountries() {
-		return FXCollections.observableArrayList(countryService.findAll());
+		ObservableList<Country> list = FXCollections.observableArrayList(countryService.findAll());
+		list.add(0, new Country());
+		return list;
 	}
 
 	private ObservableList<Producer> loadProducers() {
-		return FXCollections.observableArrayList(producerService.findAll());
+		ObservableList<Producer> list = FXCollections.observableArrayList(producerService.findAll());
+		list.add(0, new Producer());
+		return list;
 	}
 
 	private ObservableList<WineType> loadTypes() {
-		return FXCollections.observableArrayList(wineTypeService.findAll());
+		ObservableList<WineType> list = FXCollections.observableArrayList(wineTypeService.findAll());
+		list.add(0, new WineType());
+		return list;
 	}
 
 	private void raiseResetEvent() {

@@ -61,7 +61,7 @@ public class ProducerDetailController extends MainDetailController {
 			if (event.getProducer().getRegion() != null) {
 				region.setValue(event.getProducer().getRegion());
 			}
-			
+
 			changeState(ControllerState.VIEW);
 		}
 
@@ -105,7 +105,6 @@ public class ProducerDetailController extends MainDetailController {
 			}
 		}
 	}
-	
 
 	@FXML
 	private TextField company;
@@ -187,8 +186,11 @@ public class ProducerDetailController extends MainDetailController {
 		super.initialize(location, resources);
 	}
 
-	/* (non-Javadoc)
-	 * @see ch.zhaw.wineInventory.controller.MainDetailController#initializeInputControlsStyle()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#
+	 * initializeInputControlsStyle()
 	 */
 	@Override
 	protected void initializeInputControlsStyle() {
@@ -208,7 +210,7 @@ public class ProducerDetailController extends MainDetailController {
 		region.setStyle("-fx-opacity: 1;");
 		country.setItems(loadCountries());
 	}
-	
+
 	private Country getCountry() {
 		return country.getValue();
 	}
@@ -222,30 +224,47 @@ public class ProducerDetailController extends MainDetailController {
 	 */
 	@FXML
 	private void handleRegionClicked() {
-		if (country.getValue() != null) {
-			ObservableList<Region> regions = FXCollections.observableArrayList(country.getValue().getRegions());
-			region.setItems(regions);
-		}
+
+		/*
+		 * if (country.getValue() != null) { ObservableList<Region> regions =
+		 * FXCollections.observableArrayList(country.getValue().getRegions());
+		 * region.setItems(regions); }
+		 */
 	}
 
-	/** Loads all countries from the database.
+	@FXML
+	private void handleCountryClicked() {
+
+//		handleRegionClicked();
+	}
+
+	/**
+	 * Loads all countries from the database.
+	 * 
 	 * @return a observable list of countries
 	 */
 	private ObservableList<Country> loadCountries() {
 		ObservableList<Country> list = FXCollections.observableArrayList(countryService.findAll());
 		list.add(0, new Country());
 		return list;
+
 	}
 
-	/* (non-Javadoc)
-	 * @see ch.zhaw.wineInventory.controller.MainDetailController#deletePersistent(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ch.zhaw.wineInventory.controller.MainDetailController#deletePersistent(java.
+	 * lang.Object)
 	 */
 	@Override
 	void deletePersistent(Object object) {
 		producerService.delete((Producer) object);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.zhaw.wineInventory.controller.MainDetailController#getPersistent()
 	 */
 	@Override
@@ -253,7 +272,9 @@ public class ProducerDetailController extends MainDetailController {
 		return producerService.find(Long.parseLong(id.getText()));
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.zhaw.wineInventory.controller.MainDetailController#persistExisting()
 	 */
 	@Override
@@ -274,7 +295,9 @@ public class ProducerDetailController extends MainDetailController {
 		return producerService.update(producer);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.zhaw.wineInventory.controller.MainDetailController#persistNew()
 	 */
 	@Override
@@ -295,8 +318,12 @@ public class ProducerDetailController extends MainDetailController {
 		return producerService.save(producer);
 	}
 
-	/* (non-Javadoc)
-	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseAlertNew(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ch.zhaw.wineInventory.controller.MainDetailController#raiseAlertNew(java.lang
+	 * .Object)
 	 */
 	@Override
 	void raiseAlertNew(Object object) {
@@ -310,8 +337,12 @@ public class ProducerDetailController extends MainDetailController {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseAlertUpdate(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ch.zhaw.wineInventory.controller.MainDetailController#raiseAlertUpdate(java.
+	 * lang.Object)
 	 */
 	@Override
 	void raiseAlertUpdate(Object object) {
@@ -324,30 +355,38 @@ public class ProducerDetailController extends MainDetailController {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseEventDelete(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ch.zhaw.wineInventory.controller.MainDetailController#raiseEventDelete(java.
+	 * lang.Object)
 	 */
 	@Override
 	void raiseEventDelete(Object object) {
-		ChangeProducerEvent producerEvent = new ChangeProducerEvent(this,
-																	null,
-																	ChangeEntityEventType.DELETE);
+		ChangeProducerEvent producerEvent = new ChangeProducerEvent(this, null, ChangeEntityEventType.DELETE);
 		applicationEventPublisher.publishEvent(producerEvent);
 	}
 
-	/* (non-Javadoc)
-	 * @see ch.zhaw.wineInventory.controller.MainDetailController#raiseEventSave(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ch.zhaw.wineInventory.controller.MainDetailController#raiseEventSave(java.
+	 * lang.Object)
 	 */
 	@Override
 	void raiseEventSave(Object object) {
-		ChangeProducerEvent producerEvent = new ChangeProducerEvent(this,
-			                                                        (Producer) object,
-			                                                        ChangeEntityEventType.SAVE);
+		ChangeProducerEvent producerEvent = new ChangeProducerEvent(this, (Producer) object,
+				ChangeEntityEventType.SAVE);
 		applicationEventPublisher.publishEvent(producerEvent);
 	}
 
-	/* (non-Javadoc)
-	 * @see ch.zhaw.wineInventory.controller.MainDetailController#setInputControlsDisabled(boolean)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.zhaw.wineInventory.controller.MainDetailController#
+	 * setInputControlsDisabled(boolean)
 	 */
 	@Override
 	protected void setInputControlsDisabled(boolean disabled) {
@@ -366,8 +405,12 @@ public class ProducerDetailController extends MainDetailController {
 		region.setDisable(disabled);
 	}
 
-	/* (non-Javadoc)
-	 * @see ch.zhaw.wineInventory.controller.MainDetailController#setInputControlsCleared()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ch.zhaw.wineInventory.controller.MainDetailController#setInputControlsCleared
+	 * ()
 	 */
 	@Override
 	protected void setInputControlsCleared() {

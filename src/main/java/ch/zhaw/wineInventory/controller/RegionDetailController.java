@@ -126,7 +126,9 @@ public class RegionDetailController extends MainDetailController {
 	 * @return an observable list of countries
 	 */
 	private ObservableList<Country> loadCountries() {
-		return FXCollections.observableArrayList(countryService.findAll());
+		ObservableList<Country> list = FXCollections.observableArrayList(countryService.findAll());
+		list.add(0, new Country());
+		return list;
 	}
 
 	/* (non-Javadoc)
